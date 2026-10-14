@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FlagRolloutValidationServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Checks flag rollouts against the rules before anything acts on them.
+service FlagRolloutValidationService {
+  // Validates a flag rollout.
+  rpc ValidateFlagRollout(ValidateFlagRolloutRequest) returns (ValidateFlagRolloutResponse);
+
+  // Previews a flag rollout.
+  rpc PreviewFlagRollout(PreviewFlagRolloutRequest) returns (PreviewFlagRolloutResponse);
+
+  // Checks a flag rollout.
+  rpc CheckFlagRolloutEligibility(CheckFlagRolloutEligibilityRequest) returns (CheckFlagRolloutEligibilityResponse);
+
+  // Normalizes a flag rollout.
+  rpc NormalizeFlagRollout(NormalizeFlagRolloutRequest) returns (NormalizeFlagRolloutResponse);
+
+  // Explains a flag rollout.
+  rpc ExplainFlagRolloutDecision(ExplainFlagRolloutDecisionRequest) returns (ExplainFlagRolloutDecisionResponse);
+
+  // Scores a flag rollout.
+  rpc ScoreFlagRollout(ScoreFlagRolloutRequest) returns (ScoreFlagRolloutResponse);
+
+  // Lints a flag rollout.
+  rpc LintFlagRollouts(LintFlagRolloutsRequest) returns (LintFlagRolloutsResponse);
+
+  // Returns a flag rollout.
+  rpc GetFlagRolloutRules(GetFlagRolloutRulesRequest) returns (GetFlagRolloutRulesResponse);
+}
+
+// The request of `ValidateFlagRollout`.
+message ValidateFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  ValidateFlagRolloutRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateFlagRollout`.
+message ValidateFlagRolloutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  ValidateFlagRolloutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewFlagRollout`.
+message PreviewFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  PreviewFlagRolloutRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewFlagRollout`.
+message PreviewFlagRolloutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  PreviewFlagRolloutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckFlagRolloutEligibility`.
+message CheckFlagRolloutEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  CheckFlagRolloutEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckFlagRolloutEligibility`.
+message CheckFlagRolloutEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  CheckFlagRolloutEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeFlagRollout`.
+message NormalizeFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  NormalizeFlagRolloutRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeFlagRollout`.
+message NormalizeFlagRolloutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  NormalizeFlagRolloutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainFlagRolloutDecision`.
+message ExplainFlagRolloutDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  ExplainFlagRolloutDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainFlagRolloutDecision`.
+message ExplainFlagRolloutDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  ExplainFlagRolloutDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreFlagRollout`.
+message ScoreFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  ScoreFlagRolloutRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreFlagRollout`.
+message ScoreFlagRolloutResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreFlagRolloutResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FlagRollout flag_rollout = 1;
+  ScoreFlagRolloutResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintFlagRollouts`.
+message LintFlagRolloutsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  LintFlagRolloutsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintFlagRollouts`.
+message LintFlagRolloutsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  LintFlagRolloutsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFlagRolloutRules`.
+message GetFlagRolloutRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFlagRolloutRules`.
+message GetFlagRolloutRulesResponse {
+  FlagRollout flag_rollout = 1;
+  acme.common.v1.OperationResult result = 2;
+}

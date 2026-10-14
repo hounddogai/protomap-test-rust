@@ -1,0 +1,222 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ThrottleLifecycleServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Moves a throttle between the states of its lifecycle.
+service ThrottleLifecycleService {
+  // Activates a throttle.
+  rpc ActivateThrottle(ActivateThrottleRequest) returns (ActivateThrottleResponse);
+
+  // Suspends a throttle.
+  rpc SuspendThrottle(SuspendThrottleRequest) returns (SuspendThrottleResponse);
+
+  // Terminates a throttle.
+  rpc TerminateThrottle(TerminateThrottleRequest) returns (TerminateThrottleResponse);
+
+  // Renews a throttle.
+  rpc RenewThrottle(RenewThrottleRequest) returns (RenewThrottleResponse);
+
+  // Returns a throttle.
+  rpc GetThrottleLifecycle(GetThrottleLifecycleRequest) returns (GetThrottleLifecycleResponse);
+
+  // Schedules a throttle.
+  rpc ScheduleThrottleExpiry(ScheduleThrottleExpiryRequest) returns (ScheduleThrottleExpiryResponse);
+}
+
+// The request of `ActivateThrottle`.
+message ActivateThrottleRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  ActivateThrottleRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateThrottle`.
+message ActivateThrottleResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  ActivateThrottleResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendThrottle`.
+message SuspendThrottleRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  SuspendThrottleRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendThrottle`.
+message SuspendThrottleResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  SuspendThrottleResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateThrottle`.
+message TerminateThrottleRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  TerminateThrottleRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateThrottle`.
+message TerminateThrottleResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  TerminateThrottleResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewThrottle`.
+message RenewThrottleRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  RenewThrottleRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewThrottle`.
+message RenewThrottleResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  RenewThrottleResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetThrottleLifecycle`.
+message GetThrottleLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetThrottleLifecycle`.
+message GetThrottleLifecycleResponse {
+  Throttle throttle = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleThrottleExpiry`.
+message ScheduleThrottleExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  ScheduleThrottleExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleThrottleExpiry`.
+message ScheduleThrottleExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  ScheduleThrottleExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

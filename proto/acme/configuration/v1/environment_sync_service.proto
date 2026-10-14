@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/configuration/v1/configuration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "EnvironmentSyncServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Keeps environments in step with the systems of record in other regions.
+service EnvironmentSyncService {
+  // Syncs an environment.
+  rpc SyncEnvironments(SyncEnvironmentsRequest) returns (SyncEnvironmentsResponse);
+
+  // Pushs an environment.
+  rpc PushEnvironment(PushEnvironmentRequest) returns (PushEnvironmentResponse);
+
+  // Pulls an environment.
+  rpc PullEnvironments(PullEnvironmentsRequest) returns (PullEnvironmentsResponse);
+
+  // Reconciles an environment.
+  rpc ReconcileEnvironments(ReconcileEnvironmentsRequest) returns (ReconcileEnvironmentsResponse);
+
+  // Exchanges changes of environments with a peer.
+  rpc StreamEnvironmentChanges(stream StreamEnvironmentChangesRequest) returns (stream StreamEnvironmentChangesResponse);
+
+  // Resolves an environment.
+  rpc ResolveEnvironmentConflict(ResolveEnvironmentConflictRequest) returns (ResolveEnvironmentConflictResponse);
+
+  // Returns an environment.
+  rpc GetEnvironmentSyncState(GetEnvironmentSyncStateRequest) returns (GetEnvironmentSyncStateResponse);
+
+  // Lists environments a page at a time.
+  rpc ListEnvironmentConflicts(ListEnvironmentConflictsRequest) returns (ListEnvironmentConflictsResponse);
+}
+
+// The request of `SyncEnvironments`.
+message SyncEnvironmentsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  SyncEnvironmentsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncEnvironments`.
+message SyncEnvironmentsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  SyncEnvironmentsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushEnvironment`.
+message PushEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  PushEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushEnvironment`.
+message PushEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  PushEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullEnvironments`.
+message PullEnvironmentsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  PullEnvironmentsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullEnvironments`.
+message PullEnvironmentsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  PullEnvironmentsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileEnvironments`.
+message ReconcileEnvironmentsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  ReconcileEnvironmentsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileEnvironments`.
+message ReconcileEnvironmentsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  ReconcileEnvironmentsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamEnvironmentChanges`.
+message StreamEnvironmentChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    Environment change = 2;
+    StreamEnvironmentChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamEnvironmentChanges`.
+message StreamEnvironmentChangesResponse {
+  Environment environment = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveEnvironmentConflict`.
+message ResolveEnvironmentConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  ResolveEnvironmentConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveEnvironmentConflict`.
+message ResolveEnvironmentConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  ResolveEnvironmentConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetEnvironmentSyncState`.
+message GetEnvironmentSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetEnvironmentSyncState`.
+message GetEnvironmentSyncStateResponse {
+  Environment environment = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListEnvironmentConflicts`.
+message ListEnvironmentConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated EnvironmentStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListEnvironmentConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListEnvironmentConflicts`.
+message ListEnvironmentConflictsResponse {
+  repeated Environment environments = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

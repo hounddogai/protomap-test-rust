@@ -1,0 +1,311 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.authorization.v1;
+
+import "acme/authorization/v1/authorization.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Authorization.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/authorization/v1;authorizationv1";
+option java_multiple_files = true;
+option java_outer_classname = "PermissionCheckAdminServiceProto";
+option java_package = "com.acme.authorization.v1";
+
+// Operator actions on permission checks that support staff run by hand.
+service PermissionCheckAdminService {
+  // Archives a permission check.
+  rpc ArchivePermissionCheck(ArchivePermissionCheckRequest) returns (ArchivePermissionCheckResponse);
+
+  // Restores a permission check.
+  rpc RestorePermissionCheck(RestorePermissionCheckRequest) returns (RestorePermissionCheckResponse);
+
+  // Deletes a permission check.
+  rpc PurgePermissionCheck(PurgePermissionCheckRequest) returns (PurgePermissionCheckResponse);
+
+  // Reassigns a permission check.
+  rpc ReassignPermissionCheck(ReassignPermissionCheckRequest) returns (ReassignPermissionCheckResponse);
+
+  // Locks a permission check.
+  rpc LockPermissionCheck(LockPermissionCheckRequest) returns (LockPermissionCheckResponse);
+
+  // Unlocks a permission check.
+  rpc UnlockPermissionCheck(UnlockPermissionCheckRequest) returns (UnlockPermissionCheckResponse);
+
+  // Transfers a permission check.
+  rpc TransferPermissionCheck(TransferPermissionCheckRequest) returns (TransferPermissionCheckResponse);
+
+  // Repairs a permission check.
+  rpc RepairPermissionCheck(RepairPermissionCheckRequest) returns (RepairPermissionCheckResponse);
+
+  // Returns a permission check.
+  rpc InspectPermissionCheck(InspectPermissionCheckRequest) returns (InspectPermissionCheckResponse);
+}
+
+// The request of `ArchivePermissionCheck`.
+message ArchivePermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  ArchivePermissionCheckRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchivePermissionCheck`.
+message ArchivePermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  ArchivePermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestorePermissionCheck`.
+message RestorePermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  RestorePermissionCheckRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestorePermissionCheck`.
+message RestorePermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  RestorePermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgePermissionCheck`.
+message PurgePermissionCheckRequest {
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgePermissionCheck`.
+message PurgePermissionCheckResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ReassignPermissionCheck`.
+message ReassignPermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.identity.v1.UserRef assignee = 1;
+    string queue = 2;
+    int32 capacity = 3;
+    string assignee_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  ReassignPermissionCheckRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReassignPermissionCheck`.
+message ReassignPermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  ReassignPermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LockPermissionCheck`.
+message LockPermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  LockPermissionCheckRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockPermissionCheck`.
+message LockPermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  LockPermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnlockPermissionCheck`.
+message UnlockPermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  UnlockPermissionCheckRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnlockPermissionCheck`.
+message UnlockPermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  UnlockPermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferPermissionCheck`.
+message TransferPermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  TransferPermissionCheckRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferPermissionCheck`.
+message TransferPermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  TransferPermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairPermissionCheck`.
+message RepairPermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  RepairPermissionCheckRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairPermissionCheck`.
+message RepairPermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  RepairPermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectPermissionCheck`.
+message InspectPermissionCheckRequest {
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectPermissionCheck`.
+message InspectPermissionCheckResponse {
+  PermissionCheck permission_check = 1;
+  acme.common.v1.OperationResult result = 2;
+}

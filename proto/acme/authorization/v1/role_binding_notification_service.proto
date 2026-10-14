@@ -1,0 +1,247 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.authorization.v1;
+
+import "acme/authorization/v1/authorization.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Authorization.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/authorization/v1;authorizationv1";
+option java_multiple_files = true;
+option java_outer_classname = "RoleBindingNotificationServiceProto";
+option java_package = "com.acme.authorization.v1";
+
+// Tells the people who follow a role binding what changed.
+service RoleBindingNotificationService {
+  // Subscribes a role binding.
+  rpc SubscribeRoleBindingUpdates(SubscribeRoleBindingUpdatesRequest) returns (SubscribeRoleBindingUpdatesResponse);
+
+  // Unsubscribes a role binding.
+  rpc UnsubscribeRoleBindingUpdates(UnsubscribeRoleBindingUpdatesRequest) returns (UnsubscribeRoleBindingUpdatesResponse);
+
+  // Notifys a role binding.
+  rpc NotifyRoleBindingWatchers(NotifyRoleBindingWatchersRequest) returns (NotifyRoleBindingWatchersResponse);
+
+  // Lists role bindings a page at a time.
+  rpc ListRoleBindingSubscriptions(ListRoleBindingSubscriptionsRequest) returns (ListRoleBindingSubscriptionsResponse);
+
+  // Sends a role binding.
+  rpc SendRoleBindingTestNotice(SendRoleBindingTestNoticeRequest) returns (SendRoleBindingTestNoticeResponse);
+
+  // Returns a role binding.
+  rpc GetRoleBindingPreferences(GetRoleBindingPreferencesRequest) returns (GetRoleBindingPreferencesResponse);
+
+  // Streams the changes of role bindings as they happen.
+  rpc StreamRoleBindingNotices(StreamRoleBindingNoticesRequest) returns (stream StreamRoleBindingNoticesResponse);
+}
+
+// The request of `SubscribeRoleBindingUpdates`.
+message SubscribeRoleBindingUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  SubscribeRoleBindingUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribeRoleBindingUpdates`.
+message SubscribeRoleBindingUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  SubscribeRoleBindingUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribeRoleBindingUpdates`.
+message UnsubscribeRoleBindingUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  UnsubscribeRoleBindingUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribeRoleBindingUpdates`.
+message UnsubscribeRoleBindingUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  UnsubscribeRoleBindingUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NotifyRoleBindingWatchers`.
+message NotifyRoleBindingWatchersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  NotifyRoleBindingWatchersRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `NotifyRoleBindingWatchers`.
+message NotifyRoleBindingWatchersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  NotifyRoleBindingWatchersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListRoleBindingSubscriptions`.
+message ListRoleBindingSubscriptionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RoleBindingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRoleBindingSubscriptionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRoleBindingSubscriptions`.
+message ListRoleBindingSubscriptionsResponse {
+  repeated RoleBinding role_bindings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendRoleBindingTestNotice`.
+message SendRoleBindingTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  SendRoleBindingTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendRoleBindingTestNotice`.
+message SendRoleBindingTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  SendRoleBindingTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRoleBindingPreferences`.
+message GetRoleBindingPreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRoleBindingPreferences`.
+message GetRoleBindingPreferencesResponse {
+  RoleBinding role_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamRoleBindingNotices`.
+message StreamRoleBindingNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RoleBindingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamRoleBindingNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamRoleBindingNotices`.
+message StreamRoleBindingNoticesResponse {
+  RoleBinding role_binding = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

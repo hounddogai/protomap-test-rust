@@ -1,0 +1,295 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.certificates.v1;
+
+import "acme/certificates/v1/certificates.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Certificates.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/certificates/v1;certificatesv1";
+option java_multiple_files = true;
+option java_outer_classname = "CertificateApprovalServiceProto";
+option java_package = "com.acme.certificates.v1";
+
+// Routes certificates through approval, with escalation and delegation.
+service CertificateApprovalService {
+  // Submits a certificate.
+  rpc SubmitCertificate(SubmitCertificateRequest) returns (SubmitCertificateResponse);
+
+  // Approves a certificate.
+  rpc ApproveCertificate(ApproveCertificateRequest) returns (ApproveCertificateResponse);
+
+  // Rejects a certificate.
+  rpc RejectCertificate(RejectCertificateRequest) returns (RejectCertificateResponse);
+
+  // Escalates a certificate.
+  rpc EscalateCertificate(EscalateCertificateRequest) returns (EscalateCertificateResponse);
+
+  // Lists certificates a page at a time.
+  rpc ListPendingCertificates(ListPendingCertificatesRequest) returns (ListPendingCertificatesResponse);
+
+  // Delegates a certificate.
+  rpc DelegateCertificateApproval(DelegateCertificateApprovalRequest) returns (DelegateCertificateApprovalResponse);
+
+  // Recalls a certificate.
+  rpc RecallCertificate(RecallCertificateRequest) returns (RecallCertificateResponse);
+
+  // Returns a certificate.
+  rpc GetCertificateApprovalStatus(GetCertificateApprovalStatusRequest) returns (GetCertificateApprovalStatusResponse);
+}
+
+// The request of `SubmitCertificate`.
+message SubmitCertificateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_id = 2;
+  Certificate certificate = 3;
+  SubmitCertificateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitCertificate`.
+message SubmitCertificateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Certificate certificate = 1;
+  SubmitCertificateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveCertificate`.
+message ApproveCertificateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_id = 2;
+  Certificate certificate = 3;
+  ApproveCertificateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveCertificate`.
+message ApproveCertificateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Certificate certificate = 1;
+  ApproveCertificateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectCertificate`.
+message RejectCertificateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_id = 2;
+  Certificate certificate = 3;
+  RejectCertificateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectCertificate`.
+message RejectCertificateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Certificate certificate = 1;
+  RejectCertificateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateCertificate`.
+message EscalateCertificateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_id = 2;
+  Certificate certificate = 3;
+  EscalateCertificateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateCertificate`.
+message EscalateCertificateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Certificate certificate = 1;
+  EscalateCertificateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingCertificates`.
+message ListPendingCertificatesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CertificateStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingCertificatesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingCertificates`.
+message ListPendingCertificatesResponse {
+  repeated Certificate certificates = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateCertificateApproval`.
+message DelegateCertificateApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_id = 2;
+  Certificate certificate = 3;
+  DelegateCertificateApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateCertificateApproval`.
+message DelegateCertificateApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Certificate certificate = 1;
+  DelegateCertificateApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallCertificate`.
+message RecallCertificateRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_id = 2;
+  Certificate certificate = 3;
+  RecallCertificateRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallCertificate`.
+message RecallCertificateResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Certificate certificate = 1;
+  RecallCertificateResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCertificateApprovalStatus`.
+message GetCertificateApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string certificate_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCertificateApprovalStatus`.
+message GetCertificateApprovalStatusResponse {
+  Certificate certificate = 1;
+  acme.common.v1.OperationResult result = 2;
+}

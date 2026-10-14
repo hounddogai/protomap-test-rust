@@ -1,0 +1,55 @@
+[workspace]
+resolver = "3"
+members = [
+    "crates/proto",
+    "crates/platform",
+    "domains/authorization",
+    "domains/certificates",
+    "domains/configuration",
+    "domains/edgegateway",
+    "domains/featureflags",
+    "domains/keymanagement",
+    "domains/ratelimiting",
+    "domains/secrets",
+    "apps/servers",
+    "apps/operations",
+]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.94"
+
+[workspace.dependencies]
+anyhow = "=1.0.104"
+futures = "=0.3.34"
+http = "=1.5.0"
+prost = "=0.14.4"
+prost-types = "=0.14.4"
+serde = { version = "=1.0.229", features = ["derive"] }
+serde_json = "=1.0.154"
+sqlx = { version = "=0.9.0", features = ["runtime-tokio", "tls-rustls", "postgres"], default-features = false }
+thiserror = "=2.0.21"
+tokio = { version = "=1.53.3", features = ["macros", "rt-multi-thread", "sync", "time", "signal", "net"] }
+tokio-stream = { version = "=0.1.19", features = ["net"] }
+tonic = "=0.14.6"
+tonic-prost = "=0.14.6"
+tonic-prost-build = "=0.14.6"
+tower = { version = "=0.5.3", features = ["util", "limit", "timeout"] }
+tracing = "=0.1.44"
+tracing-subscriber = { version = "=0.3.23", features = ["env-filter", "json"] }
+acme-proto = { path = "crates/proto" }
+acme-platform = { path = "crates/platform" }
+acme-authorization = { path = "domains/authorization" }
+acme-certificates = { path = "domains/certificates" }
+acme-configuration = { path = "domains/configuration" }
+acme-edgegateway = { path = "domains/edgegateway" }
+acme-featureflags = { path = "domains/featureflags" }
+acme-keymanagement = { path = "domains/keymanagement" }
+acme-ratelimiting = { path = "domains/ratelimiting" }
+acme-secrets = { path = "domains/secrets" }
+
+[profile.dev]
+debug = 0
+
+[profile.test]
+debug = 0

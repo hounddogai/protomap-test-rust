@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "KeyRotationValidationServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Checks key rotations against the rules before anything acts on them.
+service KeyRotationValidationService {
+  // Validates a key rotation.
+  rpc ValidateKeyRotation(ValidateKeyRotationRequest) returns (ValidateKeyRotationResponse);
+
+  // Previews a key rotation.
+  rpc PreviewKeyRotation(PreviewKeyRotationRequest) returns (PreviewKeyRotationResponse);
+
+  // Checks a key rotation.
+  rpc CheckKeyRotationEligibility(CheckKeyRotationEligibilityRequest) returns (CheckKeyRotationEligibilityResponse);
+
+  // Normalizes a key rotation.
+  rpc NormalizeKeyRotation(NormalizeKeyRotationRequest) returns (NormalizeKeyRotationResponse);
+
+  // Explains a key rotation.
+  rpc ExplainKeyRotationDecision(ExplainKeyRotationDecisionRequest) returns (ExplainKeyRotationDecisionResponse);
+
+  // Scores a key rotation.
+  rpc ScoreKeyRotation(ScoreKeyRotationRequest) returns (ScoreKeyRotationResponse);
+
+  // Lints a key rotation.
+  rpc LintKeyRotations(LintKeyRotationsRequest) returns (LintKeyRotationsResponse);
+
+  // Returns a key rotation.
+  rpc GetKeyRotationRules(GetKeyRotationRulesRequest) returns (GetKeyRotationRulesResponse);
+}
+
+// The request of `ValidateKeyRotation`.
+message ValidateKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  ValidateKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateKeyRotation`.
+message ValidateKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  ValidateKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewKeyRotation`.
+message PreviewKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  PreviewKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewKeyRotation`.
+message PreviewKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  PreviewKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckKeyRotationEligibility`.
+message CheckKeyRotationEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  CheckKeyRotationEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckKeyRotationEligibility`.
+message CheckKeyRotationEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  CheckKeyRotationEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeKeyRotation`.
+message NormalizeKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  NormalizeKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeKeyRotation`.
+message NormalizeKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  NormalizeKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainKeyRotationDecision`.
+message ExplainKeyRotationDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  ExplainKeyRotationDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainKeyRotationDecision`.
+message ExplainKeyRotationDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  ExplainKeyRotationDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreKeyRotation`.
+message ScoreKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  ScoreKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreKeyRotation`.
+message ScoreKeyRotationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreKeyRotationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRotation key_rotation = 1;
+  ScoreKeyRotationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintKeyRotations`.
+message LintKeyRotationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  LintKeyRotationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintKeyRotations`.
+message LintKeyRotationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  LintKeyRotationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetKeyRotationRules`.
+message GetKeyRotationRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetKeyRotationRules`.
+message GetKeyRotationRulesResponse {
+  KeyRotation key_rotation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

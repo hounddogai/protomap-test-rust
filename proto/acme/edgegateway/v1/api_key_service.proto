@@ -1,0 +1,220 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.edgegateway.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/edgegateway/v1/edgegateway.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Edgegateway.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/edgegateway/v1;edgegatewayv1";
+option java_multiple_files = true;
+option java_outer_classname = "ApiKeyServiceProto";
+option java_package = "com.acme.edgegateway.v1";
+
+// Manages api keys: creates, reads, changes, and lists them.
+service ApiKeyService {
+  // Creates an api key.
+  rpc CreateApiKey(CreateApiKeyRequest) returns (CreateApiKeyResponse);
+
+  // Returns an api key.
+  rpc GetApiKey(GetApiKeyRequest) returns (GetApiKeyResponse);
+
+  // Changes an api key.
+  rpc UpdateApiKey(UpdateApiKeyRequest) returns (UpdateApiKeyResponse);
+
+  // Deletes an api key.
+  rpc DeleteApiKey(DeleteApiKeyRequest) returns (DeleteApiKeyResponse);
+
+  // Lists api keys a page at a time.
+  rpc ListApiKeys(ListApiKeysRequest) returns (ListApiKeysResponse);
+
+  // Returns several api keys at once.
+  rpc BatchGetApiKeys(BatchGetApiKeysRequest) returns (BatchGetApiKeysResponse);
+
+  // Streams the changes of api keys as they happen.
+  rpc WatchApiKeys(WatchApiKeysRequest) returns (stream WatchApiKeysResponse);
+
+  // Takes a stream of api keys and answers once at the end.
+  rpc BatchCreateApiKeys(stream BatchCreateApiKeysRequest) returns (BatchCreateApiKeysResponse);
+
+  // Creates an api key.
+  rpc CloneApiKey(CloneApiKeyRequest) returns (CloneApiKeyResponse);
+}
+
+// The request of `CreateApiKey`.
+message CreateApiKeyRequest {
+  acme.common.v1.RequestContext context = 1;
+  ApiKey api_key = 2;
+  string request_id = 3;
+  bool validate_only = 4;
+}
+
+// The response of `CreateApiKey`.
+message CreateApiKeyResponse {
+  ApiKey api_key = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `GetApiKey`.
+message GetApiKeyRequest {
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetApiKey`.
+message GetApiKeyResponse {
+  ApiKey api_key = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `UpdateApiKey`.
+message UpdateApiKeyRequest {
+  acme.common.v1.RequestContext context = 1;
+  ApiKey api_key = 2;
+  google.protobuf.FieldMask update_mask = 3;
+  bool allow_missing = 4;
+}
+
+// The response of `UpdateApiKey`.
+message UpdateApiKeyResponse {
+  ApiKey api_key = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `DeleteApiKey`.
+message DeleteApiKeyRequest {
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `DeleteApiKey`.
+message DeleteApiKeyResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ListApiKeys`.
+message ListApiKeysRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ApiKeyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListApiKeysRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListApiKeys`.
+message ListApiKeysResponse {
+  repeated ApiKey api_keys = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `BatchGetApiKeys`.
+message BatchGetApiKeysRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string api_key_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `BatchGetApiKeys`.
+message BatchGetApiKeysResponse {
+  repeated ApiKey api_keys = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `WatchApiKeys`.
+message WatchApiKeysRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ApiKeyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  WatchApiKeysRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `WatchApiKeys`.
+message WatchApiKeysResponse {
+  ApiKey api_key = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `BatchCreateApiKeys`.
+message BatchCreateApiKeysRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    BatchCreateApiKeysRequest.StreamHeader header = 2;
+    ApiKey record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `BatchCreateApiKeys`.
+message BatchCreateApiKeysResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string api_key_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated BatchCreateApiKeysResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `CloneApiKey`.
+message CloneApiKeyRequest {
+  acme.common.v1.RequestContext context = 1;
+  ApiKey api_key = 2;
+  string request_id = 3;
+  bool validate_only = 4;
+}
+
+// The response of `CloneApiKey`.
+message CloneApiKeyResponse {
+  ApiKey api_key = 1;
+  acme.common.v1.OperationResult result = 2;
+}

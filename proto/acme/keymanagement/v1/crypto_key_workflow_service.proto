@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "CryptoKeyWorkflowServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Runs the long-lived workflow that takes a crypto key from start to finish.
+service CryptoKeyWorkflowService {
+  // Starts a crypto key.
+  rpc StartCryptoKeyWorkflow(StartCryptoKeyWorkflowRequest) returns (StartCryptoKeyWorkflowResponse);
+
+  // Advances a crypto key.
+  rpc AdvanceCryptoKeyWorkflow(AdvanceCryptoKeyWorkflowRequest) returns (AdvanceCryptoKeyWorkflowResponse);
+
+  // Cancels a crypto key.
+  rpc CancelCryptoKeyWorkflow(CancelCryptoKeyWorkflowRequest) returns (CancelCryptoKeyWorkflowResponse);
+
+  // Retrys a crypto key.
+  rpc RetryCryptoKeyWorkflow(RetryCryptoKeyWorkflowRequest) returns (RetryCryptoKeyWorkflowResponse);
+
+  // Pauses a crypto key.
+  rpc PauseCryptoKeyWorkflow(PauseCryptoKeyWorkflowRequest) returns (PauseCryptoKeyWorkflowResponse);
+
+  // Resumes a crypto key.
+  rpc ResumeCryptoKeyWorkflow(ResumeCryptoKeyWorkflowRequest) returns (ResumeCryptoKeyWorkflowResponse);
+
+  // Returns a crypto key.
+  rpc InspectCryptoKeyWorkflow(InspectCryptoKeyWorkflowRequest) returns (InspectCryptoKeyWorkflowResponse);
+
+  // Lists crypto keys a page at a time.
+  rpc ListCryptoKeyWorkflows(ListCryptoKeyWorkflowsRequest) returns (ListCryptoKeyWorkflowsResponse);
+
+  // Signals a crypto key.
+  rpc SignalCryptoKeyWorkflow(SignalCryptoKeyWorkflowRequest) returns (SignalCryptoKeyWorkflowResponse);
+}
+
+// The request of `StartCryptoKeyWorkflow`.
+message StartCryptoKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  StartCryptoKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartCryptoKeyWorkflow`.
+message StartCryptoKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  StartCryptoKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceCryptoKeyWorkflow`.
+message AdvanceCryptoKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  AdvanceCryptoKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceCryptoKeyWorkflow`.
+message AdvanceCryptoKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  AdvanceCryptoKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelCryptoKeyWorkflow`.
+message CancelCryptoKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  CancelCryptoKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelCryptoKeyWorkflow`.
+message CancelCryptoKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  CancelCryptoKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryCryptoKeyWorkflow`.
+message RetryCryptoKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  RetryCryptoKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryCryptoKeyWorkflow`.
+message RetryCryptoKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  RetryCryptoKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseCryptoKeyWorkflow`.
+message PauseCryptoKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  PauseCryptoKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseCryptoKeyWorkflow`.
+message PauseCryptoKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  PauseCryptoKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeCryptoKeyWorkflow`.
+message ResumeCryptoKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  ResumeCryptoKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeCryptoKeyWorkflow`.
+message ResumeCryptoKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  ResumeCryptoKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectCryptoKeyWorkflow`.
+message InspectCryptoKeyWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectCryptoKeyWorkflow`.
+message InspectCryptoKeyWorkflowResponse {
+  CryptoKey crypto_key = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListCryptoKeyWorkflows`.
+message ListCryptoKeyWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CryptoKeyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListCryptoKeyWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListCryptoKeyWorkflows`.
+message ListCryptoKeyWorkflowsResponse {
+  repeated CryptoKey crypto_keys = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalCryptoKeyWorkflow`.
+message SignalCryptoKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  SignalCryptoKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalCryptoKeyWorkflow`.
+message SignalCryptoKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  SignalCryptoKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

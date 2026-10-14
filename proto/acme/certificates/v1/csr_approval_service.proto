@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.certificates.v1;
+
+import "acme/certificates/v1/certificates.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Certificates.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/certificates/v1;certificatesv1";
+option java_multiple_files = true;
+option java_outer_classname = "CsrApprovalServiceProto";
+option java_package = "com.acme.certificates.v1";
+
+// Routes csrs through approval, with escalation and delegation.
+service CsrApprovalService {
+  // Submits a csr.
+  rpc SubmitCsr(SubmitCsrRequest) returns (SubmitCsrResponse);
+
+  // Approves a csr.
+  rpc ApproveCsr(ApproveCsrRequest) returns (ApproveCsrResponse);
+
+  // Rejects a csr.
+  rpc RejectCsr(RejectCsrRequest) returns (RejectCsrResponse);
+
+  // Escalates a csr.
+  rpc EscalateCsr(EscalateCsrRequest) returns (EscalateCsrResponse);
+
+  // Lists csrs a page at a time.
+  rpc ListPendingCsrs(ListPendingCsrsRequest) returns (ListPendingCsrsResponse);
+
+  // Delegates a csr.
+  rpc DelegateCsrApproval(DelegateCsrApprovalRequest) returns (DelegateCsrApprovalResponse);
+
+  // Recalls a csr.
+  rpc RecallCsr(RecallCsrRequest) returns (RecallCsrResponse);
+
+  // Returns a csr.
+  rpc GetCsrApprovalStatus(GetCsrApprovalStatusRequest) returns (GetCsrApprovalStatusResponse);
+
+  // Comments a csr.
+  rpc CommentCsrApproval(CommentCsrApprovalRequest) returns (CommentCsrApprovalResponse);
+}
+
+// The request of `SubmitCsr`.
+message SubmitCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  SubmitCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitCsr`.
+message SubmitCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  SubmitCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveCsr`.
+message ApproveCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  ApproveCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveCsr`.
+message ApproveCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  ApproveCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectCsr`.
+message RejectCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  RejectCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectCsr`.
+message RejectCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  RejectCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateCsr`.
+message EscalateCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  EscalateCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateCsr`.
+message EscalateCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  EscalateCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingCsrs`.
+message ListPendingCsrsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CsrStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingCsrsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingCsrs`.
+message ListPendingCsrsResponse {
+  repeated Csr csrs = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateCsrApproval`.
+message DelegateCsrApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  DelegateCsrApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateCsrApproval`.
+message DelegateCsrApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  DelegateCsrApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallCsr`.
+message RecallCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  RecallCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallCsr`.
+message RecallCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  RecallCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCsrApprovalStatus`.
+message GetCsrApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCsrApprovalStatus`.
+message GetCsrApprovalStatusResponse {
+  Csr csr = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentCsrApproval`.
+message CommentCsrApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  CommentCsrApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentCsrApproval`.
+message CommentCsrApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  CommentCsrApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,195 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FlagRolloutHistoryServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Keeps every version of a flag rollout and restores earlier ones.
+service FlagRolloutHistoryService {
+  // Records a flag rollout.
+  rpc RecordFlagRolloutVersion(RecordFlagRolloutVersionRequest) returns (RecordFlagRolloutVersionResponse);
+
+  // Lists flag rollouts a page at a time.
+  rpc ListFlagRolloutVersions(ListFlagRolloutVersionsRequest) returns (ListFlagRolloutVersionsResponse);
+
+  // Returns a flag rollout.
+  rpc GetFlagRolloutVersion(GetFlagRolloutVersionRequest) returns (GetFlagRolloutVersionResponse);
+
+  // Compares a flag rollout.
+  rpc CompareFlagRolloutVersions(CompareFlagRolloutVersionsRequest) returns (CompareFlagRolloutVersionsResponse);
+
+  // Reverts a flag rollout.
+  rpc RevertFlagRollout(RevertFlagRolloutRequest) returns (RevertFlagRolloutResponse);
+
+  // Deletes a flag rollout.
+  rpc PruneFlagRolloutVersions(PruneFlagRolloutVersionsRequest) returns (PruneFlagRolloutVersionsResponse);
+}
+
+// The request of `RecordFlagRolloutVersion`.
+message RecordFlagRolloutVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  RecordFlagRolloutVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordFlagRolloutVersion`.
+message RecordFlagRolloutVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  RecordFlagRolloutVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListFlagRolloutVersions`.
+message ListFlagRolloutVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FlagRolloutStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFlagRolloutVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFlagRolloutVersions`.
+message ListFlagRolloutVersionsResponse {
+  repeated FlagRollout flag_rollouts = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFlagRolloutVersion`.
+message GetFlagRolloutVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFlagRolloutVersion`.
+message GetFlagRolloutVersionResponse {
+  FlagRollout flag_rollout = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CompareFlagRolloutVersions`.
+message CompareFlagRolloutVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  CompareFlagRolloutVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareFlagRolloutVersions`.
+message CompareFlagRolloutVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  CompareFlagRolloutVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertFlagRollout`.
+message RevertFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  RevertFlagRolloutRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertFlagRollout`.
+message RevertFlagRolloutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  RevertFlagRolloutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneFlagRolloutVersions`.
+message PruneFlagRolloutVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneFlagRolloutVersions`.
+message PruneFlagRolloutVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

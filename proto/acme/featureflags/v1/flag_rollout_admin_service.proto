@@ -1,0 +1,239 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FlagRolloutAdminServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Operator actions on flag rollouts that support staff run by hand.
+service FlagRolloutAdminService {
+  // Archives a flag rollout.
+  rpc ArchiveFlagRollout(ArchiveFlagRolloutRequest) returns (ArchiveFlagRolloutResponse);
+
+  // Restores a flag rollout.
+  rpc RestoreFlagRollout(RestoreFlagRolloutRequest) returns (RestoreFlagRolloutResponse);
+
+  // Deletes a flag rollout.
+  rpc PurgeFlagRollout(PurgeFlagRolloutRequest) returns (PurgeFlagRolloutResponse);
+
+  // Locks a flag rollout.
+  rpc LockFlagRollout(LockFlagRolloutRequest) returns (LockFlagRolloutResponse);
+
+  // Transfers a flag rollout.
+  rpc TransferFlagRollout(TransferFlagRolloutRequest) returns (TransferFlagRolloutResponse);
+
+  // Repairs a flag rollout.
+  rpc RepairFlagRollout(RepairFlagRolloutRequest) returns (RepairFlagRolloutResponse);
+
+  // Returns a flag rollout.
+  rpc InspectFlagRollout(InspectFlagRolloutRequest) returns (InspectFlagRolloutResponse);
+}
+
+// The request of `ArchiveFlagRollout`.
+message ArchiveFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  ArchiveFlagRolloutRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchiveFlagRollout`.
+message ArchiveFlagRolloutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  ArchiveFlagRolloutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestoreFlagRollout`.
+message RestoreFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  RestoreFlagRolloutRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestoreFlagRollout`.
+message RestoreFlagRolloutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  RestoreFlagRolloutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgeFlagRollout`.
+message PurgeFlagRolloutRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgeFlagRollout`.
+message PurgeFlagRolloutResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `LockFlagRollout`.
+message LockFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  LockFlagRolloutRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockFlagRollout`.
+message LockFlagRolloutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  LockFlagRolloutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferFlagRollout`.
+message TransferFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  TransferFlagRolloutRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferFlagRollout`.
+message TransferFlagRolloutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  TransferFlagRolloutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairFlagRollout`.
+message RepairFlagRolloutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  FlagRollout flag_rollout = 3;
+  RepairFlagRolloutRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairFlagRollout`.
+message RepairFlagRolloutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagRollout flag_rollout = 1;
+  RepairFlagRolloutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectFlagRollout`.
+message InspectFlagRolloutRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_rollout_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectFlagRollout`.
+message InspectFlagRolloutResponse {
+  FlagRollout flag_rollout = 1;
+  acme.common.v1.OperationResult result = 2;
+}

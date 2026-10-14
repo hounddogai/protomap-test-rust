@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/configuration/v1/configuration.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "ConfigSetApprovalServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Routes config sets through approval, with escalation and delegation.
+service ConfigSetApprovalService {
+  // Submits a config set.
+  rpc SubmitConfigSet(SubmitConfigSetRequest) returns (SubmitConfigSetResponse);
+
+  // Approves a config set.
+  rpc ApproveConfigSet(ApproveConfigSetRequest) returns (ApproveConfigSetResponse);
+
+  // Rejects a config set.
+  rpc RejectConfigSet(RejectConfigSetRequest) returns (RejectConfigSetResponse);
+
+  // Escalates a config set.
+  rpc EscalateConfigSet(EscalateConfigSetRequest) returns (EscalateConfigSetResponse);
+
+  // Lists config sets a page at a time.
+  rpc ListPendingConfigSets(ListPendingConfigSetsRequest) returns (ListPendingConfigSetsResponse);
+
+  // Delegates a config set.
+  rpc DelegateConfigSetApproval(DelegateConfigSetApprovalRequest) returns (DelegateConfigSetApprovalResponse);
+
+  // Recalls a config set.
+  rpc RecallConfigSet(RecallConfigSetRequest) returns (RecallConfigSetResponse);
+
+  // Returns a config set.
+  rpc GetConfigSetApprovalStatus(GetConfigSetApprovalStatusRequest) returns (GetConfigSetApprovalStatusResponse);
+
+  // Comments a config set.
+  rpc CommentConfigSetApproval(CommentConfigSetApprovalRequest) returns (CommentConfigSetApprovalResponse);
+}
+
+// The request of `SubmitConfigSet`.
+message SubmitConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ConfigSet config_set = 3;
+  SubmitConfigSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitConfigSet`.
+message SubmitConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  SubmitConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveConfigSet`.
+message ApproveConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ConfigSet config_set = 3;
+  ApproveConfigSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveConfigSet`.
+message ApproveConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  ApproveConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectConfigSet`.
+message RejectConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ConfigSet config_set = 3;
+  RejectConfigSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectConfigSet`.
+message RejectConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  RejectConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateConfigSet`.
+message EscalateConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ConfigSet config_set = 3;
+  EscalateConfigSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateConfigSet`.
+message EscalateConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  EscalateConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingConfigSets`.
+message ListPendingConfigSetsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ConfigSetStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingConfigSetsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingConfigSets`.
+message ListPendingConfigSetsResponse {
+  repeated ConfigSet config_sets = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateConfigSetApproval`.
+message DelegateConfigSetApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ConfigSet config_set = 3;
+  DelegateConfigSetApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateConfigSetApproval`.
+message DelegateConfigSetApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  DelegateConfigSetApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallConfigSet`.
+message RecallConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ConfigSet config_set = 3;
+  RecallConfigSetRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallConfigSet`.
+message RecallConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  RecallConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetConfigSetApprovalStatus`.
+message GetConfigSetApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetConfigSetApprovalStatus`.
+message GetConfigSetApprovalStatusResponse {
+  ConfigSet config_set = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentConfigSetApproval`.
+message CommentConfigSetApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ConfigSet config_set = 3;
+  CommentConfigSetApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentConfigSetApproval`.
+message CommentConfigSetApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  CommentConfigSetApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

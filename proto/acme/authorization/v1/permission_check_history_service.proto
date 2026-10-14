@@ -1,0 +1,214 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.authorization.v1;
+
+import "acme/authorization/v1/authorization.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Authorization.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/authorization/v1;authorizationv1";
+option java_multiple_files = true;
+option java_outer_classname = "PermissionCheckHistoryServiceProto";
+option java_package = "com.acme.authorization.v1";
+
+// Keeps every version of a permission check and restores earlier ones.
+service PermissionCheckHistoryService {
+  // Records a permission check.
+  rpc RecordPermissionCheckVersion(RecordPermissionCheckVersionRequest) returns (RecordPermissionCheckVersionResponse);
+
+  // Lists permission checks a page at a time.
+  rpc ListPermissionCheckVersions(ListPermissionCheckVersionsRequest) returns (ListPermissionCheckVersionsResponse);
+
+  // Returns a permission check.
+  rpc GetPermissionCheckVersion(GetPermissionCheckVersionRequest) returns (GetPermissionCheckVersionResponse);
+
+  // Compares a permission check.
+  rpc ComparePermissionCheckVersions(ComparePermissionCheckVersionsRequest) returns (ComparePermissionCheckVersionsResponse);
+
+  // Reverts a permission check.
+  rpc RevertPermissionCheck(RevertPermissionCheckRequest) returns (RevertPermissionCheckResponse);
+
+  // Annotates a permission check.
+  rpc AnnotatePermissionCheckVersion(AnnotatePermissionCheckVersionRequest) returns (AnnotatePermissionCheckVersionResponse);
+}
+
+// The request of `RecordPermissionCheckVersion`.
+message RecordPermissionCheckVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  RecordPermissionCheckVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordPermissionCheckVersion`.
+message RecordPermissionCheckVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  RecordPermissionCheckVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPermissionCheckVersions`.
+message ListPermissionCheckVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated PermissionCheckStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPermissionCheckVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPermissionCheckVersions`.
+message ListPermissionCheckVersionsResponse {
+  repeated PermissionCheck permission_checks = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPermissionCheckVersion`.
+message GetPermissionCheckVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPermissionCheckVersion`.
+message GetPermissionCheckVersionResponse {
+  PermissionCheck permission_check = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ComparePermissionCheckVersions`.
+message ComparePermissionCheckVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  ComparePermissionCheckVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ComparePermissionCheckVersions`.
+message ComparePermissionCheckVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  ComparePermissionCheckVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertPermissionCheck`.
+message RevertPermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  RevertPermissionCheckRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertPermissionCheck`.
+message RevertPermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  RevertPermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AnnotatePermissionCheckVersion`.
+message AnnotatePermissionCheckVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  AnnotatePermissionCheckVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AnnotatePermissionCheckVersion`.
+message AnnotatePermissionCheckVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  AnnotatePermissionCheckVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

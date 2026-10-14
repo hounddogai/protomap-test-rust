@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/configuration/v1/configuration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "ConfigChangeValidationServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Checks config changes against the rules before anything acts on them.
+service ConfigChangeValidationService {
+  // Validates a config change.
+  rpc ValidateConfigChange(ValidateConfigChangeRequest) returns (ValidateConfigChangeResponse);
+
+  // Previews a config change.
+  rpc PreviewConfigChange(PreviewConfigChangeRequest) returns (PreviewConfigChangeResponse);
+
+  // Checks a config change.
+  rpc CheckConfigChangeEligibility(CheckConfigChangeEligibilityRequest) returns (CheckConfigChangeEligibilityResponse);
+
+  // Normalizes a config change.
+  rpc NormalizeConfigChange(NormalizeConfigChangeRequest) returns (NormalizeConfigChangeResponse);
+
+  // Explains a config change.
+  rpc ExplainConfigChangeDecision(ExplainConfigChangeDecisionRequest) returns (ExplainConfigChangeDecisionResponse);
+
+  // Scores a config change.
+  rpc ScoreConfigChange(ScoreConfigChangeRequest) returns (ScoreConfigChangeResponse);
+
+  // Lints a config change.
+  rpc LintConfigChanges(LintConfigChangesRequest) returns (LintConfigChangesResponse);
+
+  // Returns a config change.
+  rpc GetConfigChangeRules(GetConfigChangeRulesRequest) returns (GetConfigChangeRulesResponse);
+}
+
+// The request of `ValidateConfigChange`.
+message ValidateConfigChangeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  ValidateConfigChangeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateConfigChange`.
+message ValidateConfigChangeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  ValidateConfigChangeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewConfigChange`.
+message PreviewConfigChangeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  PreviewConfigChangeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewConfigChange`.
+message PreviewConfigChangeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  PreviewConfigChangeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckConfigChangeEligibility`.
+message CheckConfigChangeEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  CheckConfigChangeEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckConfigChangeEligibility`.
+message CheckConfigChangeEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  CheckConfigChangeEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeConfigChange`.
+message NormalizeConfigChangeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  NormalizeConfigChangeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeConfigChange`.
+message NormalizeConfigChangeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  NormalizeConfigChangeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainConfigChangeDecision`.
+message ExplainConfigChangeDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  ExplainConfigChangeDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainConfigChangeDecision`.
+message ExplainConfigChangeDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  ExplainConfigChangeDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreConfigChange`.
+message ScoreConfigChangeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  ScoreConfigChangeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreConfigChange`.
+message ScoreConfigChangeResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreConfigChangeResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ConfigChange config_change = 1;
+  ScoreConfigChangeResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintConfigChanges`.
+message LintConfigChangesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  LintConfigChangesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintConfigChanges`.
+message LintConfigChangesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  LintConfigChangesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetConfigChangeRules`.
+message GetConfigChangeRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetConfigChangeRules`.
+message GetConfigChangeRulesResponse {
+  ConfigChange config_change = 1;
+  acme.common.v1.OperationResult result = 2;
+}

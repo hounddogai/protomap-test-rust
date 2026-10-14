@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FlagEvaluationCalculationServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Computes the figures of a flag evaluation, such as totals, taxes, and estimates.
+service FlagEvaluationCalculationService {
+  // Calculates a flag evaluation.
+  rpc CalculateFlagEvaluation(CalculateFlagEvaluationRequest) returns (CalculateFlagEvaluationResponse);
+
+  // Estimates a flag evaluation.
+  rpc EstimateFlagEvaluation(EstimateFlagEvaluationRequest) returns (EstimateFlagEvaluationResponse);
+
+  // Quotes a flag evaluation.
+  rpc QuoteFlagEvaluation(QuoteFlagEvaluationRequest) returns (QuoteFlagEvaluationResponse);
+
+  // Compares a flag evaluation.
+  rpc CompareFlagEvaluationOptions(CompareFlagEvaluationOptionsRequest) returns (CompareFlagEvaluationOptionsResponse);
+
+  // Recalculates a flag evaluation.
+  rpc RecalculateFlagEvaluations(RecalculateFlagEvaluationsRequest) returns (RecalculateFlagEvaluationsResponse);
+
+  // Simulates a flag evaluation.
+  rpc SimulateFlagEvaluation(SimulateFlagEvaluationRequest) returns (SimulateFlagEvaluationResponse);
+
+  // Explains a flag evaluation.
+  rpc ExplainFlagEvaluationCalculation(ExplainFlagEvaluationCalculationRequest) returns (ExplainFlagEvaluationCalculationResponse);
+
+  // Returns a flag evaluation.
+  rpc GetFlagEvaluationRates(GetFlagEvaluationRatesRequest) returns (GetFlagEvaluationRatesResponse);
+}
+
+// The request of `CalculateFlagEvaluation`.
+message CalculateFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  CalculateFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateFlagEvaluation`.
+message CalculateFlagEvaluationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateFlagEvaluationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  CalculateFlagEvaluationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateFlagEvaluation`.
+message EstimateFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  EstimateFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateFlagEvaluation`.
+message EstimateFlagEvaluationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateFlagEvaluationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  EstimateFlagEvaluationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteFlagEvaluation`.
+message QuoteFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  QuoteFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteFlagEvaluation`.
+message QuoteFlagEvaluationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteFlagEvaluationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  QuoteFlagEvaluationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareFlagEvaluationOptions`.
+message CompareFlagEvaluationOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  CompareFlagEvaluationOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareFlagEvaluationOptions`.
+message CompareFlagEvaluationOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareFlagEvaluationOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  CompareFlagEvaluationOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateFlagEvaluations`.
+message RecalculateFlagEvaluationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  RecalculateFlagEvaluationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateFlagEvaluations`.
+message RecalculateFlagEvaluationsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateFlagEvaluationsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  RecalculateFlagEvaluationsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateFlagEvaluation`.
+message SimulateFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  SimulateFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateFlagEvaluation`.
+message SimulateFlagEvaluationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateFlagEvaluationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  SimulateFlagEvaluationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainFlagEvaluationCalculation`.
+message ExplainFlagEvaluationCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  ExplainFlagEvaluationCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainFlagEvaluationCalculation`.
+message ExplainFlagEvaluationCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  ExplainFlagEvaluationCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFlagEvaluationRates`.
+message GetFlagEvaluationRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFlagEvaluationRates`.
+message GetFlagEvaluationRatesResponse {
+  FlagEvaluation flag_evaluation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,205 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.edgegateway.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/edgegateway/v1/edgegateway.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Edgegateway.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/edgegateway/v1;edgegatewayv1";
+option java_multiple_files = true;
+option java_outer_classname = "GatewayPolicyReportingServiceProto";
+option java_package = "com.acme.edgegateway.v1";
+
+// Builds and schedules reports about gateway policies.
+service GatewayPolicyReportingService {
+  // Generates a gateway policy.
+  rpc GenerateGatewayPolicyReport(GenerateGatewayPolicyReportRequest) returns (GenerateGatewayPolicyReportResponse);
+
+  // Returns a gateway policy.
+  rpc FetchGatewayPolicyReport(FetchGatewayPolicyReportRequest) returns (FetchGatewayPolicyReportResponse);
+
+  // Schedules a gateway policy.
+  rpc ScheduleGatewayPolicyReport(ScheduleGatewayPolicyReportRequest) returns (ScheduleGatewayPolicyReportResponse);
+
+  // Streams the changes of gateway policies as they happen.
+  rpc StreamGatewayPolicyMetrics(StreamGatewayPolicyMetricsRequest) returns (stream StreamGatewayPolicyMetricsResponse);
+
+  // Lists gateway policies a page at a time.
+  rpc ListGatewayPolicyReports(ListGatewayPolicyReportsRequest) returns (ListGatewayPolicyReportsResponse);
+
+  // Counts gateway policies by status.
+  rpc CountGatewayPolicyTotals(CountGatewayPolicyTotalsRequest) returns (CountGatewayPolicyTotalsResponse);
+
+  // Deletes a gateway policy.
+  rpc DeleteGatewayPolicyReport(DeleteGatewayPolicyReportRequest) returns (DeleteGatewayPolicyReportResponse);
+}
+
+// The request of `GenerateGatewayPolicyReport`.
+message GenerateGatewayPolicyReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string gateway_policy_id = 2;
+  GenerateGatewayPolicyReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `GenerateGatewayPolicyReport`.
+message GenerateGatewayPolicyReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `FetchGatewayPolicyReport`.
+message FetchGatewayPolicyReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string gateway_policy_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `FetchGatewayPolicyReport`.
+message FetchGatewayPolicyReportResponse {
+  GatewayPolicy gateway_policy = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleGatewayPolicyReport`.
+message ScheduleGatewayPolicyReportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string gateway_policy_id = 2;
+  ScheduleGatewayPolicyReportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ScheduleGatewayPolicyReport`.
+message ScheduleGatewayPolicyReportResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `StreamGatewayPolicyMetrics`.
+message StreamGatewayPolicyMetricsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated GatewayPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamGatewayPolicyMetricsRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamGatewayPolicyMetrics`.
+message StreamGatewayPolicyMetricsResponse {
+  GatewayPolicy gateway_policy = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListGatewayPolicyReports`.
+message ListGatewayPolicyReportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated GatewayPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListGatewayPolicyReportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListGatewayPolicyReports`.
+message ListGatewayPolicyReportsResponse {
+  repeated GatewayPolicy gateway_policies = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountGatewayPolicyTotals`.
+message CountGatewayPolicyTotalsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated GatewayPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountGatewayPolicyTotalsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountGatewayPolicyTotals`.
+message CountGatewayPolicyTotalsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DeleteGatewayPolicyReport`.
+message DeleteGatewayPolicyReportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string gateway_policy_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `DeleteGatewayPolicyReport`.
+message DeleteGatewayPolicyReportResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

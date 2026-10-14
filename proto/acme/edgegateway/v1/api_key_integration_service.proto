@@ -1,0 +1,263 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.edgegateway.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/edgegateway/v1/edgegateway.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Edgegateway.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/edgegateway/v1;edgegatewayv1";
+option java_multiple_files = true;
+option java_outer_classname = "ApiKeyIntegrationServiceProto";
+option java_package = "com.acme.edgegateway.v1";
+
+// Connects external systems that send api key events.
+service ApiKeyIntegrationService {
+  // Connects an api key.
+  rpc ConnectApiKeySource(ConnectApiKeySourceRequest) returns (ConnectApiKeySourceResponse);
+
+  // Disconnects an api key.
+  rpc DisconnectApiKeySource(DisconnectApiKeySourceRequest) returns (DisconnectApiKeySourceResponse);
+
+  // Takes a stream of api keys and answers once at the end.
+  rpc IngestApiKeyEvents(stream IngestApiKeyEventsRequest) returns (IngestApiKeyEventsResponse);
+
+  // Acknowledges an api key.
+  rpc AcknowledgeApiKeyEvent(AcknowledgeApiKeyEventRequest) returns (AcknowledgeApiKeyEventResponse);
+
+  // Exchanges changes of api keys with a peer.
+  rpc RelayApiKeyMessages(stream RelayApiKeyMessagesRequest) returns (stream RelayApiKeyMessagesResponse);
+
+  // Lists api keys a page at a time.
+  rpc ListApiKeySources(ListApiKeySourcesRequest) returns (ListApiKeySourcesResponse);
+
+  // Tests an api key.
+  rpc TestApiKeyConnection(TestApiKeyConnectionRequest) returns (TestApiKeyConnectionResponse);
+}
+
+// The request of `ConnectApiKeySource`.
+message ConnectApiKeySourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  ConnectApiKeySourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ConnectApiKeySource`.
+message ConnectApiKeySourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApiKey api_key = 1;
+  ConnectApiKeySourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DisconnectApiKeySource`.
+message DisconnectApiKeySourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  DisconnectApiKeySourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `DisconnectApiKeySource`.
+message DisconnectApiKeySourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApiKey api_key = 1;
+  DisconnectApiKeySourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `IngestApiKeyEvents`.
+message IngestApiKeyEventsRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    IngestApiKeyEventsRequest.StreamHeader header = 2;
+    ApiKey record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `IngestApiKeyEvents`.
+message IngestApiKeyEventsResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string api_key_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated IngestApiKeyEventsResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `AcknowledgeApiKeyEvent`.
+message AcknowledgeApiKeyEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  AcknowledgeApiKeyEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `AcknowledgeApiKeyEvent`.
+message AcknowledgeApiKeyEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApiKey api_key = 1;
+  AcknowledgeApiKeyEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RelayApiKeyMessages`.
+message RelayApiKeyMessagesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    ApiKey change = 2;
+    RelayApiKeyMessagesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `RelayApiKeyMessages`.
+message RelayApiKeyMessagesResponse {
+  ApiKey api_key = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListApiKeySources`.
+message ListApiKeySourcesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ApiKeyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListApiKeySourcesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListApiKeySources`.
+message ListApiKeySourcesResponse {
+  repeated ApiKey api_keys = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TestApiKeyConnection`.
+message TestApiKeyConnectionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  TestApiKeyConnectionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TestApiKeyConnection`.
+message TestApiKeyConnectionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApiKey api_key = 1;
+  TestApiKeyConnectionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

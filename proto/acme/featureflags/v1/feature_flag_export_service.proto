@@ -1,0 +1,212 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureFlagExportServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Exports feature flags to files and other systems.
+service FeatureFlagExportService {
+  // Streams every matching feature flag.
+  rpc StreamFeatureFlagExport(StreamFeatureFlagExportRequest) returns (stream StreamFeatureFlagExportResponse);
+
+  // Returns a feature flag.
+  rpc GetFeatureFlagExport(GetFeatureFlagExportRequest) returns (GetFeatureFlagExportResponse);
+
+  // Cancels a feature flag.
+  rpc CancelFeatureFlagExport(CancelFeatureFlagExportRequest) returns (CancelFeatureFlagExportResponse);
+
+  // Lists feature flags a page at a time.
+  rpc ListFeatureFlagExports(ListFeatureFlagExportsRequest) returns (ListFeatureFlagExportsResponse);
+
+  // Retrys a feature flag.
+  rpc RetryFeatureFlagExport(RetryFeatureFlagExportRequest) returns (RetryFeatureFlagExportResponse);
+
+  // Shares a feature flag.
+  rpc ShareFeatureFlagExport(ShareFeatureFlagExportRequest) returns (ShareFeatureFlagExportResponse);
+}
+
+// The request of `StreamFeatureFlagExport`.
+message StreamFeatureFlagExportRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FeatureFlagStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamFeatureFlagExportRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `StreamFeatureFlagExport`.
+message StreamFeatureFlagExportResponse {
+  FeatureFlag feature_flag = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `GetFeatureFlagExport`.
+message GetFeatureFlagExportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string feature_flag_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFeatureFlagExport`.
+message GetFeatureFlagExportResponse {
+  FeatureFlag feature_flag = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CancelFeatureFlagExport`.
+message CancelFeatureFlagExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_flag_id = 2;
+  CancelFeatureFlagExportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `CancelFeatureFlagExport`.
+message CancelFeatureFlagExportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureFlag feature_flag = 1;
+  CancelFeatureFlagExportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListFeatureFlagExports`.
+message ListFeatureFlagExportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FeatureFlagStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFeatureFlagExportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFeatureFlagExports`.
+message ListFeatureFlagExportsResponse {
+  repeated FeatureFlag feature_flags = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryFeatureFlagExport`.
+message RetryFeatureFlagExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_flag_id = 2;
+  FeatureFlag feature_flag = 3;
+  RetryFeatureFlagExportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryFeatureFlagExport`.
+message RetryFeatureFlagExportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureFlag feature_flag = 1;
+  RetryFeatureFlagExportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ShareFeatureFlagExport`.
+message ShareFeatureFlagExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_flag_id = 2;
+  ShareFeatureFlagExportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ShareFeatureFlagExport`.
+message ShareFeatureFlagExportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureFlag feature_flag = 1;
+  ShareFeatureFlagExportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

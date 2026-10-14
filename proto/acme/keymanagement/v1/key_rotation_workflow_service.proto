@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "KeyRotationWorkflowServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Runs the long-lived workflow that takes a key rotation from start to finish.
+service KeyRotationWorkflowService {
+  // Starts a key rotation.
+  rpc StartKeyRotationWorkflow(StartKeyRotationWorkflowRequest) returns (StartKeyRotationWorkflowResponse);
+
+  // Advances a key rotation.
+  rpc AdvanceKeyRotationWorkflow(AdvanceKeyRotationWorkflowRequest) returns (AdvanceKeyRotationWorkflowResponse);
+
+  // Cancels a key rotation.
+  rpc CancelKeyRotationWorkflow(CancelKeyRotationWorkflowRequest) returns (CancelKeyRotationWorkflowResponse);
+
+  // Retrys a key rotation.
+  rpc RetryKeyRotationWorkflow(RetryKeyRotationWorkflowRequest) returns (RetryKeyRotationWorkflowResponse);
+
+  // Pauses a key rotation.
+  rpc PauseKeyRotationWorkflow(PauseKeyRotationWorkflowRequest) returns (PauseKeyRotationWorkflowResponse);
+
+  // Resumes a key rotation.
+  rpc ResumeKeyRotationWorkflow(ResumeKeyRotationWorkflowRequest) returns (ResumeKeyRotationWorkflowResponse);
+
+  // Returns a key rotation.
+  rpc InspectKeyRotationWorkflow(InspectKeyRotationWorkflowRequest) returns (InspectKeyRotationWorkflowResponse);
+
+  // Lists key rotations a page at a time.
+  rpc ListKeyRotationWorkflows(ListKeyRotationWorkflowsRequest) returns (ListKeyRotationWorkflowsResponse);
+
+  // Signals a key rotation.
+  rpc SignalKeyRotationWorkflow(SignalKeyRotationWorkflowRequest) returns (SignalKeyRotationWorkflowResponse);
+}
+
+// The request of `StartKeyRotationWorkflow`.
+message StartKeyRotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  StartKeyRotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartKeyRotationWorkflow`.
+message StartKeyRotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  StartKeyRotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceKeyRotationWorkflow`.
+message AdvanceKeyRotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  AdvanceKeyRotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceKeyRotationWorkflow`.
+message AdvanceKeyRotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  AdvanceKeyRotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelKeyRotationWorkflow`.
+message CancelKeyRotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  CancelKeyRotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelKeyRotationWorkflow`.
+message CancelKeyRotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  CancelKeyRotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryKeyRotationWorkflow`.
+message RetryKeyRotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  RetryKeyRotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryKeyRotationWorkflow`.
+message RetryKeyRotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  RetryKeyRotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseKeyRotationWorkflow`.
+message PauseKeyRotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  PauseKeyRotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseKeyRotationWorkflow`.
+message PauseKeyRotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  PauseKeyRotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeKeyRotationWorkflow`.
+message ResumeKeyRotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  ResumeKeyRotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeKeyRotationWorkflow`.
+message ResumeKeyRotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  ResumeKeyRotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectKeyRotationWorkflow`.
+message InspectKeyRotationWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectKeyRotationWorkflow`.
+message InspectKeyRotationWorkflowResponse {
+  KeyRotation key_rotation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListKeyRotationWorkflows`.
+message ListKeyRotationWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated KeyRotationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListKeyRotationWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListKeyRotationWorkflows`.
+message ListKeyRotationWorkflowsResponse {
+  repeated KeyRotation key_rotations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalKeyRotationWorkflow`.
+message SignalKeyRotationWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  SignalKeyRotationWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalKeyRotationWorkflow`.
+message SignalKeyRotationWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  SignalKeyRotationWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

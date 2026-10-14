@@ -1,0 +1,240 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "CryptoKeyApprovalServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Routes crypto keys through approval, with escalation and delegation.
+service CryptoKeyApprovalService {
+  // Submits a crypto key.
+  rpc SubmitCryptoKey(SubmitCryptoKeyRequest) returns (SubmitCryptoKeyResponse);
+
+  // Approves a crypto key.
+  rpc ApproveCryptoKey(ApproveCryptoKeyRequest) returns (ApproveCryptoKeyResponse);
+
+  // Rejects a crypto key.
+  rpc RejectCryptoKey(RejectCryptoKeyRequest) returns (RejectCryptoKeyResponse);
+
+  // Escalates a crypto key.
+  rpc EscalateCryptoKey(EscalateCryptoKeyRequest) returns (EscalateCryptoKeyResponse);
+
+  // Lists crypto keys a page at a time.
+  rpc ListPendingCryptoKeys(ListPendingCryptoKeysRequest) returns (ListPendingCryptoKeysResponse);
+
+  // Delegates a crypto key.
+  rpc DelegateCryptoKeyApproval(DelegateCryptoKeyApprovalRequest) returns (DelegateCryptoKeyApprovalResponse);
+}
+
+// The request of `SubmitCryptoKey`.
+message SubmitCryptoKeyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  SubmitCryptoKeyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitCryptoKey`.
+message SubmitCryptoKeyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  SubmitCryptoKeyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveCryptoKey`.
+message ApproveCryptoKeyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  ApproveCryptoKeyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveCryptoKey`.
+message ApproveCryptoKeyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  ApproveCryptoKeyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectCryptoKey`.
+message RejectCryptoKeyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  RejectCryptoKeyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectCryptoKey`.
+message RejectCryptoKeyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  RejectCryptoKeyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateCryptoKey`.
+message EscalateCryptoKeyRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  EscalateCryptoKeyRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateCryptoKey`.
+message EscalateCryptoKeyResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  EscalateCryptoKeyResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingCryptoKeys`.
+message ListPendingCryptoKeysRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CryptoKeyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingCryptoKeysRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingCryptoKeys`.
+message ListPendingCryptoKeysResponse {
+  repeated CryptoKey crypto_keys = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateCryptoKeyApproval`.
+message DelegateCryptoKeyApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string crypto_key_id = 2;
+  CryptoKey crypto_key = 3;
+  DelegateCryptoKeyApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateCryptoKeyApproval`.
+message DelegateCryptoKeyApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CryptoKey crypto_key = 1;
+  DelegateCryptoKeyApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,253 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ThrottleImportServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Takes throttles in bulk from partners and legacy systems.
+service ThrottleImportService {
+  // Takes a stream of throttles and answers once at the end.
+  rpc ImportThrottles(stream ImportThrottlesRequest) returns (ImportThrottlesResponse);
+
+  // Returns a throttle.
+  rpc GetThrottleImportStatus(GetThrottleImportStatusRequest) returns (GetThrottleImportStatusResponse);
+
+  // Cancels a throttle.
+  rpc CancelThrottleImport(CancelThrottleImportRequest) returns (CancelThrottleImportResponse);
+
+  // Validates a throttle.
+  rpc ValidateThrottleImport(ValidateThrottleImportRequest) returns (ValidateThrottleImportResponse);
+
+  // Lists throttles a page at a time.
+  rpc ListThrottleImports(ListThrottleImportsRequest) returns (ListThrottleImportsResponse);
+
+  // Retrys a throttle.
+  rpc RetryThrottleImport(RetryThrottleImportRequest) returns (RetryThrottleImportResponse);
+
+  // Maps a throttle.
+  rpc MapThrottleImportColumns(MapThrottleImportColumnsRequest) returns (MapThrottleImportColumnsResponse);
+}
+
+// The request of `ImportThrottles`.
+message ImportThrottlesRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    ImportThrottlesRequest.StreamHeader header = 2;
+    Throttle record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `ImportThrottles`.
+message ImportThrottlesResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string throttle_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated ImportThrottlesResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `GetThrottleImportStatus`.
+message GetThrottleImportStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetThrottleImportStatus`.
+message GetThrottleImportStatusResponse {
+  Throttle throttle = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CancelThrottleImport`.
+message CancelThrottleImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  CancelThrottleImportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `CancelThrottleImport`.
+message CancelThrottleImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  CancelThrottleImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ValidateThrottleImport`.
+message ValidateThrottleImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  ValidateThrottleImportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateThrottleImport`.
+message ValidateThrottleImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  ValidateThrottleImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListThrottleImports`.
+message ListThrottleImportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ThrottleStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListThrottleImportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListThrottleImports`.
+message ListThrottleImportsResponse {
+  repeated Throttle throttles = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryThrottleImport`.
+message RetryThrottleImportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  RetryThrottleImportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryThrottleImport`.
+message RetryThrottleImportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  RetryThrottleImportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `MapThrottleImportColumns`.
+message MapThrottleImportColumnsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  MapThrottleImportColumnsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `MapThrottleImportColumns`.
+message MapThrottleImportColumnsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  MapThrottleImportColumnsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

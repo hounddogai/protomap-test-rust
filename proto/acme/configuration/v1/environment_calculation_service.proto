@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/configuration/v1/configuration.proto";
+import "google/protobuf/field_mask.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "EnvironmentCalculationServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Computes the figures of an environment, such as totals, taxes, and estimates.
+service EnvironmentCalculationService {
+  // Calculates an environment.
+  rpc CalculateEnvironment(CalculateEnvironmentRequest) returns (CalculateEnvironmentResponse);
+
+  // Estimates an environment.
+  rpc EstimateEnvironment(EstimateEnvironmentRequest) returns (EstimateEnvironmentResponse);
+
+  // Quotes an environment.
+  rpc QuoteEnvironment(QuoteEnvironmentRequest) returns (QuoteEnvironmentResponse);
+
+  // Compares an environment.
+  rpc CompareEnvironmentOptions(CompareEnvironmentOptionsRequest) returns (CompareEnvironmentOptionsResponse);
+
+  // Recalculates an environment.
+  rpc RecalculateEnvironments(RecalculateEnvironmentsRequest) returns (RecalculateEnvironmentsResponse);
+
+  // Simulates an environment.
+  rpc SimulateEnvironment(SimulateEnvironmentRequest) returns (SimulateEnvironmentResponse);
+
+  // Returns an environment.
+  rpc GetEnvironmentRates(GetEnvironmentRatesRequest) returns (GetEnvironmentRatesResponse);
+}
+
+// The request of `CalculateEnvironment`.
+message CalculateEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  CalculateEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateEnvironment`.
+message CalculateEnvironmentResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateEnvironmentResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Environment environment = 1;
+  CalculateEnvironmentResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateEnvironment`.
+message EstimateEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  EstimateEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateEnvironment`.
+message EstimateEnvironmentResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateEnvironmentResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Environment environment = 1;
+  EstimateEnvironmentResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteEnvironment`.
+message QuoteEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  QuoteEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteEnvironment`.
+message QuoteEnvironmentResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteEnvironmentResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Environment environment = 1;
+  QuoteEnvironmentResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareEnvironmentOptions`.
+message CompareEnvironmentOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  CompareEnvironmentOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareEnvironmentOptions`.
+message CompareEnvironmentOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareEnvironmentOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Environment environment = 1;
+  CompareEnvironmentOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateEnvironments`.
+message RecalculateEnvironmentsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  RecalculateEnvironmentsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateEnvironments`.
+message RecalculateEnvironmentsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateEnvironmentsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Environment environment = 1;
+  RecalculateEnvironmentsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateEnvironment`.
+message SimulateEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  SimulateEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateEnvironment`.
+message SimulateEnvironmentResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateEnvironmentResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Environment environment = 1;
+  SimulateEnvironmentResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetEnvironmentRates`.
+message GetEnvironmentRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetEnvironmentRates`.
+message GetEnvironmentRatesResponse {
+  Environment environment = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,219 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "QuotaBucketApprovalServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Routes quota buckets through approval, with escalation and delegation.
+service QuotaBucketApprovalService {
+  // Submits a quota bucket.
+  rpc SubmitQuotaBucket(SubmitQuotaBucketRequest) returns (SubmitQuotaBucketResponse);
+
+  // Approves a quota bucket.
+  rpc ApproveQuotaBucket(ApproveQuotaBucketRequest) returns (ApproveQuotaBucketResponse);
+
+  // Escalates a quota bucket.
+  rpc EscalateQuotaBucket(EscalateQuotaBucketRequest) returns (EscalateQuotaBucketResponse);
+
+  // Lists quota buckets a page at a time.
+  rpc ListPendingQuotaBuckets(ListPendingQuotaBucketsRequest) returns (ListPendingQuotaBucketsResponse);
+
+  // Returns a quota bucket.
+  rpc GetQuotaBucketApprovalStatus(GetQuotaBucketApprovalStatusRequest) returns (GetQuotaBucketApprovalStatusResponse);
+
+  // Comments a quota bucket.
+  rpc CommentQuotaBucketApproval(CommentQuotaBucketApprovalRequest) returns (CommentQuotaBucketApprovalResponse);
+}
+
+// The request of `SubmitQuotaBucket`.
+message SubmitQuotaBucketRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  SubmitQuotaBucketRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitQuotaBucket`.
+message SubmitQuotaBucketResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  SubmitQuotaBucketResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveQuotaBucket`.
+message ApproveQuotaBucketRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  ApproveQuotaBucketRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveQuotaBucket`.
+message ApproveQuotaBucketResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  ApproveQuotaBucketResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateQuotaBucket`.
+message EscalateQuotaBucketRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  EscalateQuotaBucketRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateQuotaBucket`.
+message EscalateQuotaBucketResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  EscalateQuotaBucketResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingQuotaBuckets`.
+message ListPendingQuotaBucketsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated QuotaBucketStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingQuotaBucketsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingQuotaBuckets`.
+message ListPendingQuotaBucketsResponse {
+  repeated QuotaBucket quota_buckets = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetQuotaBucketApprovalStatus`.
+message GetQuotaBucketApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetQuotaBucketApprovalStatus`.
+message GetQuotaBucketApprovalStatusResponse {
+  QuotaBucket quota_bucket = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentQuotaBucketApproval`.
+message CommentQuotaBucketApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  CommentQuotaBucketApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentQuotaBucketApproval`.
+message CommentQuotaBucketApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  CommentQuotaBucketApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

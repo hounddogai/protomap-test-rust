@@ -1,0 +1,249 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "KeyRotationCalculationServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Computes the figures of a key rotation, such as totals, taxes, and estimates.
+service KeyRotationCalculationService {
+  // Calculates a key rotation.
+  rpc CalculateKeyRotation(CalculateKeyRotationRequest) returns (CalculateKeyRotationResponse);
+
+  // Estimates a key rotation.
+  rpc EstimateKeyRotation(EstimateKeyRotationRequest) returns (EstimateKeyRotationResponse);
+
+  // Recalculates a key rotation.
+  rpc RecalculateKeyRotations(RecalculateKeyRotationsRequest) returns (RecalculateKeyRotationsResponse);
+
+  // Simulates a key rotation.
+  rpc SimulateKeyRotation(SimulateKeyRotationRequest) returns (SimulateKeyRotationResponse);
+
+  // Explains a key rotation.
+  rpc ExplainKeyRotationCalculation(ExplainKeyRotationCalculationRequest) returns (ExplainKeyRotationCalculationResponse);
+
+  // Returns a key rotation.
+  rpc GetKeyRotationRates(GetKeyRotationRatesRequest) returns (GetKeyRotationRatesResponse);
+}
+
+// The request of `CalculateKeyRotation`.
+message CalculateKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  CalculateKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateKeyRotation`.
+message CalculateKeyRotationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateKeyRotationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRotation key_rotation = 1;
+  CalculateKeyRotationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateKeyRotation`.
+message EstimateKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  EstimateKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateKeyRotation`.
+message EstimateKeyRotationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateKeyRotationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRotation key_rotation = 1;
+  EstimateKeyRotationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateKeyRotations`.
+message RecalculateKeyRotationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  RecalculateKeyRotationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateKeyRotations`.
+message RecalculateKeyRotationsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateKeyRotationsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRotation key_rotation = 1;
+  RecalculateKeyRotationsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateKeyRotation`.
+message SimulateKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  SimulateKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateKeyRotation`.
+message SimulateKeyRotationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateKeyRotationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRotation key_rotation = 1;
+  SimulateKeyRotationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainKeyRotationCalculation`.
+message ExplainKeyRotationCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  ExplainKeyRotationCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainKeyRotationCalculation`.
+message ExplainKeyRotationCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  ExplainKeyRotationCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetKeyRotationRates`.
+message GetKeyRotationRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetKeyRotationRates`.
+message GetKeyRotationRatesResponse {
+  KeyRotation key_rotation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

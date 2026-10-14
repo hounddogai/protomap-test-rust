@@ -1,0 +1,255 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.certificates.v1;
+
+import "acme/certificates/v1/certificates.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Certificates.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/certificates/v1;certificatesv1";
+option java_multiple_files = true;
+option java_outer_classname = "CsrLifecycleServiceProto";
+option java_package = "com.acme.certificates.v1";
+
+// Moves a csr between the states of its lifecycle.
+service CsrLifecycleService {
+  // Activates a csr.
+  rpc ActivateCsr(ActivateCsrRequest) returns (ActivateCsrResponse);
+
+  // Suspends a csr.
+  rpc SuspendCsr(SuspendCsrRequest) returns (SuspendCsrResponse);
+
+  // Reinstates a csr.
+  rpc ReinstateCsr(ReinstateCsrRequest) returns (ReinstateCsrResponse);
+
+  // Terminates a csr.
+  rpc TerminateCsr(TerminateCsrRequest) returns (TerminateCsrResponse);
+
+  // Renews a csr.
+  rpc RenewCsr(RenewCsrRequest) returns (RenewCsrResponse);
+
+  // Expires a csr.
+  rpc ExpireCsr(ExpireCsrRequest) returns (ExpireCsrResponse);
+
+  // Returns a csr.
+  rpc GetCsrLifecycle(GetCsrLifecycleRequest) returns (GetCsrLifecycleResponse);
+}
+
+// The request of `ActivateCsr`.
+message ActivateCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  ActivateCsrRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateCsr`.
+message ActivateCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  ActivateCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendCsr`.
+message SuspendCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  SuspendCsrRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendCsr`.
+message SuspendCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  SuspendCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateCsr`.
+message ReinstateCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  ReinstateCsrRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateCsr`.
+message ReinstateCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  ReinstateCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateCsr`.
+message TerminateCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  TerminateCsrRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateCsr`.
+message TerminateCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  TerminateCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewCsr`.
+message RenewCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  RenewCsrRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewCsr`.
+message RenewCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  RenewCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireCsr`.
+message ExpireCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  ExpireCsrRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireCsr`.
+message ExpireCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  ExpireCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCsrLifecycle`.
+message GetCsrLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCsrLifecycle`.
+message GetCsrLifecycleResponse {
+  Csr csr = 1;
+  acme.common.v1.OperationResult result = 2;
+}

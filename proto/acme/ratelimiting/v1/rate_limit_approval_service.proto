@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "RateLimitApprovalServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Routes rate limits through approval, with escalation and delegation.
+service RateLimitApprovalService {
+  // Submits a rate limit.
+  rpc SubmitRateLimit(SubmitRateLimitRequest) returns (SubmitRateLimitResponse);
+
+  // Approves a rate limit.
+  rpc ApproveRateLimit(ApproveRateLimitRequest) returns (ApproveRateLimitResponse);
+
+  // Rejects a rate limit.
+  rpc RejectRateLimit(RejectRateLimitRequest) returns (RejectRateLimitResponse);
+
+  // Escalates a rate limit.
+  rpc EscalateRateLimit(EscalateRateLimitRequest) returns (EscalateRateLimitResponse);
+
+  // Lists rate limits a page at a time.
+  rpc ListPendingRateLimits(ListPendingRateLimitsRequest) returns (ListPendingRateLimitsResponse);
+
+  // Delegates a rate limit.
+  rpc DelegateRateLimitApproval(DelegateRateLimitApprovalRequest) returns (DelegateRateLimitApprovalResponse);
+
+  // Recalls a rate limit.
+  rpc RecallRateLimit(RecallRateLimitRequest) returns (RecallRateLimitResponse);
+
+  // Returns a rate limit.
+  rpc GetRateLimitApprovalStatus(GetRateLimitApprovalStatusRequest) returns (GetRateLimitApprovalStatusResponse);
+
+  // Comments a rate limit.
+  rpc CommentRateLimitApproval(CommentRateLimitApprovalRequest) returns (CommentRateLimitApprovalResponse);
+}
+
+// The request of `SubmitRateLimit`.
+message SubmitRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  SubmitRateLimitRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitRateLimit`.
+message SubmitRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  SubmitRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveRateLimit`.
+message ApproveRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  ApproveRateLimitRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveRateLimit`.
+message ApproveRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  ApproveRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectRateLimit`.
+message RejectRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  RejectRateLimitRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectRateLimit`.
+message RejectRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  RejectRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateRateLimit`.
+message EscalateRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  EscalateRateLimitRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateRateLimit`.
+message EscalateRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  EscalateRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingRateLimits`.
+message ListPendingRateLimitsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RateLimitStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingRateLimitsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingRateLimits`.
+message ListPendingRateLimitsResponse {
+  repeated RateLimit rate_limits = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateRateLimitApproval`.
+message DelegateRateLimitApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  DelegateRateLimitApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateRateLimitApproval`.
+message DelegateRateLimitApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  DelegateRateLimitApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallRateLimit`.
+message RecallRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  RecallRateLimitRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallRateLimit`.
+message RecallRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  RecallRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRateLimitApprovalStatus`.
+message GetRateLimitApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRateLimitApprovalStatus`.
+message GetRateLimitApprovalStatusResponse {
+  RateLimit rate_limit = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentRateLimitApproval`.
+message CommentRateLimitApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  CommentRateLimitApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentRateLimitApproval`.
+message CommentRateLimitApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  CommentRateLimitApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

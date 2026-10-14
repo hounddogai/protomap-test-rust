@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "RateLimitLifecycleServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Moves a rate limit between the states of its lifecycle.
+service RateLimitLifecycleService {
+  // Activates a rate limit.
+  rpc ActivateRateLimit(ActivateRateLimitRequest) returns (ActivateRateLimitResponse);
+
+  // Suspends a rate limit.
+  rpc SuspendRateLimit(SuspendRateLimitRequest) returns (SuspendRateLimitResponse);
+
+  // Terminates a rate limit.
+  rpc TerminateRateLimit(TerminateRateLimitRequest) returns (TerminateRateLimitResponse);
+
+  // Renews a rate limit.
+  rpc RenewRateLimit(RenewRateLimitRequest) returns (RenewRateLimitResponse);
+
+  // Expires a rate limit.
+  rpc ExpireRateLimit(ExpireRateLimitRequest) returns (ExpireRateLimitResponse);
+
+  // Returns a rate limit.
+  rpc GetRateLimitLifecycle(GetRateLimitLifecycleRequest) returns (GetRateLimitLifecycleResponse);
+
+  // Schedules a rate limit.
+  rpc ScheduleRateLimitExpiry(ScheduleRateLimitExpiryRequest) returns (ScheduleRateLimitExpiryResponse);
+}
+
+// The request of `ActivateRateLimit`.
+message ActivateRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  ActivateRateLimitRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateRateLimit`.
+message ActivateRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  ActivateRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendRateLimit`.
+message SuspendRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  SuspendRateLimitRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendRateLimit`.
+message SuspendRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  SuspendRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateRateLimit`.
+message TerminateRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  TerminateRateLimitRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateRateLimit`.
+message TerminateRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  TerminateRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewRateLimit`.
+message RenewRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RenewRateLimitRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewRateLimit`.
+message RenewRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  RenewRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireRateLimit`.
+message ExpireRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  ExpireRateLimitRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireRateLimit`.
+message ExpireRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  ExpireRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRateLimitLifecycle`.
+message GetRateLimitLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRateLimitLifecycle`.
+message GetRateLimitLifecycleResponse {
+  RateLimit rate_limit = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleRateLimitExpiry`.
+message ScheduleRateLimitExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  ScheduleRateLimitExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleRateLimitExpiry`.
+message ScheduleRateLimitExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  ScheduleRateLimitExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

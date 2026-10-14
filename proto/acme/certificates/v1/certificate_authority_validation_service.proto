@@ -1,0 +1,260 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.certificates.v1;
+
+import "acme/certificates/v1/certificates.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Certificates.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/certificates/v1;certificatesv1";
+option java_multiple_files = true;
+option java_outer_classname = "CertificateAuthorityValidationServiceProto";
+option java_package = "com.acme.certificates.v1";
+
+// Checks certificate authorities against the rules before anything acts on them.
+service CertificateAuthorityValidationService {
+  // Validates a certificate authority.
+  rpc ValidateCertificateAuthority(ValidateCertificateAuthorityRequest) returns (ValidateCertificateAuthorityResponse);
+
+  // Previews a certificate authority.
+  rpc PreviewCertificateAuthority(PreviewCertificateAuthorityRequest) returns (PreviewCertificateAuthorityResponse);
+
+  // Checks a certificate authority.
+  rpc CheckCertificateAuthorityEligibility(CheckCertificateAuthorityEligibilityRequest) returns (CheckCertificateAuthorityEligibilityResponse);
+
+  // Normalizes a certificate authority.
+  rpc NormalizeCertificateAuthority(NormalizeCertificateAuthorityRequest) returns (NormalizeCertificateAuthorityResponse);
+
+  // Explains a certificate authority.
+  rpc ExplainCertificateAuthorityDecision(ExplainCertificateAuthorityDecisionRequest) returns (ExplainCertificateAuthorityDecisionResponse);
+
+  // Lints a certificate authority.
+  rpc LintCertificateAuthorities(LintCertificateAuthoritiesRequest) returns (LintCertificateAuthoritiesResponse);
+
+  // Returns a certificate authority.
+  rpc GetCertificateAuthorityRules(GetCertificateAuthorityRulesRequest) returns (GetCertificateAuthorityRulesResponse);
+}
+
+// The request of `ValidateCertificateAuthority`.
+message ValidateCertificateAuthorityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  ValidateCertificateAuthorityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateCertificateAuthority`.
+message ValidateCertificateAuthorityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  ValidateCertificateAuthorityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewCertificateAuthority`.
+message PreviewCertificateAuthorityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  PreviewCertificateAuthorityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewCertificateAuthority`.
+message PreviewCertificateAuthorityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  PreviewCertificateAuthorityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckCertificateAuthorityEligibility`.
+message CheckCertificateAuthorityEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  CheckCertificateAuthorityEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckCertificateAuthorityEligibility`.
+message CheckCertificateAuthorityEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  CheckCertificateAuthorityEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeCertificateAuthority`.
+message NormalizeCertificateAuthorityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  NormalizeCertificateAuthorityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeCertificateAuthority`.
+message NormalizeCertificateAuthorityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  NormalizeCertificateAuthorityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainCertificateAuthorityDecision`.
+message ExplainCertificateAuthorityDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  ExplainCertificateAuthorityDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainCertificateAuthorityDecision`.
+message ExplainCertificateAuthorityDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  ExplainCertificateAuthorityDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintCertificateAuthorities`.
+message LintCertificateAuthoritiesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  LintCertificateAuthoritiesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintCertificateAuthorities`.
+message LintCertificateAuthoritiesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  LintCertificateAuthoritiesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCertificateAuthorityRules`.
+message GetCertificateAuthorityRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCertificateAuthorityRules`.
+message GetCertificateAuthorityRulesResponse {
+  CertificateAuthority certificate_authority = 1;
+  acme.common.v1.OperationResult result = 2;
+}

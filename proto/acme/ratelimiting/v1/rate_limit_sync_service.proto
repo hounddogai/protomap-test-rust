@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "RateLimitSyncServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Keeps rate limits in step with the systems of record in other regions.
+service RateLimitSyncService {
+  // Syncs a rate limit.
+  rpc SyncRateLimits(SyncRateLimitsRequest) returns (SyncRateLimitsResponse);
+
+  // Pushs a rate limit.
+  rpc PushRateLimit(PushRateLimitRequest) returns (PushRateLimitResponse);
+
+  // Pulls a rate limit.
+  rpc PullRateLimits(PullRateLimitsRequest) returns (PullRateLimitsResponse);
+
+  // Reconciles a rate limit.
+  rpc ReconcileRateLimits(ReconcileRateLimitsRequest) returns (ReconcileRateLimitsResponse);
+
+  // Exchanges changes of rate limits with a peer.
+  rpc StreamRateLimitChanges(stream StreamRateLimitChangesRequest) returns (stream StreamRateLimitChangesResponse);
+
+  // Resolves a rate limit.
+  rpc ResolveRateLimitConflict(ResolveRateLimitConflictRequest) returns (ResolveRateLimitConflictResponse);
+
+  // Returns a rate limit.
+  rpc GetRateLimitSyncState(GetRateLimitSyncStateRequest) returns (GetRateLimitSyncStateResponse);
+
+  // Lists rate limits a page at a time.
+  rpc ListRateLimitConflicts(ListRateLimitConflictsRequest) returns (ListRateLimitConflictsResponse);
+}
+
+// The request of `SyncRateLimits`.
+message SyncRateLimitsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  SyncRateLimitsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncRateLimits`.
+message SyncRateLimitsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  SyncRateLimitsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushRateLimit`.
+message PushRateLimitRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  PushRateLimitRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushRateLimit`.
+message PushRateLimitResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  PushRateLimitResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullRateLimits`.
+message PullRateLimitsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  PullRateLimitsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullRateLimits`.
+message PullRateLimitsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  PullRateLimitsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileRateLimits`.
+message ReconcileRateLimitsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  ReconcileRateLimitsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileRateLimits`.
+message ReconcileRateLimitsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  ReconcileRateLimitsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamRateLimitChanges`.
+message StreamRateLimitChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    RateLimit change = 2;
+    StreamRateLimitChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamRateLimitChanges`.
+message StreamRateLimitChangesResponse {
+  RateLimit rate_limit = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveRateLimitConflict`.
+message ResolveRateLimitConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  ResolveRateLimitConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveRateLimitConflict`.
+message ResolveRateLimitConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  ResolveRateLimitConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRateLimitSyncState`.
+message GetRateLimitSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRateLimitSyncState`.
+message GetRateLimitSyncStateResponse {
+  RateLimit rate_limit = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListRateLimitConflicts`.
+message ListRateLimitConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RateLimitStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRateLimitConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRateLimitConflicts`.
+message ListRateLimitConflictsResponse {
+  repeated RateLimit rate_limits = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

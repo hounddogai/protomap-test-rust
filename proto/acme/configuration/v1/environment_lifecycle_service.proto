@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/configuration/v1/configuration.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "EnvironmentLifecycleServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Moves an environment between the states of its lifecycle.
+service EnvironmentLifecycleService {
+  // Activates an environment.
+  rpc ActivateEnvironment(ActivateEnvironmentRequest) returns (ActivateEnvironmentResponse);
+
+  // Suspends an environment.
+  rpc SuspendEnvironment(SuspendEnvironmentRequest) returns (SuspendEnvironmentResponse);
+
+  // Reinstates an environment.
+  rpc ReinstateEnvironment(ReinstateEnvironmentRequest) returns (ReinstateEnvironmentResponse);
+
+  // Terminates an environment.
+  rpc TerminateEnvironment(TerminateEnvironmentRequest) returns (TerminateEnvironmentResponse);
+
+  // Renews an environment.
+  rpc RenewEnvironment(RenewEnvironmentRequest) returns (RenewEnvironmentResponse);
+
+  // Expires an environment.
+  rpc ExpireEnvironment(ExpireEnvironmentRequest) returns (ExpireEnvironmentResponse);
+
+  // Returns an environment.
+  rpc GetEnvironmentLifecycle(GetEnvironmentLifecycleRequest) returns (GetEnvironmentLifecycleResponse);
+
+  // Schedules an environment.
+  rpc ScheduleEnvironmentExpiry(ScheduleEnvironmentExpiryRequest) returns (ScheduleEnvironmentExpiryResponse);
+}
+
+// The request of `ActivateEnvironment`.
+message ActivateEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  ActivateEnvironmentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateEnvironment`.
+message ActivateEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  ActivateEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendEnvironment`.
+message SuspendEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  SuspendEnvironmentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendEnvironment`.
+message SuspendEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  SuspendEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateEnvironment`.
+message ReinstateEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  ReinstateEnvironmentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateEnvironment`.
+message ReinstateEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  ReinstateEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateEnvironment`.
+message TerminateEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  TerminateEnvironmentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateEnvironment`.
+message TerminateEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  TerminateEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewEnvironment`.
+message RenewEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  RenewEnvironmentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewEnvironment`.
+message RenewEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  RenewEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireEnvironment`.
+message ExpireEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  ExpireEnvironmentRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireEnvironment`.
+message ExpireEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  ExpireEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetEnvironmentLifecycle`.
+message GetEnvironmentLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetEnvironmentLifecycle`.
+message GetEnvironmentLifecycleResponse {
+  Environment environment = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleEnvironmentExpiry`.
+message ScheduleEnvironmentExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  ScheduleEnvironmentExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleEnvironmentExpiry`.
+message ScheduleEnvironmentExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  ScheduleEnvironmentExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

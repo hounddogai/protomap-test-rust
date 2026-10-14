@@ -1,0 +1,247 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FeatureFlagNotificationServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Tells the people who follow a feature flag what changed.
+service FeatureFlagNotificationService {
+  // Subscribes a feature flag.
+  rpc SubscribeFeatureFlagUpdates(SubscribeFeatureFlagUpdatesRequest) returns (SubscribeFeatureFlagUpdatesResponse);
+
+  // Unsubscribes a feature flag.
+  rpc UnsubscribeFeatureFlagUpdates(UnsubscribeFeatureFlagUpdatesRequest) returns (UnsubscribeFeatureFlagUpdatesResponse);
+
+  // Notifys a feature flag.
+  rpc NotifyFeatureFlagWatchers(NotifyFeatureFlagWatchersRequest) returns (NotifyFeatureFlagWatchersResponse);
+
+  // Lists feature flags a page at a time.
+  rpc ListFeatureFlagSubscriptions(ListFeatureFlagSubscriptionsRequest) returns (ListFeatureFlagSubscriptionsResponse);
+
+  // Sends a feature flag.
+  rpc SendFeatureFlagTestNotice(SendFeatureFlagTestNoticeRequest) returns (SendFeatureFlagTestNoticeResponse);
+
+  // Returns a feature flag.
+  rpc GetFeatureFlagPreferences(GetFeatureFlagPreferencesRequest) returns (GetFeatureFlagPreferencesResponse);
+
+  // Streams the changes of feature flags as they happen.
+  rpc StreamFeatureFlagNotices(StreamFeatureFlagNoticesRequest) returns (stream StreamFeatureFlagNoticesResponse);
+}
+
+// The request of `SubscribeFeatureFlagUpdates`.
+message SubscribeFeatureFlagUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_flag_id = 2;
+  SubscribeFeatureFlagUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribeFeatureFlagUpdates`.
+message SubscribeFeatureFlagUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureFlag feature_flag = 1;
+  SubscribeFeatureFlagUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribeFeatureFlagUpdates`.
+message UnsubscribeFeatureFlagUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_flag_id = 2;
+  UnsubscribeFeatureFlagUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribeFeatureFlagUpdates`.
+message UnsubscribeFeatureFlagUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureFlag feature_flag = 1;
+  UnsubscribeFeatureFlagUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NotifyFeatureFlagWatchers`.
+message NotifyFeatureFlagWatchersRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_flag_id = 2;
+  NotifyFeatureFlagWatchersRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `NotifyFeatureFlagWatchers`.
+message NotifyFeatureFlagWatchersResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureFlag feature_flag = 1;
+  NotifyFeatureFlagWatchersResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListFeatureFlagSubscriptions`.
+message ListFeatureFlagSubscriptionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FeatureFlagStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFeatureFlagSubscriptionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFeatureFlagSubscriptions`.
+message ListFeatureFlagSubscriptionsResponse {
+  repeated FeatureFlag feature_flags = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendFeatureFlagTestNotice`.
+message SendFeatureFlagTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string feature_flag_id = 2;
+  SendFeatureFlagTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendFeatureFlagTestNotice`.
+message SendFeatureFlagTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FeatureFlag feature_flag = 1;
+  SendFeatureFlagTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFeatureFlagPreferences`.
+message GetFeatureFlagPreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string feature_flag_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFeatureFlagPreferences`.
+message GetFeatureFlagPreferencesResponse {
+  FeatureFlag feature_flag = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamFeatureFlagNotices`.
+message StreamFeatureFlagNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FeatureFlagStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamFeatureFlagNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamFeatureFlagNotices`.
+message StreamFeatureFlagNoticesResponse {
+  FeatureFlag feature_flag = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

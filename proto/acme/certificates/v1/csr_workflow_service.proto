@@ -1,0 +1,317 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.certificates.v1;
+
+import "acme/certificates/v1/certificates.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Certificates.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/certificates/v1;certificatesv1";
+option java_multiple_files = true;
+option java_outer_classname = "CsrWorkflowServiceProto";
+option java_package = "com.acme.certificates.v1";
+
+// Runs the long-lived workflow that takes a csr from start to finish.
+service CsrWorkflowService {
+  // Starts a csr.
+  rpc StartCsrWorkflow(StartCsrWorkflowRequest) returns (StartCsrWorkflowResponse);
+
+  // Advances a csr.
+  rpc AdvanceCsrWorkflow(AdvanceCsrWorkflowRequest) returns (AdvanceCsrWorkflowResponse);
+
+  // Cancels a csr.
+  rpc CancelCsrWorkflow(CancelCsrWorkflowRequest) returns (CancelCsrWorkflowResponse);
+
+  // Retrys a csr.
+  rpc RetryCsrWorkflow(RetryCsrWorkflowRequest) returns (RetryCsrWorkflowResponse);
+
+  // Pauses a csr.
+  rpc PauseCsrWorkflow(PauseCsrWorkflowRequest) returns (PauseCsrWorkflowResponse);
+
+  // Resumes a csr.
+  rpc ResumeCsrWorkflow(ResumeCsrWorkflowRequest) returns (ResumeCsrWorkflowResponse);
+
+  // Lists csrs a page at a time.
+  rpc ListCsrWorkflows(ListCsrWorkflowsRequest) returns (ListCsrWorkflowsResponse);
+
+  // Signals a csr.
+  rpc SignalCsrWorkflow(SignalCsrWorkflowRequest) returns (SignalCsrWorkflowResponse);
+}
+
+// The request of `StartCsrWorkflow`.
+message StartCsrWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  StartCsrWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartCsrWorkflow`.
+message StartCsrWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  StartCsrWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceCsrWorkflow`.
+message AdvanceCsrWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  AdvanceCsrWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceCsrWorkflow`.
+message AdvanceCsrWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  AdvanceCsrWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelCsrWorkflow`.
+message CancelCsrWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  CancelCsrWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelCsrWorkflow`.
+message CancelCsrWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  CancelCsrWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryCsrWorkflow`.
+message RetryCsrWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  RetryCsrWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryCsrWorkflow`.
+message RetryCsrWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  RetryCsrWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseCsrWorkflow`.
+message PauseCsrWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  PauseCsrWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseCsrWorkflow`.
+message PauseCsrWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  PauseCsrWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeCsrWorkflow`.
+message ResumeCsrWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  ResumeCsrWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeCsrWorkflow`.
+message ResumeCsrWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  ResumeCsrWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListCsrWorkflows`.
+message ListCsrWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CsrStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListCsrWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListCsrWorkflows`.
+message ListCsrWorkflowsResponse {
+  repeated Csr csrs = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalCsrWorkflow`.
+message SignalCsrWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  SignalCsrWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalCsrWorkflow`.
+message SignalCsrWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  SignalCsrWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

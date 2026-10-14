@@ -1,0 +1,195 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FlagEvaluationHistoryServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Keeps every version of a flag evaluation and restores earlier ones.
+service FlagEvaluationHistoryService {
+  // Records a flag evaluation.
+  rpc RecordFlagEvaluationVersion(RecordFlagEvaluationVersionRequest) returns (RecordFlagEvaluationVersionResponse);
+
+  // Lists flag evaluations a page at a time.
+  rpc ListFlagEvaluationVersions(ListFlagEvaluationVersionsRequest) returns (ListFlagEvaluationVersionsResponse);
+
+  // Returns a flag evaluation.
+  rpc GetFlagEvaluationVersion(GetFlagEvaluationVersionRequest) returns (GetFlagEvaluationVersionResponse);
+
+  // Compares a flag evaluation.
+  rpc CompareFlagEvaluationVersions(CompareFlagEvaluationVersionsRequest) returns (CompareFlagEvaluationVersionsResponse);
+
+  // Reverts a flag evaluation.
+  rpc RevertFlagEvaluation(RevertFlagEvaluationRequest) returns (RevertFlagEvaluationResponse);
+
+  // Deletes a flag evaluation.
+  rpc PruneFlagEvaluationVersions(PruneFlagEvaluationVersionsRequest) returns (PruneFlagEvaluationVersionsResponse);
+}
+
+// The request of `RecordFlagEvaluationVersion`.
+message RecordFlagEvaluationVersionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  RecordFlagEvaluationVersionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecordFlagEvaluationVersion`.
+message RecordFlagEvaluationVersionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  RecordFlagEvaluationVersionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListFlagEvaluationVersions`.
+message ListFlagEvaluationVersionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FlagEvaluationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFlagEvaluationVersionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFlagEvaluationVersions`.
+message ListFlagEvaluationVersionsResponse {
+  repeated FlagEvaluation flag_evaluations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFlagEvaluationVersion`.
+message GetFlagEvaluationVersionRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFlagEvaluationVersion`.
+message GetFlagEvaluationVersionResponse {
+  FlagEvaluation flag_evaluation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CompareFlagEvaluationVersions`.
+message CompareFlagEvaluationVersionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  CompareFlagEvaluationVersionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareFlagEvaluationVersions`.
+message CompareFlagEvaluationVersionsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  CompareFlagEvaluationVersionsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RevertFlagEvaluation`.
+message RevertFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    int64 version = 1;
+    int64 other_version = 2;
+    bytes snapshot = 3;
+    string author_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  RevertFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RevertFlagEvaluation`.
+message RevertFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  RevertFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PruneFlagEvaluationVersions`.
+message PruneFlagEvaluationVersionsRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PruneFlagEvaluationVersions`.
+message PruneFlagEvaluationVersionsResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}

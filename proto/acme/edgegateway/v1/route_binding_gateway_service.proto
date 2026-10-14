@@ -1,0 +1,285 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.edgegateway.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/edgegateway/v1/edgegateway.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Edgegateway.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/edgegateway/v1;edgegatewayv1";
+option java_multiple_files = true;
+option java_outer_classname = "RouteBindingGatewayServiceProto";
+option java_package = "com.acme.edgegateway.v1";
+
+// The edge API that apps call for route bindings.
+service RouteBindingGatewayService {
+  // Fetchs a route binding.
+  rpc FetchRouteBindingView(FetchRouteBindingViewRequest) returns (FetchRouteBindingViewResponse);
+
+  // Composes a route binding.
+  rpc ComposeRouteBindingPage(ComposeRouteBindingPageRequest) returns (ComposeRouteBindingPageResponse);
+
+  // Refreshs a route binding.
+  rpc RefreshRouteBinding(RefreshRouteBindingRequest) returns (RefreshRouteBindingResponse);
+
+  // Submits a route binding.
+  rpc SubmitRouteBindingForm(SubmitRouteBindingFormRequest) returns (SubmitRouteBindingFormResponse);
+
+  // Tracks a route binding.
+  rpc TrackRouteBinding(TrackRouteBindingRequest) returns (TrackRouteBindingResponse);
+
+  // Streams the changes of route bindings as they happen.
+  rpc StreamRouteBindingUpdates(StreamRouteBindingUpdatesRequest) returns (stream StreamRouteBindingUpdatesResponse);
+
+  // Takes a stream of route bindings and answers once at the end.
+  rpc UploadRouteBindingAttachments(stream UploadRouteBindingAttachmentsRequest) returns (UploadRouteBindingAttachmentsResponse);
+
+  // Returns a route binding.
+  rpc GetRouteBindingSummary(GetRouteBindingSummaryRequest) returns (GetRouteBindingSummaryResponse);
+
+  // Starts a route binding.
+  rpc StartRouteBindingCheckout(StartRouteBindingCheckoutRequest) returns (StartRouteBindingCheckoutResponse);
+}
+
+// The request of `FetchRouteBindingView`.
+message FetchRouteBindingViewRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string device = 1;
+    string locale = 2;
+    acme.common.v1.GeoPoint location = 3;
+    map<string, string> client_hints = 4;
+    string session_id = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string route_binding_id = 2;
+  RouteBinding route_binding = 3;
+  FetchRouteBindingViewRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `FetchRouteBindingView`.
+message FetchRouteBindingViewResponse {
+  RouteBinding route_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ComposeRouteBindingPage`.
+message ComposeRouteBindingPageRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string device = 1;
+    string locale = 2;
+    acme.common.v1.GeoPoint location = 3;
+    map<string, string> client_hints = 4;
+    string session_id = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string route_binding_id = 2;
+  RouteBinding route_binding = 3;
+  ComposeRouteBindingPageRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ComposeRouteBindingPage`.
+message ComposeRouteBindingPageResponse {
+  RouteBinding route_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `RefreshRouteBinding`.
+message RefreshRouteBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string device = 1;
+    string locale = 2;
+    acme.common.v1.GeoPoint location = 3;
+    map<string, string> client_hints = 4;
+    string session_id = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string route_binding_id = 2;
+  RouteBinding route_binding = 3;
+  RefreshRouteBindingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RefreshRouteBinding`.
+message RefreshRouteBindingResponse {
+  RouteBinding route_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SubmitRouteBindingForm`.
+message SubmitRouteBindingFormRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string device = 1;
+    string locale = 2;
+    acme.common.v1.GeoPoint location = 3;
+    map<string, string> client_hints = 4;
+    string session_id = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string route_binding_id = 2;
+  RouteBinding route_binding = 3;
+  SubmitRouteBindingFormRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitRouteBindingForm`.
+message SubmitRouteBindingFormResponse {
+  RouteBinding route_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `TrackRouteBinding`.
+message TrackRouteBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string device = 1;
+    string locale = 2;
+    acme.common.v1.GeoPoint location = 3;
+    map<string, string> client_hints = 4;
+    string session_id = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string route_binding_id = 2;
+  RouteBinding route_binding = 3;
+  TrackRouteBindingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `TrackRouteBinding`.
+message TrackRouteBindingResponse {
+  RouteBinding route_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamRouteBindingUpdates`.
+message StreamRouteBindingUpdatesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RouteBindingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamRouteBindingUpdatesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamRouteBindingUpdates`.
+message StreamRouteBindingUpdatesResponse {
+  RouteBinding route_binding = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `UploadRouteBindingAttachments`.
+message UploadRouteBindingAttachmentsRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    UploadRouteBindingAttachmentsRequest.StreamHeader header = 2;
+    RouteBinding record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `UploadRouteBindingAttachments`.
+message UploadRouteBindingAttachmentsResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string route_binding_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated UploadRouteBindingAttachmentsResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `GetRouteBindingSummary`.
+message GetRouteBindingSummaryRequest {
+  acme.common.v1.RequestContext context = 1;
+  string route_binding_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRouteBindingSummary`.
+message GetRouteBindingSummaryResponse {
+  RouteBinding route_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StartRouteBindingCheckout`.
+message StartRouteBindingCheckoutRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string route_binding_id = 2;
+  RouteBinding route_binding = 3;
+  StartRouteBindingCheckoutRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartRouteBindingCheckout`.
+message StartRouteBindingCheckoutResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RouteBinding route_binding = 1;
+  StartRouteBindingCheckoutResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

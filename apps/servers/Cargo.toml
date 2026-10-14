@@ -1,0 +1,22 @@
+[package]
+name = "acme-servers"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[dependencies]
+acme-authorization.workspace = true
+acme-certificates.workspace = true
+acme-configuration.workspace = true
+acme-edgegateway.workspace = true
+acme-featureflags.workspace = true
+acme-keymanagement.workspace = true
+acme-platform.workspace = true
+acme-proto.workspace = true
+acme-ratelimiting.workspace = true
+acme-secrets.workspace = true
+anyhow.workspace = true
+tokio.workspace = true
+tonic.workspace = true
+tracing.workspace = true

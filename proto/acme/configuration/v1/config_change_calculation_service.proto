@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/configuration/v1/configuration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "ConfigChangeCalculationServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Computes the figures of a config change, such as totals, taxes, and estimates.
+service ConfigChangeCalculationService {
+  // Calculates a config change.
+  rpc CalculateConfigChange(CalculateConfigChangeRequest) returns (CalculateConfigChangeResponse);
+
+  // Estimates a config change.
+  rpc EstimateConfigChange(EstimateConfigChangeRequest) returns (EstimateConfigChangeResponse);
+
+  // Quotes a config change.
+  rpc QuoteConfigChange(QuoteConfigChangeRequest) returns (QuoteConfigChangeResponse);
+
+  // Compares a config change.
+  rpc CompareConfigChangeOptions(CompareConfigChangeOptionsRequest) returns (CompareConfigChangeOptionsResponse);
+
+  // Recalculates a config change.
+  rpc RecalculateConfigChanges(RecalculateConfigChangesRequest) returns (RecalculateConfigChangesResponse);
+
+  // Simulates a config change.
+  rpc SimulateConfigChange(SimulateConfigChangeRequest) returns (SimulateConfigChangeResponse);
+
+  // Explains a config change.
+  rpc ExplainConfigChangeCalculation(ExplainConfigChangeCalculationRequest) returns (ExplainConfigChangeCalculationResponse);
+
+  // Returns a config change.
+  rpc GetConfigChangeRates(GetConfigChangeRatesRequest) returns (GetConfigChangeRatesResponse);
+}
+
+// The request of `CalculateConfigChange`.
+message CalculateConfigChangeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  CalculateConfigChangeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateConfigChange`.
+message CalculateConfigChangeResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateConfigChangeResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ConfigChange config_change = 1;
+  CalculateConfigChangeResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateConfigChange`.
+message EstimateConfigChangeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  EstimateConfigChangeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateConfigChange`.
+message EstimateConfigChangeResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateConfigChangeResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ConfigChange config_change = 1;
+  EstimateConfigChangeResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteConfigChange`.
+message QuoteConfigChangeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  QuoteConfigChangeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteConfigChange`.
+message QuoteConfigChangeResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteConfigChangeResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ConfigChange config_change = 1;
+  QuoteConfigChangeResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareConfigChangeOptions`.
+message CompareConfigChangeOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  CompareConfigChangeOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareConfigChangeOptions`.
+message CompareConfigChangeOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareConfigChangeOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ConfigChange config_change = 1;
+  CompareConfigChangeOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateConfigChanges`.
+message RecalculateConfigChangesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  RecalculateConfigChangesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateConfigChanges`.
+message RecalculateConfigChangesResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateConfigChangesResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ConfigChange config_change = 1;
+  RecalculateConfigChangesResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateConfigChange`.
+message SimulateConfigChangeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  SimulateConfigChangeRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateConfigChange`.
+message SimulateConfigChangeResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateConfigChangeResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  ConfigChange config_change = 1;
+  SimulateConfigChangeResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainConfigChangeCalculation`.
+message ExplainConfigChangeCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  ExplainConfigChangeCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainConfigChangeCalculation`.
+message ExplainConfigChangeCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  ExplainConfigChangeCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetConfigChangeRates`.
+message GetConfigChangeRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetConfigChangeRates`.
+message GetConfigChangeRatesResponse {
+  ConfigChange config_change = 1;
+  acme.common.v1.OperationResult result = 2;
+}

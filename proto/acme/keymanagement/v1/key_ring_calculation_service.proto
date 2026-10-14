@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "KeyRingCalculationServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Computes the figures of a key ring, such as totals, taxes, and estimates.
+service KeyRingCalculationService {
+  // Calculates a key ring.
+  rpc CalculateKeyRing(CalculateKeyRingRequest) returns (CalculateKeyRingResponse);
+
+  // Estimates a key ring.
+  rpc EstimateKeyRing(EstimateKeyRingRequest) returns (EstimateKeyRingResponse);
+
+  // Quotes a key ring.
+  rpc QuoteKeyRing(QuoteKeyRingRequest) returns (QuoteKeyRingResponse);
+
+  // Compares a key ring.
+  rpc CompareKeyRingOptions(CompareKeyRingOptionsRequest) returns (CompareKeyRingOptionsResponse);
+
+  // Recalculates a key ring.
+  rpc RecalculateKeyRings(RecalculateKeyRingsRequest) returns (RecalculateKeyRingsResponse);
+
+  // Simulates a key ring.
+  rpc SimulateKeyRing(SimulateKeyRingRequest) returns (SimulateKeyRingResponse);
+
+  // Explains a key ring.
+  rpc ExplainKeyRingCalculation(ExplainKeyRingCalculationRequest) returns (ExplainKeyRingCalculationResponse);
+
+  // Returns a key ring.
+  rpc GetKeyRingRates(GetKeyRingRatesRequest) returns (GetKeyRingRatesResponse);
+}
+
+// The request of `CalculateKeyRing`.
+message CalculateKeyRingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  CalculateKeyRingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateKeyRing`.
+message CalculateKeyRingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateKeyRingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRing key_ring = 1;
+  CalculateKeyRingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateKeyRing`.
+message EstimateKeyRingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  EstimateKeyRingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateKeyRing`.
+message EstimateKeyRingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateKeyRingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRing key_ring = 1;
+  EstimateKeyRingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteKeyRing`.
+message QuoteKeyRingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  QuoteKeyRingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteKeyRing`.
+message QuoteKeyRingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteKeyRingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRing key_ring = 1;
+  QuoteKeyRingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareKeyRingOptions`.
+message CompareKeyRingOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  CompareKeyRingOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareKeyRingOptions`.
+message CompareKeyRingOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareKeyRingOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRing key_ring = 1;
+  CompareKeyRingOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateKeyRings`.
+message RecalculateKeyRingsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  RecalculateKeyRingsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateKeyRings`.
+message RecalculateKeyRingsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateKeyRingsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRing key_ring = 1;
+  RecalculateKeyRingsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateKeyRing`.
+message SimulateKeyRingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  SimulateKeyRingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateKeyRing`.
+message SimulateKeyRingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateKeyRingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRing key_ring = 1;
+  SimulateKeyRingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainKeyRingCalculation`.
+message ExplainKeyRingCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  ExplainKeyRingCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainKeyRingCalculation`.
+message ExplainKeyRingCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  ExplainKeyRingCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetKeyRingRates`.
+message GetKeyRingRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetKeyRingRates`.
+message GetKeyRingRatesResponse {
+  KeyRing key_ring = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "KeyRotationApprovalServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Routes key rotations through approval, with escalation and delegation.
+service KeyRotationApprovalService {
+  // Submits a key rotation.
+  rpc SubmitKeyRotation(SubmitKeyRotationRequest) returns (SubmitKeyRotationResponse);
+
+  // Approves a key rotation.
+  rpc ApproveKeyRotation(ApproveKeyRotationRequest) returns (ApproveKeyRotationResponse);
+
+  // Rejects a key rotation.
+  rpc RejectKeyRotation(RejectKeyRotationRequest) returns (RejectKeyRotationResponse);
+
+  // Escalates a key rotation.
+  rpc EscalateKeyRotation(EscalateKeyRotationRequest) returns (EscalateKeyRotationResponse);
+
+  // Lists key rotations a page at a time.
+  rpc ListPendingKeyRotations(ListPendingKeyRotationsRequest) returns (ListPendingKeyRotationsResponse);
+
+  // Delegates a key rotation.
+  rpc DelegateKeyRotationApproval(DelegateKeyRotationApprovalRequest) returns (DelegateKeyRotationApprovalResponse);
+
+  // Recalls a key rotation.
+  rpc RecallKeyRotation(RecallKeyRotationRequest) returns (RecallKeyRotationResponse);
+
+  // Returns a key rotation.
+  rpc GetKeyRotationApprovalStatus(GetKeyRotationApprovalStatusRequest) returns (GetKeyRotationApprovalStatusResponse);
+
+  // Comments a key rotation.
+  rpc CommentKeyRotationApproval(CommentKeyRotationApprovalRequest) returns (CommentKeyRotationApprovalResponse);
+}
+
+// The request of `SubmitKeyRotation`.
+message SubmitKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  SubmitKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitKeyRotation`.
+message SubmitKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  SubmitKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveKeyRotation`.
+message ApproveKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  ApproveKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveKeyRotation`.
+message ApproveKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  ApproveKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectKeyRotation`.
+message RejectKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  RejectKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectKeyRotation`.
+message RejectKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  RejectKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateKeyRotation`.
+message EscalateKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  EscalateKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateKeyRotation`.
+message EscalateKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  EscalateKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingKeyRotations`.
+message ListPendingKeyRotationsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated KeyRotationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingKeyRotationsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingKeyRotations`.
+message ListPendingKeyRotationsResponse {
+  repeated KeyRotation key_rotations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateKeyRotationApproval`.
+message DelegateKeyRotationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  DelegateKeyRotationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateKeyRotationApproval`.
+message DelegateKeyRotationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  DelegateKeyRotationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallKeyRotation`.
+message RecallKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  RecallKeyRotationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallKeyRotation`.
+message RecallKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  RecallKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetKeyRotationApprovalStatus`.
+message GetKeyRotationApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetKeyRotationApprovalStatus`.
+message GetKeyRotationApprovalStatusResponse {
+  KeyRotation key_rotation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentKeyRotationApproval`.
+message CommentKeyRotationApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  CommentKeyRotationApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentKeyRotationApproval`.
+message CommentKeyRotationApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  CommentKeyRotationApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
