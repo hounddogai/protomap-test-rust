@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.authorization.v1;
+
+import "acme/authorization/v1/authorization.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Authorization.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/authorization/v1;authorizationv1";
+option java_multiple_files = true;
+option java_outer_classname = "PermissionCheckValidationServiceProto";
+option java_package = "com.acme.authorization.v1";
+
+// Checks permission checks against the rules before anything acts on them.
+service PermissionCheckValidationService {
+  // Validates a permission check.
+  rpc ValidatePermissionCheck(ValidatePermissionCheckRequest) returns (ValidatePermissionCheckResponse);
+
+  // Previews a permission check.
+  rpc PreviewPermissionCheck(PreviewPermissionCheckRequest) returns (PreviewPermissionCheckResponse);
+
+  // Checks a permission check.
+  rpc CheckPermissionCheckEligibility(CheckPermissionCheckEligibilityRequest) returns (CheckPermissionCheckEligibilityResponse);
+
+  // Normalizes a permission check.
+  rpc NormalizePermissionCheck(NormalizePermissionCheckRequest) returns (NormalizePermissionCheckResponse);
+
+  // Explains a permission check.
+  rpc ExplainPermissionCheckDecision(ExplainPermissionCheckDecisionRequest) returns (ExplainPermissionCheckDecisionResponse);
+
+  // Scores a permission check.
+  rpc ScorePermissionCheck(ScorePermissionCheckRequest) returns (ScorePermissionCheckResponse);
+
+  // Returns a permission check.
+  rpc GetPermissionCheckRules(GetPermissionCheckRulesRequest) returns (GetPermissionCheckRulesResponse);
+}
+
+// The request of `ValidatePermissionCheck`.
+message ValidatePermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  ValidatePermissionCheckRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidatePermissionCheck`.
+message ValidatePermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  ValidatePermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewPermissionCheck`.
+message PreviewPermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  PreviewPermissionCheckRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewPermissionCheck`.
+message PreviewPermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  PreviewPermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckPermissionCheckEligibility`.
+message CheckPermissionCheckEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  CheckPermissionCheckEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckPermissionCheckEligibility`.
+message CheckPermissionCheckEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  CheckPermissionCheckEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizePermissionCheck`.
+message NormalizePermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  NormalizePermissionCheckRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizePermissionCheck`.
+message NormalizePermissionCheckResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  NormalizePermissionCheckResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainPermissionCheckDecision`.
+message ExplainPermissionCheckDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  ExplainPermissionCheckDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainPermissionCheckDecision`.
+message ExplainPermissionCheckDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  PermissionCheck permission_check = 1;
+  ExplainPermissionCheckDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScorePermissionCheck`.
+message ScorePermissionCheckRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  PermissionCheck permission_check = 3;
+  ScorePermissionCheckRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScorePermissionCheck`.
+message ScorePermissionCheckResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScorePermissionCheckResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  PermissionCheck permission_check = 1;
+  ScorePermissionCheckResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetPermissionCheckRules`.
+message GetPermissionCheckRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string permission_check_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetPermissionCheckRules`.
+message GetPermissionCheckRulesResponse {
+  PermissionCheck permission_check = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,45 @@
+//! The approval rule records of deploys's approval work, and the rules, stores, and calculations around them.
+
+mod approval_rule;
+mod approval_rule_engine;
+mod approval_rule_report;
+mod legacy_approval_checkpoint;
+mod legacy_approval_checkpoint_engine;
+mod strict_approval_threshold;
+mod strict_approval_threshold_rules;
+mod strict_approval_threshold_store;
+mod strict_approval_threshold_view;
+mod strict_approval_threshold_workflow;
+mod approval_metric;
+mod approval_metric_rules;
+mod approval_metric_store;
+mod approval_metric_view;
+mod approval_metric_report;
+mod approval_rule_policy;
+mod legacy_approval_checkpoint_policy;
+mod strict_approval_threshold_policy;
+mod approval_metric_policy;
+mod strict_approval_threshold_from_snapshot;
+mod strict_approval_threshold_from_notice;
+
+pub use approval_rule::*;
+pub use approval_rule_engine::*;
+pub use approval_rule_report::*;
+pub use legacy_approval_checkpoint::*;
+pub use legacy_approval_checkpoint_engine::*;
+pub use strict_approval_threshold::*;
+pub use strict_approval_threshold_rules::*;
+pub use strict_approval_threshold_store::*;
+pub use strict_approval_threshold_view::*;
+pub use strict_approval_threshold_workflow::*;
+pub use approval_metric::*;
+pub use approval_metric_rules::*;
+pub use approval_metric_store::*;
+pub use approval_metric_view::*;
+pub use approval_metric_report::*;
+pub use approval_rule_policy::*;
+pub use legacy_approval_checkpoint_policy::*;
+pub use strict_approval_threshold_policy::*;
+pub use approval_metric_policy::*;
+pub use strict_approval_threshold_from_snapshot::*;
+pub use strict_approval_threshold_from_notice::*;

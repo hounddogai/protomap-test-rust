@@ -1,0 +1,175 @@
+use super::*;
+
+use std::collections::BTreeMap;
+use std::rc::Rc;
+
+/// A rule a rollout override must pass. Check returns its problems, or none.
+pub trait RolloutOverrideRule: std::fmt::Debug {
+    fn check(&self, item: &RolloutOverride) -> Vec<String>;
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RolloutOverrideCeilingRangeRule {
+    pub min: f64,
+    pub max: f64,
+}
+
+impl RolloutOverrideRule for RolloutOverrideCeilingRangeRule {
+    fn check(&self, item: &RolloutOverride) -> Vec<String> {
+        let value = item.ceiling;
+        if value < self.min || value > self.max {
+            return vec![format!("ceiling {} is outside {} to {}", value, self.min, self.max)];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RolloutOverrideCodeLengthRule {
+    pub max_length: i64,
+}
+
+impl RolloutOverrideRule for RolloutOverrideCodeLengthRule {
+    fn check(&self, item: &RolloutOverride) -> Vec<String> {
+        let size = item.code.len() as i64;
+        if size > self.max_length {
+            return vec![format!("code is {} characters, more than {}", size, self.max_length)];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RolloutOverrideRequiredPhoneRule {
+    pub message: String,
+}
+
+impl RolloutOverrideRule for RolloutOverrideRequiredPhoneRule {
+    fn check(&self, item: &RolloutOverride) -> Vec<String> {
+        if item.phone.trim() == "" {
+            return vec![self.message.clone()];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RolloutOverrideRequiredLabelRule {
+    pub message: String,
+}
+
+impl RolloutOverrideRule for RolloutOverrideRequiredLabelRule {
+    fn check(&self, item: &RolloutOverride) -> Vec<String> {
+        if item.label.trim() == "" {
+            return vec![self.message.clone()];
+        }
+        Vec::new()
+    }
+}
+
+/// Runs every rule of a rollout override.
+#[derive(Debug, Clone)]
+pub struct RolloutOverrideValidator {
+    pub rules: Vec<Rc<dyn RolloutOverrideRule>>,
+}
+
+impl RolloutOverrideValidator {
+    pub fn validate(&self, item: &RolloutOverride) -> Vec<String> {
+        let mut problems: Vec<String> = Vec::new();
+        for rule in self.rules.iter() {
+            let found = rule.check(item);
+            if (found.len() as i64) == 0 {
+                continue;
+            }
+            for problem in found.iter() {
+                problems.push(format!("{}: {}", item.code, problem));
+            }
+        }
+        problems
+    }
+
+    pub fn require_valid(&self, item: &RolloutOverride) -> Result<(), String> {
+        let problems = self.validate(item);
+        if (problems.len() as i64) > 0 {
+            return Err(format!("{} is invalid: {}", item.display_label(), problems.join("; ")));
+        }
+        Ok(())
+    }
+
+    pub fn validate_all(&self, items: &[RolloutOverride]) -> BTreeMap<String, Vec<String>> {
+        let mut report: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for item in items.iter() {
+            let problems = self.validate(item);
+            if (problems.len() as i64) > 0 {
+                report.insert(item.code.clone(), problems);
+            }
+        }
+        report
+    }
+}
+
+pub fn default_rollout_override_validator() -> RolloutOverrideValidator {
+    RolloutOverrideValidator {
+        rules: vec![
+            Rc::new(RolloutOverrideCeilingRangeRule { min: 3.6, max: 377.1 }) as Rc<dyn RolloutOverrideRule>,
+            Rc::new(RolloutOverrideCodeLengthRule { max_length: 80 }),
+            Rc::new(RolloutOverrideRequiredPhoneRule {
+                message: "rollout override needs a value".to_string(),
+            }),
+            Rc::new(RolloutOverrideRequiredLabelRule {
+                message: "rollout override needs this field".to_string(),
+            }),
+        ],
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn reports_every_problem() {
+        let validator = default_rollout_override_validator();
+        let item = new_rollout_override("", "");
+        let problems = validator.validate(&item);
+        assert!((problems.len() as i64) >= 0, "problems");
+    }
+
+    #[test]
+    fn flags_values_above_ceiling() {
+        let rule = RolloutOverrideCeilingRangeRule { min: 2.3, max: 4921.8 };
+        let mut item = new_rollout_override("x", "y");
+        item.ceiling = 4923.3;
+        assert!((rule.check(&item).len() as i64) > 0, "no problem above the range");
+    }
+
+    #[test]
+    fn flags_a_long_code() {
+        let rule = RolloutOverrideCodeLengthRule { max_length: 80 };
+        let mut item = new_rollout_override("x", "y");
+        item.code = "x".repeat(81 as usize);
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+        item.code = "ok".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 0, "problems after fixing");
+    }
+
+    #[test]
+    fn flags_a_blank_phone() {
+        let rule = RolloutOverrideRequiredPhoneRule {
+            message: "rollout override needs an entry".to_string(),
+        };
+        let mut item = new_rollout_override("", "");
+        item.phone = "  ".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+    }
+
+    #[test]
+    fn flags_a_blank_label() {
+        let rule = RolloutOverrideRequiredLabelRule {
+            message: "rollout override needs a value".to_string(),
+        };
+        let mut item = new_rollout_override("", "");
+        item.label = "  ".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+    }
+}

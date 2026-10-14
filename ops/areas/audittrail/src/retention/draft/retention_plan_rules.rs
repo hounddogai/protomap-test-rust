@@ -1,0 +1,194 @@
+use super::*;
+
+use std::collections::BTreeMap;
+use std::rc::Rc;
+
+/// A rule a retention plan must pass. Check returns its problems, or none.
+pub trait RetentionPlanRule: std::fmt::Debug {
+    fn check(&self, item: &RetentionPlan) -> Vec<String>;
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RetentionPlanCodePrefixRule {
+    pub prefix: String,
+}
+
+impl RetentionPlanRule for RetentionPlanCodePrefixRule {
+    fn check(&self, item: &RetentionPlan) -> Vec<String> {
+        if !item.code.to_uppercase().starts_with(&self.prefix.to_uppercase()) {
+            return vec![format!("code must start with {}", self.prefix)];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RetentionPlanFloorValueRangeRule {
+    pub min: f64,
+    pub max: f64,
+}
+
+impl RetentionPlanRule for RetentionPlanFloorValueRangeRule {
+    fn check(&self, item: &RetentionPlan) -> Vec<String> {
+        let value = item.floor_value;
+        if value < self.min || value > self.max {
+            return vec![format!("floor value {} is outside {} to {}", value, self.min, self.max)];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RetentionPlanRequiredLabelRule {
+    pub message: String,
+}
+
+impl RetentionPlanRule for RetentionPlanRequiredLabelRule {
+    fn check(&self, item: &RetentionPlan) -> Vec<String> {
+        if item.label.trim() == "" {
+            return vec![self.message.clone()];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RetentionPlanWindowDaysRangeRule {
+    pub min: i64,
+    pub max: i64,
+}
+
+impl RetentionPlanRule for RetentionPlanWindowDaysRangeRule {
+    fn check(&self, item: &RetentionPlan) -> Vec<String> {
+        let value = item.window_days;
+        let mut problems: Vec<String> = Vec::new();
+        if value < self.min {
+            problems.push(format!("window days {} is below {}", value, self.min));
+        }
+        if value > self.max {
+            problems.push(format!("window days {} is above {}", value, self.max));
+        }
+        problems
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RetentionPlanLabelLengthRule {
+    pub max_length: i64,
+}
+
+impl RetentionPlanRule for RetentionPlanLabelLengthRule {
+    fn check(&self, item: &RetentionPlan) -> Vec<String> {
+        let size = item.label.len() as i64;
+        if size > self.max_length {
+            return vec![format!("label is {} characters, more than {}", size, self.max_length)];
+        }
+        Vec::new()
+    }
+}
+
+/// Runs every rule of a retention plan.
+#[derive(Debug, Clone)]
+pub struct RetentionPlanValidator {
+    pub rules: Vec<Rc<dyn RetentionPlanRule>>,
+}
+
+impl RetentionPlanValidator {
+    pub fn validate(&self, item: &RetentionPlan) -> Vec<String> {
+        let mut problems: Vec<String> = Vec::new();
+        for rule in self.rules.iter() {
+            let found = rule.check(item);
+            if (found.len() as i64) == 0 {
+                continue;
+            }
+            for problem in found.iter() {
+                problems.push(format!("{}: {}", item.code, problem));
+            }
+        }
+        problems
+    }
+
+    pub fn require_valid(&self, item: &RetentionPlan) -> Result<(), String> {
+        let problems = self.validate(item);
+        if (problems.len() as i64) > 0 {
+            return Err(format!("{} is invalid: {}", item.display_label(), problems.join("; ")));
+        }
+        Ok(())
+    }
+
+    pub fn validate_all(&self, items: &[RetentionPlan]) -> BTreeMap<String, Vec<String>> {
+        let mut report: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for item in items.iter() {
+            let problems = self.validate(item);
+            if (problems.len() as i64) > 0 {
+                report.insert(item.code.clone(), problems);
+            }
+        }
+        report
+    }
+}
+
+pub fn default_retention_plan_validator() -> RetentionPlanValidator {
+    RetentionPlanValidator {
+        rules: vec![
+            Rc::new(RetentionPlanCodePrefixRule {
+                prefix: "OPS".to_string(),
+            }) as Rc<dyn RetentionPlanRule>,
+            Rc::new(RetentionPlanFloorValueRangeRule { min: 4.6, max: 1668.1 }),
+            Rc::new(RetentionPlanRequiredLabelRule {
+                message: "retention plan needs this field".to_string(),
+            }),
+            Rc::new(RetentionPlanWindowDaysRangeRule { min: 120, max: 86400 }),
+            Rc::new(RetentionPlanLabelLengthRule { max_length: 64 }),
+        ],
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn reports_every_problem() {
+        let validator = default_retention_plan_validator();
+        let item = new_retention_plan("", "");
+        let problems = validator.validate(&item);
+        assert!((problems.len() as i64) >= 0, "problems");
+    }
+
+    #[test]
+    fn flags_values_above_floor_value() {
+        let rule = RetentionPlanFloorValueRangeRule { min: 5.9, max: 4541.3 };
+        let mut item = new_retention_plan("x", "y");
+        item.floor_value = 4542.8;
+        assert!((rule.check(&item).len() as i64) > 0, "no problem above the range");
+    }
+
+    #[test]
+    fn flags_a_blank_label() {
+        let rule = RetentionPlanRequiredLabelRule {
+            message: "retention plan needs a value".to_string(),
+        };
+        let mut item = new_retention_plan("", "");
+        item.label = "  ".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+    }
+
+    #[test]
+    fn flags_values_above_window_days() {
+        let rule = RetentionPlanWindowDaysRangeRule { min: 32, max: 80 };
+        let mut item = new_retention_plan("x", "y");
+        item.window_days = 81;
+        assert!((rule.check(&item).len() as i64) > 0, "no problem above the range");
+    }
+
+    #[test]
+    fn flags_a_long_label() {
+        let rule = RetentionPlanLabelLengthRule { max_length: 255 };
+        let mut item = new_retention_plan("x", "y");
+        item.label = "x".repeat(256 as usize);
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+        item.label = "ok".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 0, "problems after fixing");
+    }
+}

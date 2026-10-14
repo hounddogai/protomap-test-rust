@@ -1,0 +1,52 @@
+//! The dashboard rule records of observability's dashboard work, and the rules, stores, and calculations
+//! around them.
+
+mod dashboard_rule;
+mod dashboard_rule_engine;
+mod dashboard_rule_view;
+mod scheduled_dashboard_rule;
+mod scheduled_dashboard_rule_store;
+mod scheduled_dashboard_rule_engine;
+mod scheduled_dashboard_rule_view;
+mod dashboard_forecast;
+mod dashboard_forecast_rules;
+mod dashboard_forecast_store;
+mod dashboard_forecast_engine;
+mod dashboard_forecast_report;
+mod dashboard_forecast_workflow;
+mod primary_dashboard_reservation;
+mod primary_dashboard_reservation_rules;
+mod primary_dashboard_reservation_store;
+mod primary_dashboard_reservation_engine;
+mod primary_dashboard_reservation_view;
+mod primary_dashboard_reservation_report;
+mod dashboard_rule_policy;
+mod scheduled_dashboard_rule_policy;
+mod dashboard_forecast_policy;
+mod primary_dashboard_reservation_policy;
+mod primary_dashboard_reservation_from_override;
+
+pub use dashboard_rule::*;
+pub use dashboard_rule_engine::*;
+pub use dashboard_rule_view::*;
+pub use scheduled_dashboard_rule::*;
+pub use scheduled_dashboard_rule_store::*;
+pub use scheduled_dashboard_rule_engine::*;
+pub use scheduled_dashboard_rule_view::*;
+pub use dashboard_forecast::*;
+pub use dashboard_forecast_rules::*;
+pub use dashboard_forecast_store::*;
+pub use dashboard_forecast_engine::*;
+pub use dashboard_forecast_report::*;
+pub use dashboard_forecast_workflow::*;
+pub use primary_dashboard_reservation::*;
+pub use primary_dashboard_reservation_rules::*;
+pub use primary_dashboard_reservation_store::*;
+pub use primary_dashboard_reservation_engine::*;
+pub use primary_dashboard_reservation_view::*;
+pub use primary_dashboard_reservation_report::*;
+pub use dashboard_rule_policy::*;
+pub use scheduled_dashboard_rule_policy::*;
+pub use dashboard_forecast_policy::*;
+pub use primary_dashboard_reservation_policy::*;
+pub use primary_dashboard_reservation_from_override::*;

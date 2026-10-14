@@ -1,0 +1,58 @@
+//! The legacy rollout segment records of deploys's rollout work, and the rules, stores, and calculations
+//! around them.
+
+mod legacy_rollout_segment;
+mod legacy_rollout_segment_rules;
+mod legacy_rollout_segment_store;
+mod legacy_rollout_segment_engine;
+mod legacy_rollout_segment_view;
+mod legacy_rollout_segment_report;
+mod legacy_rollout_metric;
+mod legacy_rollout_metric_rules;
+mod legacy_rollout_metric_store;
+mod legacy_rollout_metric_engine;
+mod legacy_rollout_metric_view;
+mod legacy_rollout_metric_report;
+mod legacy_rollout_metric_workflow;
+mod lenient_rollout_rollup;
+mod lenient_rollout_rollup_rules;
+mod lenient_rollout_rollup_store;
+mod lenient_rollout_rollup_view;
+mod lenient_rollout_rollup_report;
+mod tiered_rollout_slot;
+mod legacy_rollout_reservation;
+mod legacy_rollout_reservation_rules;
+mod legacy_rollout_segment_policy;
+mod legacy_rollout_metric_policy;
+mod lenient_rollout_rollup_policy;
+mod tiered_rollout_slot_policy;
+mod legacy_rollout_reservation_policy;
+mod legacy_rollout_segment_from_segment;
+
+pub use legacy_rollout_segment::*;
+pub use legacy_rollout_segment_rules::*;
+pub use legacy_rollout_segment_store::*;
+pub use legacy_rollout_segment_engine::*;
+pub use legacy_rollout_segment_view::*;
+pub use legacy_rollout_segment_report::*;
+pub use legacy_rollout_metric::*;
+pub use legacy_rollout_metric_rules::*;
+pub use legacy_rollout_metric_store::*;
+pub use legacy_rollout_metric_engine::*;
+pub use legacy_rollout_metric_view::*;
+pub use legacy_rollout_metric_report::*;
+pub use legacy_rollout_metric_workflow::*;
+pub use lenient_rollout_rollup::*;
+pub use lenient_rollout_rollup_rules::*;
+pub use lenient_rollout_rollup_store::*;
+pub use lenient_rollout_rollup_view::*;
+pub use lenient_rollout_rollup_report::*;
+pub use tiered_rollout_slot::*;
+pub use legacy_rollout_reservation::*;
+pub use legacy_rollout_reservation_rules::*;
+pub use legacy_rollout_segment_policy::*;
+pub use legacy_rollout_metric_policy::*;
+pub use lenient_rollout_rollup_policy::*;
+pub use tiered_rollout_slot_policy::*;
+pub use legacy_rollout_reservation_policy::*;
+pub use legacy_rollout_segment_from_segment::*;

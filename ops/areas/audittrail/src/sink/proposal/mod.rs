@@ -1,0 +1,47 @@
+//! The sink proposal records of audittrail's sink work, and the rules, stores, and calculations around them.
+
+mod sink_proposal;
+mod sink_proposal_rules;
+mod sink_proposal_store;
+mod sink_proposal_engine;
+mod sink_proposal_report;
+mod sink_proposal_workflow;
+mod sink_schedule;
+mod sink_schedule_rules;
+mod sink_schedule_store;
+mod sink_schedule_workflow;
+mod sink_policy;
+mod sink_policy_rules;
+mod sink_policy_store;
+mod sink_policy_engine;
+mod sink_policy_view;
+mod sink_policy_report;
+mod sink_policy_workflow;
+mod sink_proposal_policy;
+mod sink_schedule_policy;
+mod sink_policy_policy;
+mod sink_schedule_from_manifest;
+mod sink_schedule_from_template;
+
+pub use sink_proposal::*;
+pub use sink_proposal_rules::*;
+pub use sink_proposal_store::*;
+pub use sink_proposal_engine::*;
+pub use sink_proposal_report::*;
+pub use sink_proposal_workflow::*;
+pub use sink_schedule::*;
+pub use sink_schedule_rules::*;
+pub use sink_schedule_store::*;
+pub use sink_schedule_workflow::*;
+pub use sink_policy::*;
+pub use sink_policy_rules::*;
+pub use sink_policy_store::*;
+pub use sink_policy_engine::*;
+pub use sink_policy_view::*;
+pub use sink_policy_report::*;
+pub use sink_policy_workflow::*;
+pub use sink_proposal_policy::*;
+pub use sink_schedule_policy::*;
+pub use sink_policy_policy::*;
+pub use sink_schedule_from_manifest::*;
+pub use sink_schedule_from_template::*;

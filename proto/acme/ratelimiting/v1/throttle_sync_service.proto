@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ThrottleSyncServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Keeps throttles in step with the systems of record in other regions.
+service ThrottleSyncService {
+  // Syncs a throttle.
+  rpc SyncThrottles(SyncThrottlesRequest) returns (SyncThrottlesResponse);
+
+  // Pushs a throttle.
+  rpc PushThrottle(PushThrottleRequest) returns (PushThrottleResponse);
+
+  // Pulls a throttle.
+  rpc PullThrottles(PullThrottlesRequest) returns (PullThrottlesResponse);
+
+  // Reconciles a throttle.
+  rpc ReconcileThrottles(ReconcileThrottlesRequest) returns (ReconcileThrottlesResponse);
+
+  // Exchanges changes of throttles with a peer.
+  rpc StreamThrottleChanges(stream StreamThrottleChangesRequest) returns (stream StreamThrottleChangesResponse);
+
+  // Resolves a throttle.
+  rpc ResolveThrottleConflict(ResolveThrottleConflictRequest) returns (ResolveThrottleConflictResponse);
+
+  // Returns a throttle.
+  rpc GetThrottleSyncState(GetThrottleSyncStateRequest) returns (GetThrottleSyncStateResponse);
+
+  // Lists throttles a page at a time.
+  rpc ListThrottleConflicts(ListThrottleConflictsRequest) returns (ListThrottleConflictsResponse);
+}
+
+// The request of `SyncThrottles`.
+message SyncThrottlesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  SyncThrottlesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncThrottles`.
+message SyncThrottlesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  SyncThrottlesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushThrottle`.
+message PushThrottleRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  PushThrottleRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushThrottle`.
+message PushThrottleResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  PushThrottleResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullThrottles`.
+message PullThrottlesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  PullThrottlesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullThrottles`.
+message PullThrottlesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  PullThrottlesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileThrottles`.
+message ReconcileThrottlesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  ReconcileThrottlesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileThrottles`.
+message ReconcileThrottlesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  ReconcileThrottlesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamThrottleChanges`.
+message StreamThrottleChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    Throttle change = 2;
+    StreamThrottleChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamThrottleChanges`.
+message StreamThrottleChangesResponse {
+  Throttle throttle = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveThrottleConflict`.
+message ResolveThrottleConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  ResolveThrottleConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveThrottleConflict`.
+message ResolveThrottleConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  ResolveThrottleConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetThrottleSyncState`.
+message GetThrottleSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetThrottleSyncState`.
+message GetThrottleSyncStateResponse {
+  Throttle throttle = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListThrottleConflicts`.
+message ListThrottleConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ThrottleStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListThrottleConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListThrottleConflicts`.
+message ListThrottleConflictsResponse {
+  repeated Throttle throttles = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

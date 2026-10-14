@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "KeyRingWorkflowServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Runs the long-lived workflow that takes a key ring from start to finish.
+service KeyRingWorkflowService {
+  // Starts a key ring.
+  rpc StartKeyRingWorkflow(StartKeyRingWorkflowRequest) returns (StartKeyRingWorkflowResponse);
+
+  // Advances a key ring.
+  rpc AdvanceKeyRingWorkflow(AdvanceKeyRingWorkflowRequest) returns (AdvanceKeyRingWorkflowResponse);
+
+  // Cancels a key ring.
+  rpc CancelKeyRingWorkflow(CancelKeyRingWorkflowRequest) returns (CancelKeyRingWorkflowResponse);
+
+  // Retrys a key ring.
+  rpc RetryKeyRingWorkflow(RetryKeyRingWorkflowRequest) returns (RetryKeyRingWorkflowResponse);
+
+  // Pauses a key ring.
+  rpc PauseKeyRingWorkflow(PauseKeyRingWorkflowRequest) returns (PauseKeyRingWorkflowResponse);
+
+  // Resumes a key ring.
+  rpc ResumeKeyRingWorkflow(ResumeKeyRingWorkflowRequest) returns (ResumeKeyRingWorkflowResponse);
+
+  // Returns a key ring.
+  rpc InspectKeyRingWorkflow(InspectKeyRingWorkflowRequest) returns (InspectKeyRingWorkflowResponse);
+
+  // Lists key rings a page at a time.
+  rpc ListKeyRingWorkflows(ListKeyRingWorkflowsRequest) returns (ListKeyRingWorkflowsResponse);
+}
+
+// The request of `StartKeyRingWorkflow`.
+message StartKeyRingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  StartKeyRingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartKeyRingWorkflow`.
+message StartKeyRingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  StartKeyRingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceKeyRingWorkflow`.
+message AdvanceKeyRingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  AdvanceKeyRingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceKeyRingWorkflow`.
+message AdvanceKeyRingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  AdvanceKeyRingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelKeyRingWorkflow`.
+message CancelKeyRingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  CancelKeyRingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelKeyRingWorkflow`.
+message CancelKeyRingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  CancelKeyRingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryKeyRingWorkflow`.
+message RetryKeyRingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  RetryKeyRingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryKeyRingWorkflow`.
+message RetryKeyRingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  RetryKeyRingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseKeyRingWorkflow`.
+message PauseKeyRingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  PauseKeyRingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseKeyRingWorkflow`.
+message PauseKeyRingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  PauseKeyRingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeKeyRingWorkflow`.
+message ResumeKeyRingWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  ResumeKeyRingWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeKeyRingWorkflow`.
+message ResumeKeyRingWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  ResumeKeyRingWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectKeyRingWorkflow`.
+message InspectKeyRingWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectKeyRingWorkflow`.
+message InspectKeyRingWorkflowResponse {
+  KeyRing key_ring = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListKeyRingWorkflows`.
+message ListKeyRingWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated KeyRingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListKeyRingWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListKeyRingWorkflows`.
+message ListKeyRingWorkflowsResponse {
+  repeated KeyRing key_rings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

@@ -1,0 +1,54 @@
+//! The fallback redaction metric records of audittrail's redaction work, and the rules, stores, and
+//! calculations around them.
+
+mod fallback_redaction_metric;
+mod fallback_redaction_metric_rules;
+mod fallback_redaction_metric_store;
+mod fallback_redaction_metric_engine;
+mod fallback_redaction_metric_view;
+mod fallback_redaction_metric_report;
+mod fallback_redaction_metric_workflow;
+mod default_redaction_template;
+mod default_redaction_template_rules;
+mod default_redaction_template_report;
+mod manual_redaction_bundle;
+mod manual_redaction_bundle_rules;
+mod manual_redaction_bundle_store;
+mod manual_redaction_bundle_report;
+mod manual_redaction_bundle_workflow;
+mod fallback_redaction_template;
+mod fallback_redaction_template_rules;
+mod fallback_redaction_template_engine;
+mod fallback_redaction_template_view;
+mod fallback_redaction_template_report;
+mod fallback_redaction_metric_policy;
+mod default_redaction_template_policy;
+mod manual_redaction_bundle_policy;
+mod fallback_redaction_template_policy;
+mod fallback_redaction_metric_from_profile;
+
+pub use fallback_redaction_metric::*;
+pub use fallback_redaction_metric_rules::*;
+pub use fallback_redaction_metric_store::*;
+pub use fallback_redaction_metric_engine::*;
+pub use fallback_redaction_metric_view::*;
+pub use fallback_redaction_metric_report::*;
+pub use fallback_redaction_metric_workflow::*;
+pub use default_redaction_template::*;
+pub use default_redaction_template_rules::*;
+pub use default_redaction_template_report::*;
+pub use manual_redaction_bundle::*;
+pub use manual_redaction_bundle_rules::*;
+pub use manual_redaction_bundle_store::*;
+pub use manual_redaction_bundle_report::*;
+pub use manual_redaction_bundle_workflow::*;
+pub use fallback_redaction_template::*;
+pub use fallback_redaction_template_rules::*;
+pub use fallback_redaction_template_engine::*;
+pub use fallback_redaction_template_view::*;
+pub use fallback_redaction_template_report::*;
+pub use fallback_redaction_metric_policy::*;
+pub use default_redaction_template_policy::*;
+pub use manual_redaction_bundle_policy::*;
+pub use fallback_redaction_template_policy::*;
+pub use fallback_redaction_metric_from_profile::*;

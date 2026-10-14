@@ -1,0 +1,45 @@
+//! The rollout metric records of deploys's rollout work, and the rules, stores, and calculations around them.
+
+mod rollout_metric;
+mod rollout_metric_rules;
+mod rollout_metric_engine;
+mod rollout_metric_view;
+mod rollout_metric_report;
+mod weighted_rollout_profile;
+mod weighted_rollout_profile_rules;
+mod weighted_rollout_profile_store;
+mod weighted_rollout_profile_engine;
+mod weighted_rollout_profile_view;
+mod weighted_rollout_profile_report;
+mod weighted_rollout_profile_workflow;
+mod tiered_rollout_proposal;
+mod tiered_rollout_proposal_rules;
+mod tiered_rollout_proposal_store;
+mod tiered_rollout_proposal_view;
+mod tiered_rollout_proposal_report;
+mod rollout_metric_policy;
+mod weighted_rollout_profile_policy;
+mod tiered_rollout_proposal_policy;
+mod rollout_metric_from_agreement;
+
+pub use rollout_metric::*;
+pub use rollout_metric_rules::*;
+pub use rollout_metric_engine::*;
+pub use rollout_metric_view::*;
+pub use rollout_metric_report::*;
+pub use weighted_rollout_profile::*;
+pub use weighted_rollout_profile_rules::*;
+pub use weighted_rollout_profile_store::*;
+pub use weighted_rollout_profile_engine::*;
+pub use weighted_rollout_profile_view::*;
+pub use weighted_rollout_profile_report::*;
+pub use weighted_rollout_profile_workflow::*;
+pub use tiered_rollout_proposal::*;
+pub use tiered_rollout_proposal_rules::*;
+pub use tiered_rollout_proposal_store::*;
+pub use tiered_rollout_proposal_view::*;
+pub use tiered_rollout_proposal_report::*;
+pub use rollout_metric_policy::*;
+pub use weighted_rollout_profile_policy::*;
+pub use tiered_rollout_proposal_policy::*;
+pub use rollout_metric_from_agreement::*;

@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "RateLimitWorkflowServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Runs the long-lived workflow that takes a rate limit from start to finish.
+service RateLimitWorkflowService {
+  // Starts a rate limit.
+  rpc StartRateLimitWorkflow(StartRateLimitWorkflowRequest) returns (StartRateLimitWorkflowResponse);
+
+  // Advances a rate limit.
+  rpc AdvanceRateLimitWorkflow(AdvanceRateLimitWorkflowRequest) returns (AdvanceRateLimitWorkflowResponse);
+
+  // Cancels a rate limit.
+  rpc CancelRateLimitWorkflow(CancelRateLimitWorkflowRequest) returns (CancelRateLimitWorkflowResponse);
+
+  // Retrys a rate limit.
+  rpc RetryRateLimitWorkflow(RetryRateLimitWorkflowRequest) returns (RetryRateLimitWorkflowResponse);
+
+  // Pauses a rate limit.
+  rpc PauseRateLimitWorkflow(PauseRateLimitWorkflowRequest) returns (PauseRateLimitWorkflowResponse);
+
+  // Returns a rate limit.
+  rpc InspectRateLimitWorkflow(InspectRateLimitWorkflowRequest) returns (InspectRateLimitWorkflowResponse);
+
+  // Lists rate limits a page at a time.
+  rpc ListRateLimitWorkflows(ListRateLimitWorkflowsRequest) returns (ListRateLimitWorkflowsResponse);
+
+  // Signals a rate limit.
+  rpc SignalRateLimitWorkflow(SignalRateLimitWorkflowRequest) returns (SignalRateLimitWorkflowResponse);
+}
+
+// The request of `StartRateLimitWorkflow`.
+message StartRateLimitWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  StartRateLimitWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartRateLimitWorkflow`.
+message StartRateLimitWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  StartRateLimitWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceRateLimitWorkflow`.
+message AdvanceRateLimitWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  AdvanceRateLimitWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceRateLimitWorkflow`.
+message AdvanceRateLimitWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  AdvanceRateLimitWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelRateLimitWorkflow`.
+message CancelRateLimitWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  CancelRateLimitWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelRateLimitWorkflow`.
+message CancelRateLimitWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  CancelRateLimitWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryRateLimitWorkflow`.
+message RetryRateLimitWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  RetryRateLimitWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryRateLimitWorkflow`.
+message RetryRateLimitWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  RetryRateLimitWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseRateLimitWorkflow`.
+message PauseRateLimitWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  PauseRateLimitWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseRateLimitWorkflow`.
+message PauseRateLimitWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  PauseRateLimitWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectRateLimitWorkflow`.
+message InspectRateLimitWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectRateLimitWorkflow`.
+message InspectRateLimitWorkflowResponse {
+  RateLimit rate_limit = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListRateLimitWorkflows`.
+message ListRateLimitWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RateLimitStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRateLimitWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRateLimitWorkflows`.
+message ListRateLimitWorkflowsResponse {
+  repeated RateLimit rate_limits = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalRateLimitWorkflow`.
+message SignalRateLimitWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string rate_limit_id = 2;
+  RateLimit rate_limit = 3;
+  SignalRateLimitWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalRateLimitWorkflow`.
+message SignalRateLimitWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RateLimit rate_limit = 1;
+  SignalRateLimitWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

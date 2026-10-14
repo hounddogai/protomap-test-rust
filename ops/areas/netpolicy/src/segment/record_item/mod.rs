@@ -1,0 +1,50 @@
+//! The capped segment record records of netpolicy's segment work, and the rules, stores, and calculations
+//! around them.
+
+mod capped_segment_record;
+mod capped_segment_record_rules;
+mod capped_segment_record_store;
+mod capped_segment_record_engine;
+mod capped_segment_record_report;
+mod capped_segment_record_workflow;
+mod primary_segment_group;
+mod primary_segment_group_rules;
+mod primary_segment_group_engine;
+mod primary_segment_group_view;
+mod primary_segment_group_report;
+mod segment_quota;
+mod segment_quota_rules;
+mod segment_quota_store;
+mod segment_digest;
+mod segment_digest_rules;
+mod segment_digest_engine;
+mod segment_digest_report;
+mod capped_segment_record_policy;
+mod primary_segment_group_policy;
+mod segment_quota_policy;
+mod segment_digest_policy;
+mod segment_quota_from_snapshot;
+
+pub use capped_segment_record::*;
+pub use capped_segment_record_rules::*;
+pub use capped_segment_record_store::*;
+pub use capped_segment_record_engine::*;
+pub use capped_segment_record_report::*;
+pub use capped_segment_record_workflow::*;
+pub use primary_segment_group::*;
+pub use primary_segment_group_rules::*;
+pub use primary_segment_group_engine::*;
+pub use primary_segment_group_view::*;
+pub use primary_segment_group_report::*;
+pub use segment_quota::*;
+pub use segment_quota_rules::*;
+pub use segment_quota_store::*;
+pub use segment_digest::*;
+pub use segment_digest_rules::*;
+pub use segment_digest_engine::*;
+pub use segment_digest_report::*;
+pub use capped_segment_record_policy::*;
+pub use primary_segment_group_policy::*;
+pub use segment_quota_policy::*;
+pub use segment_digest_policy::*;
+pub use segment_quota_from_snapshot::*;

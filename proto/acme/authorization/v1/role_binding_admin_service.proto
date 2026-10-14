@@ -1,0 +1,311 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.authorization.v1;
+
+import "acme/authorization/v1/authorization.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Authorization.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/authorization/v1;authorizationv1";
+option java_multiple_files = true;
+option java_outer_classname = "RoleBindingAdminServiceProto";
+option java_package = "com.acme.authorization.v1";
+
+// Operator actions on role bindings that support staff run by hand.
+service RoleBindingAdminService {
+  // Archives a role binding.
+  rpc ArchiveRoleBinding(ArchiveRoleBindingRequest) returns (ArchiveRoleBindingResponse);
+
+  // Restores a role binding.
+  rpc RestoreRoleBinding(RestoreRoleBindingRequest) returns (RestoreRoleBindingResponse);
+
+  // Deletes a role binding.
+  rpc PurgeRoleBinding(PurgeRoleBindingRequest) returns (PurgeRoleBindingResponse);
+
+  // Reassigns a role binding.
+  rpc ReassignRoleBinding(ReassignRoleBindingRequest) returns (ReassignRoleBindingResponse);
+
+  // Locks a role binding.
+  rpc LockRoleBinding(LockRoleBindingRequest) returns (LockRoleBindingResponse);
+
+  // Unlocks a role binding.
+  rpc UnlockRoleBinding(UnlockRoleBindingRequest) returns (UnlockRoleBindingResponse);
+
+  // Transfers a role binding.
+  rpc TransferRoleBinding(TransferRoleBindingRequest) returns (TransferRoleBindingResponse);
+
+  // Repairs a role binding.
+  rpc RepairRoleBinding(RepairRoleBindingRequest) returns (RepairRoleBindingResponse);
+
+  // Returns a role binding.
+  rpc InspectRoleBinding(InspectRoleBindingRequest) returns (InspectRoleBindingResponse);
+}
+
+// The request of `ArchiveRoleBinding`.
+message ArchiveRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  ArchiveRoleBindingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchiveRoleBinding`.
+message ArchiveRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  ArchiveRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestoreRoleBinding`.
+message RestoreRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RestoreRoleBindingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestoreRoleBinding`.
+message RestoreRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  RestoreRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgeRoleBinding`.
+message PurgeRoleBindingRequest {
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgeRoleBinding`.
+message PurgeRoleBindingResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ReassignRoleBinding`.
+message ReassignRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.identity.v1.UserRef assignee = 1;
+    string queue = 2;
+    int32 capacity = 3;
+    string assignee_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  ReassignRoleBindingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReassignRoleBinding`.
+message ReassignRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  ReassignRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LockRoleBinding`.
+message LockRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  LockRoleBindingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockRoleBinding`.
+message LockRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  LockRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnlockRoleBinding`.
+message UnlockRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  UnlockRoleBindingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnlockRoleBinding`.
+message UnlockRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  UnlockRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferRoleBinding`.
+message TransferRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  TransferRoleBindingRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferRoleBinding`.
+message TransferRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  TransferRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairRoleBinding`.
+message RepairRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RoleBinding role_binding = 3;
+  RepairRoleBindingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairRoleBinding`.
+message RepairRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  RepairRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectRoleBinding`.
+message InspectRoleBindingRequest {
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectRoleBinding`.
+message InspectRoleBindingResponse {
+  RoleBinding role_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,255 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/configuration/v1/configuration.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "ConfigSetLifecycleServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Moves a config set between the states of its lifecycle.
+service ConfigSetLifecycleService {
+  // Activates a config set.
+  rpc ActivateConfigSet(ActivateConfigSetRequest) returns (ActivateConfigSetResponse);
+
+  // Suspends a config set.
+  rpc SuspendConfigSet(SuspendConfigSetRequest) returns (SuspendConfigSetResponse);
+
+  // Reinstates a config set.
+  rpc ReinstateConfigSet(ReinstateConfigSetRequest) returns (ReinstateConfigSetResponse);
+
+  // Terminates a config set.
+  rpc TerminateConfigSet(TerminateConfigSetRequest) returns (TerminateConfigSetResponse);
+
+  // Renews a config set.
+  rpc RenewConfigSet(RenewConfigSetRequest) returns (RenewConfigSetResponse);
+
+  // Expires a config set.
+  rpc ExpireConfigSet(ExpireConfigSetRequest) returns (ExpireConfigSetResponse);
+
+  // Returns a config set.
+  rpc GetConfigSetLifecycle(GetConfigSetLifecycleRequest) returns (GetConfigSetLifecycleResponse);
+}
+
+// The request of `ActivateConfigSet`.
+message ActivateConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ActivateConfigSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateConfigSet`.
+message ActivateConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  ActivateConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendConfigSet`.
+message SuspendConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  SuspendConfigSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendConfigSet`.
+message SuspendConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  SuspendConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateConfigSet`.
+message ReinstateConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ReinstateConfigSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateConfigSet`.
+message ReinstateConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  ReinstateConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateConfigSet`.
+message TerminateConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  TerminateConfigSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateConfigSet`.
+message TerminateConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  TerminateConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewConfigSet`.
+message RenewConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  RenewConfigSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewConfigSet`.
+message RenewConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  RenewConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireConfigSet`.
+message ExpireConfigSetRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  ExpireConfigSetRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireConfigSet`.
+message ExpireConfigSetResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigSet config_set = 1;
+  ExpireConfigSetResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetConfigSetLifecycle`.
+message GetConfigSetLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string config_set_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetConfigSetLifecycle`.
+message GetConfigSetLifecycleResponse {
+  ConfigSet config_set = 1;
+  acme.common.v1.OperationResult result = 2;
+}

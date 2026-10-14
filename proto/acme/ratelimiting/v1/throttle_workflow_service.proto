@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ThrottleWorkflowServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Runs the long-lived workflow that takes a throttle from start to finish.
+service ThrottleWorkflowService {
+  // Starts a throttle.
+  rpc StartThrottleWorkflow(StartThrottleWorkflowRequest) returns (StartThrottleWorkflowResponse);
+
+  // Advances a throttle.
+  rpc AdvanceThrottleWorkflow(AdvanceThrottleWorkflowRequest) returns (AdvanceThrottleWorkflowResponse);
+
+  // Cancels a throttle.
+  rpc CancelThrottleWorkflow(CancelThrottleWorkflowRequest) returns (CancelThrottleWorkflowResponse);
+
+  // Retrys a throttle.
+  rpc RetryThrottleWorkflow(RetryThrottleWorkflowRequest) returns (RetryThrottleWorkflowResponse);
+
+  // Resumes a throttle.
+  rpc ResumeThrottleWorkflow(ResumeThrottleWorkflowRequest) returns (ResumeThrottleWorkflowResponse);
+
+  // Returns a throttle.
+  rpc InspectThrottleWorkflow(InspectThrottleWorkflowRequest) returns (InspectThrottleWorkflowResponse);
+
+  // Lists throttles a page at a time.
+  rpc ListThrottleWorkflows(ListThrottleWorkflowsRequest) returns (ListThrottleWorkflowsResponse);
+
+  // Signals a throttle.
+  rpc SignalThrottleWorkflow(SignalThrottleWorkflowRequest) returns (SignalThrottleWorkflowResponse);
+}
+
+// The request of `StartThrottleWorkflow`.
+message StartThrottleWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  StartThrottleWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartThrottleWorkflow`.
+message StartThrottleWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  StartThrottleWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceThrottleWorkflow`.
+message AdvanceThrottleWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  AdvanceThrottleWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceThrottleWorkflow`.
+message AdvanceThrottleWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  AdvanceThrottleWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelThrottleWorkflow`.
+message CancelThrottleWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  CancelThrottleWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelThrottleWorkflow`.
+message CancelThrottleWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  CancelThrottleWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryThrottleWorkflow`.
+message RetryThrottleWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  RetryThrottleWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryThrottleWorkflow`.
+message RetryThrottleWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  RetryThrottleWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeThrottleWorkflow`.
+message ResumeThrottleWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  ResumeThrottleWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeThrottleWorkflow`.
+message ResumeThrottleWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  ResumeThrottleWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectThrottleWorkflow`.
+message InspectThrottleWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectThrottleWorkflow`.
+message InspectThrottleWorkflowResponse {
+  Throttle throttle = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListThrottleWorkflows`.
+message ListThrottleWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ThrottleStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListThrottleWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListThrottleWorkflows`.
+message ListThrottleWorkflowsResponse {
+  repeated Throttle throttles = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalThrottleWorkflow`.
+message SignalThrottleWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  SignalThrottleWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalThrottleWorkflow`.
+message SignalThrottleWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Throttle throttle = 1;
+  SignalThrottleWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

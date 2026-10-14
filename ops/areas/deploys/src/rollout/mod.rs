@@ -1,0 +1,29 @@
+//! Deploys's rollout work.
+
+pub mod rollup;
+pub mod window;
+pub mod assignment;
+pub mod preference;
+pub mod slot;
+pub mod notice;
+pub mod request;
+pub mod variance;
+pub mod reservation;
+pub mod estimate;
+pub mod rollout_slot;
+pub mod proposal;
+pub mod override_item;
+pub mod mapping;
+pub mod rollout_preference;
+pub mod budget;
+pub mod policy;
+pub mod manual_rollout_slot;
+pub mod digest;
+pub mod rollout_window;
+pub mod batch;
+pub mod ledger;
+pub mod metric;
+pub mod rule;
+pub mod manifest;
+pub mod segment;
+pub mod rollout_variance;

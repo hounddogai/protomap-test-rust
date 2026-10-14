@@ -1,0 +1,58 @@
+//! The weighted segment assignment records of netpolicy's segment work, and the rules, stores, and
+//! calculations around them.
+
+mod weighted_segment_assignment;
+mod weighted_segment_assignment_rules;
+mod weighted_segment_assignment_engine;
+mod weighted_segment_assignment_view;
+mod segment_metric;
+mod segment_metric_rules;
+mod segment_metric_store;
+mod segment_metric_engine;
+mod segment_metric_view;
+mod segment_metric_workflow;
+mod regional_segment_item;
+mod regional_segment_item_rules;
+mod regional_segment_item_engine;
+mod regional_segment_item_report;
+mod scheduled_segment_item;
+mod scheduled_segment_item_view;
+mod segment_request;
+mod segment_request_rules;
+mod segment_request_store;
+mod segment_request_view;
+mod weighted_segment_assignment_policy;
+mod segment_metric_policy;
+mod regional_segment_item_policy;
+mod scheduled_segment_item_policy;
+mod segment_request_policy;
+mod regional_segment_item_from_audit;
+mod weighted_segment_assignment_from_digest;
+
+pub use weighted_segment_assignment::*;
+pub use weighted_segment_assignment_rules::*;
+pub use weighted_segment_assignment_engine::*;
+pub use weighted_segment_assignment_view::*;
+pub use segment_metric::*;
+pub use segment_metric_rules::*;
+pub use segment_metric_store::*;
+pub use segment_metric_engine::*;
+pub use segment_metric_view::*;
+pub use segment_metric_workflow::*;
+pub use regional_segment_item::*;
+pub use regional_segment_item_rules::*;
+pub use regional_segment_item_engine::*;
+pub use regional_segment_item_report::*;
+pub use scheduled_segment_item::*;
+pub use scheduled_segment_item_view::*;
+pub use segment_request::*;
+pub use segment_request_rules::*;
+pub use segment_request_store::*;
+pub use segment_request_view::*;
+pub use weighted_segment_assignment_policy::*;
+pub use segment_metric_policy::*;
+pub use regional_segment_item_policy::*;
+pub use scheduled_segment_item_policy::*;
+pub use segment_request_policy::*;
+pub use regional_segment_item_from_audit::*;
+pub use weighted_segment_assignment_from_digest::*;

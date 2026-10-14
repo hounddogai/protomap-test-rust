@@ -1,0 +1,284 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FlagEvaluationSyncServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Keeps flag evaluations in step with the systems of record in other regions.
+service FlagEvaluationSyncService {
+  // Syncs a flag evaluation.
+  rpc SyncFlagEvaluations(SyncFlagEvaluationsRequest) returns (SyncFlagEvaluationsResponse);
+
+  // Pushs a flag evaluation.
+  rpc PushFlagEvaluation(PushFlagEvaluationRequest) returns (PushFlagEvaluationResponse);
+
+  // Pulls a flag evaluation.
+  rpc PullFlagEvaluations(PullFlagEvaluationsRequest) returns (PullFlagEvaluationsResponse);
+
+  // Reconciles a flag evaluation.
+  rpc ReconcileFlagEvaluations(ReconcileFlagEvaluationsRequest) returns (ReconcileFlagEvaluationsResponse);
+
+  // Exchanges changes of flag evaluations with a peer.
+  rpc StreamFlagEvaluationChanges(stream StreamFlagEvaluationChangesRequest) returns (stream StreamFlagEvaluationChangesResponse);
+
+  // Resolves a flag evaluation.
+  rpc ResolveFlagEvaluationConflict(ResolveFlagEvaluationConflictRequest) returns (ResolveFlagEvaluationConflictResponse);
+
+  // Returns a flag evaluation.
+  rpc GetFlagEvaluationSyncState(GetFlagEvaluationSyncStateRequest) returns (GetFlagEvaluationSyncStateResponse);
+
+  // Lists flag evaluations a page at a time.
+  rpc ListFlagEvaluationConflicts(ListFlagEvaluationConflictsRequest) returns (ListFlagEvaluationConflictsResponse);
+}
+
+// The request of `SyncFlagEvaluations`.
+message SyncFlagEvaluationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  SyncFlagEvaluationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SyncFlagEvaluations`.
+message SyncFlagEvaluationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  SyncFlagEvaluationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PushFlagEvaluation`.
+message PushFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  PushFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PushFlagEvaluation`.
+message PushFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  PushFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PullFlagEvaluations`.
+message PullFlagEvaluationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  PullFlagEvaluationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PullFlagEvaluations`.
+message PullFlagEvaluationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  PullFlagEvaluationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReconcileFlagEvaluations`.
+message ReconcileFlagEvaluationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  ReconcileFlagEvaluationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ReconcileFlagEvaluations`.
+message ReconcileFlagEvaluationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  ReconcileFlagEvaluationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `StreamFlagEvaluationChanges`.
+message StreamFlagEvaluationChangesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    FlagEvaluation change = 2;
+    StreamFlagEvaluationChangesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `StreamFlagEvaluationChanges`.
+message StreamFlagEvaluationChangesResponse {
+  FlagEvaluation flag_evaluation = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ResolveFlagEvaluationConflict`.
+message ResolveFlagEvaluationConflictRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  ResolveFlagEvaluationConflictRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResolveFlagEvaluationConflict`.
+message ResolveFlagEvaluationConflictResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  ResolveFlagEvaluationConflictResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFlagEvaluationSyncState`.
+message GetFlagEvaluationSyncStateRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFlagEvaluationSyncState`.
+message GetFlagEvaluationSyncStateResponse {
+  FlagEvaluation flag_evaluation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListFlagEvaluationConflicts`.
+message ListFlagEvaluationConflictsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated FlagEvaluationStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListFlagEvaluationConflictsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListFlagEvaluationConflicts`.
+message ListFlagEvaluationConflictsResponse {
+  repeated FlagEvaluation flag_evaluations = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}

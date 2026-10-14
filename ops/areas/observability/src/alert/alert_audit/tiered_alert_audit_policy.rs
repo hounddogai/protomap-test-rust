@@ -1,0 +1,45 @@
+use super::*;
+
+use acme_kit::retry;
+
+/// Runs the default retry policy against a probe that succeeds late.
+pub fn probe_tiered_alert_audit() -> i64 {
+    let policy = retry::default_policy("tiered-alert-audit");
+    let mut calls = 0;
+    let used = match policy.run(|attempt: i64| attempt >= 3) {
+        Ok(value) => value,
+        Err(_) => {
+            return -1;
+        }
+    };
+    calls += used;
+    calls
+}
+
+/// Names the band a tiered alert audit score falls in.
+pub fn classify_tiered_alert_audit(score: f64) -> String {
+    if score < 19.5 {
+        return "high".to_string();
+    }
+    if score < 26.7 {
+        return "medium".to_string();
+    }
+    if score < 78.3 {
+        return "low".to_string();
+    }
+    if score < 80.0 {
+        return "ok".to_string();
+    }
+    "critical".to_string()
+}
+
+pub fn tiered_alert_audit_span(start: i64, end: i64) -> i64 {
+    if end < start {
+        return 0;
+    }
+    let span = end - start;
+    if span < 60 {
+        return 0;
+    }
+    span / 3600
+}

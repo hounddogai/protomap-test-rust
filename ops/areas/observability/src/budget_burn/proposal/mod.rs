@@ -1,0 +1,50 @@
+//! The manual budget burn proposal records of observability's budget burn work, and the rules, stores, and
+//! calculations around them.
+
+mod manual_budget_burn_proposal;
+mod manual_budget_burn_proposal_rules;
+mod manual_budget_burn_proposal_store;
+mod manual_budget_burn_proposal_engine;
+mod manual_budget_burn_proposal_view;
+mod manual_budget_burn_proposal_report;
+mod budget_burn_record;
+mod budget_burn_record_rules;
+mod budget_burn_record_view;
+mod fallback_budget_burn_forecast;
+mod fallback_budget_burn_forecast_rules;
+mod fallback_budget_burn_forecast_engine;
+mod fallback_budget_burn_forecast_view;
+mod fallback_budget_burn_forecast_report;
+mod budget_burn_rollup;
+mod budget_burn_rollup_rules;
+mod budget_burn_rollup_store;
+mod budget_burn_rollup_workflow;
+mod manual_budget_burn_proposal_policy;
+mod budget_burn_record_policy;
+mod fallback_budget_burn_forecast_policy;
+mod budget_burn_rollup_policy;
+mod fallback_budget_burn_forecast_from_window;
+
+pub use manual_budget_burn_proposal::*;
+pub use manual_budget_burn_proposal_rules::*;
+pub use manual_budget_burn_proposal_store::*;
+pub use manual_budget_burn_proposal_engine::*;
+pub use manual_budget_burn_proposal_view::*;
+pub use manual_budget_burn_proposal_report::*;
+pub use budget_burn_record::*;
+pub use budget_burn_record_rules::*;
+pub use budget_burn_record_view::*;
+pub use fallback_budget_burn_forecast::*;
+pub use fallback_budget_burn_forecast_rules::*;
+pub use fallback_budget_burn_forecast_engine::*;
+pub use fallback_budget_burn_forecast_view::*;
+pub use fallback_budget_burn_forecast_report::*;
+pub use budget_burn_rollup::*;
+pub use budget_burn_rollup_rules::*;
+pub use budget_burn_rollup_store::*;
+pub use budget_burn_rollup_workflow::*;
+pub use manual_budget_burn_proposal_policy::*;
+pub use budget_burn_record_policy::*;
+pub use fallback_budget_burn_forecast_policy::*;
+pub use budget_burn_rollup_policy::*;
+pub use fallback_budget_burn_forecast_from_window::*;

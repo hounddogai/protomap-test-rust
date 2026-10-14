@@ -1,0 +1,50 @@
+//! The failover agreement records of dns's failover work, and the rules, stores, and calculations around
+//! them.
+
+mod failover_agreement;
+mod failover_agreement_rules;
+mod failover_agreement_store;
+mod failover_agreement_engine;
+mod failover_agreement_view;
+mod failover_agreement_report;
+mod failover_agreement_workflow;
+mod fallback_failover_draft;
+mod fallback_failover_draft_rules;
+mod fallback_failover_draft_store;
+mod fallback_failover_draft_engine;
+mod fallback_failover_draft_view;
+mod fallback_failover_draft_workflow;
+mod fallback_failover_budget;
+mod fallback_failover_budget_rules;
+mod fallback_failover_budget_store;
+mod fallback_failover_budget_engine;
+mod fallback_failover_budget_report;
+mod fallback_failover_budget_workflow;
+mod failover_agreement_policy;
+mod fallback_failover_draft_policy;
+mod fallback_failover_budget_policy;
+mod fallback_failover_budget_from_notice;
+
+pub use failover_agreement::*;
+pub use failover_agreement_rules::*;
+pub use failover_agreement_store::*;
+pub use failover_agreement_engine::*;
+pub use failover_agreement_view::*;
+pub use failover_agreement_report::*;
+pub use failover_agreement_workflow::*;
+pub use fallback_failover_draft::*;
+pub use fallback_failover_draft_rules::*;
+pub use fallback_failover_draft_store::*;
+pub use fallback_failover_draft_engine::*;
+pub use fallback_failover_draft_view::*;
+pub use fallback_failover_draft_workflow::*;
+pub use fallback_failover_budget::*;
+pub use fallback_failover_budget_rules::*;
+pub use fallback_failover_budget_store::*;
+pub use fallback_failover_budget_engine::*;
+pub use fallback_failover_budget_report::*;
+pub use fallback_failover_budget_workflow::*;
+pub use failover_agreement_policy::*;
+pub use fallback_failover_draft_policy::*;
+pub use fallback_failover_budget_policy::*;
+pub use fallback_failover_budget_from_notice::*;

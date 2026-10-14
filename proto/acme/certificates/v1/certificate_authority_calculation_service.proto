@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.certificates.v1;
+
+import "acme/certificates/v1/certificates.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+
+option csharp_namespace = "Acme.Certificates.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/certificates/v1;certificatesv1";
+option java_multiple_files = true;
+option java_outer_classname = "CertificateAuthorityCalculationServiceProto";
+option java_package = "com.acme.certificates.v1";
+
+// Computes the figures of a certificate authority, such as totals, taxes, and estimates.
+service CertificateAuthorityCalculationService {
+  // Calculates a certificate authority.
+  rpc CalculateCertificateAuthority(CalculateCertificateAuthorityRequest) returns (CalculateCertificateAuthorityResponse);
+
+  // Estimates a certificate authority.
+  rpc EstimateCertificateAuthority(EstimateCertificateAuthorityRequest) returns (EstimateCertificateAuthorityResponse);
+
+  // Quotes a certificate authority.
+  rpc QuoteCertificateAuthority(QuoteCertificateAuthorityRequest) returns (QuoteCertificateAuthorityResponse);
+
+  // Compares a certificate authority.
+  rpc CompareCertificateAuthorityOptions(CompareCertificateAuthorityOptionsRequest) returns (CompareCertificateAuthorityOptionsResponse);
+
+  // Recalculates a certificate authority.
+  rpc RecalculateCertificateAuthorities(RecalculateCertificateAuthoritiesRequest) returns (RecalculateCertificateAuthoritiesResponse);
+
+  // Simulates a certificate authority.
+  rpc SimulateCertificateAuthority(SimulateCertificateAuthorityRequest) returns (SimulateCertificateAuthorityResponse);
+
+  // Returns a certificate authority.
+  rpc GetCertificateAuthorityRates(GetCertificateAuthorityRatesRequest) returns (GetCertificateAuthorityRatesResponse);
+}
+
+// The request of `CalculateCertificateAuthority`.
+message CalculateCertificateAuthorityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  CalculateCertificateAuthorityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateCertificateAuthority`.
+message CalculateCertificateAuthorityResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateCertificateAuthorityResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  CalculateCertificateAuthorityResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateCertificateAuthority`.
+message EstimateCertificateAuthorityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  EstimateCertificateAuthorityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateCertificateAuthority`.
+message EstimateCertificateAuthorityResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateCertificateAuthorityResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  EstimateCertificateAuthorityResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteCertificateAuthority`.
+message QuoteCertificateAuthorityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  QuoteCertificateAuthorityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteCertificateAuthority`.
+message QuoteCertificateAuthorityResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteCertificateAuthorityResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  QuoteCertificateAuthorityResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareCertificateAuthorityOptions`.
+message CompareCertificateAuthorityOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  CompareCertificateAuthorityOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareCertificateAuthorityOptions`.
+message CompareCertificateAuthorityOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareCertificateAuthorityOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  CompareCertificateAuthorityOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateCertificateAuthorities`.
+message RecalculateCertificateAuthoritiesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  RecalculateCertificateAuthoritiesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateCertificateAuthorities`.
+message RecalculateCertificateAuthoritiesResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateCertificateAuthoritiesResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  RecalculateCertificateAuthoritiesResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateCertificateAuthority`.
+message SimulateCertificateAuthorityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  SimulateCertificateAuthorityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateCertificateAuthority`.
+message SimulateCertificateAuthorityResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateCertificateAuthorityResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  SimulateCertificateAuthorityResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCertificateAuthorityRates`.
+message GetCertificateAuthorityRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCertificateAuthorityRates`.
+message GetCertificateAuthorityRatesResponse {
+  CertificateAuthority certificate_authority = 1;
+  acme.common.v1.OperationResult result = 2;
+}

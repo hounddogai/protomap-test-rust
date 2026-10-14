@@ -1,0 +1,333 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/configuration/v1/configuration.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "EnvironmentApprovalServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Routes environments through approval, with escalation and delegation.
+service EnvironmentApprovalService {
+  // Submits an environment.
+  rpc SubmitEnvironment(SubmitEnvironmentRequest) returns (SubmitEnvironmentResponse);
+
+  // Approves an environment.
+  rpc ApproveEnvironment(ApproveEnvironmentRequest) returns (ApproveEnvironmentResponse);
+
+  // Rejects an environment.
+  rpc RejectEnvironment(RejectEnvironmentRequest) returns (RejectEnvironmentResponse);
+
+  // Escalates an environment.
+  rpc EscalateEnvironment(EscalateEnvironmentRequest) returns (EscalateEnvironmentResponse);
+
+  // Lists environments a page at a time.
+  rpc ListPendingEnvironments(ListPendingEnvironmentsRequest) returns (ListPendingEnvironmentsResponse);
+
+  // Delegates an environment.
+  rpc DelegateEnvironmentApproval(DelegateEnvironmentApprovalRequest) returns (DelegateEnvironmentApprovalResponse);
+
+  // Recalls an environment.
+  rpc RecallEnvironment(RecallEnvironmentRequest) returns (RecallEnvironmentResponse);
+
+  // Returns an environment.
+  rpc GetEnvironmentApprovalStatus(GetEnvironmentApprovalStatusRequest) returns (GetEnvironmentApprovalStatusResponse);
+
+  // Comments an environment.
+  rpc CommentEnvironmentApproval(CommentEnvironmentApprovalRequest) returns (CommentEnvironmentApprovalResponse);
+}
+
+// The request of `SubmitEnvironment`.
+message SubmitEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  SubmitEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SubmitEnvironment`.
+message SubmitEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  SubmitEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ApproveEnvironment`.
+message ApproveEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  ApproveEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ApproveEnvironment`.
+message ApproveEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  ApproveEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RejectEnvironment`.
+message RejectEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  RejectEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RejectEnvironment`.
+message RejectEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  RejectEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EscalateEnvironment`.
+message EscalateEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  EscalateEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EscalateEnvironment`.
+message EscalateEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  EscalateEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListPendingEnvironments`.
+message ListPendingEnvironmentsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated EnvironmentStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListPendingEnvironmentsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListPendingEnvironments`.
+message ListPendingEnvironmentsResponse {
+  repeated Environment environments = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DelegateEnvironmentApproval`.
+message DelegateEnvironmentApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  DelegateEnvironmentApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `DelegateEnvironmentApproval`.
+message DelegateEnvironmentApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  DelegateEnvironmentApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecallEnvironment`.
+message RecallEnvironmentRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  RecallEnvironmentRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecallEnvironment`.
+message RecallEnvironmentResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  RecallEnvironmentResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetEnvironmentApprovalStatus`.
+message GetEnvironmentApprovalStatusRequest {
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetEnvironmentApprovalStatus`.
+message GetEnvironmentApprovalStatusResponse {
+  Environment environment = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CommentEnvironmentApproval`.
+message CommentEnvironmentApprovalRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string approver_email = 1;
+    string comment = 2;
+    repeated string conditions = 3;
+    google.protobuf.Timestamp effective_at = 4;
+    acme.identity.v1.UserRef approver = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  CommentEnvironmentApprovalRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CommentEnvironmentApproval`.
+message CommentEnvironmentApprovalResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  CommentEnvironmentApprovalResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

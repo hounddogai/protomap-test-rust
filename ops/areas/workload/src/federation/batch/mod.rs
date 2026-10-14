@@ -1,0 +1,58 @@
+//! The strict federation batch records of workload's federation work, and the rules, stores, and calculations
+//! around them.
+
+mod strict_federation_batch;
+mod strict_federation_batch_rules;
+mod strict_federation_batch_store;
+mod strict_federation_batch_report;
+mod federation_adjustment;
+mod federation_adjustment_store;
+mod federation_adjustment_engine;
+mod federation_adjustment_view;
+mod manual_federation_batch;
+mod manual_federation_batch_rules;
+mod manual_federation_batch_store;
+mod manual_federation_batch_engine;
+mod manual_federation_batch_view;
+mod manual_federation_batch_workflow;
+mod federation_override;
+mod federation_override_rules;
+mod federation_override_store;
+mod federation_override_engine;
+mod federation_override_view;
+mod federation_override_report;
+mod federation_override_workflow;
+mod strict_federation_batch_policy;
+mod federation_adjustment_policy;
+mod manual_federation_batch_policy;
+mod federation_override_policy;
+mod federation_adjustment_from_proposal;
+mod strict_federation_batch_from_target;
+
+pub use strict_federation_batch::*;
+pub use strict_federation_batch_rules::*;
+pub use strict_federation_batch_store::*;
+pub use strict_federation_batch_report::*;
+pub use federation_adjustment::*;
+pub use federation_adjustment_store::*;
+pub use federation_adjustment_engine::*;
+pub use federation_adjustment_view::*;
+pub use manual_federation_batch::*;
+pub use manual_federation_batch_rules::*;
+pub use manual_federation_batch_store::*;
+pub use manual_federation_batch_engine::*;
+pub use manual_federation_batch_view::*;
+pub use manual_federation_batch_workflow::*;
+pub use federation_override::*;
+pub use federation_override_rules::*;
+pub use federation_override_store::*;
+pub use federation_override_engine::*;
+pub use federation_override_view::*;
+pub use federation_override_report::*;
+pub use federation_override_workflow::*;
+pub use strict_federation_batch_policy::*;
+pub use federation_adjustment_policy::*;
+pub use manual_federation_batch_policy::*;
+pub use federation_override_policy::*;
+pub use federation_adjustment_from_proposal::*;
+pub use strict_federation_batch_from_target::*;

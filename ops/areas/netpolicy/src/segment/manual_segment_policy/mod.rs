@@ -1,0 +1,56 @@
+//! The weighted segment policy records of netpolicy's segment work, and the rules, stores, and calculations
+//! around them.
+
+mod weighted_segment_policy;
+mod weighted_segment_policy_rules;
+mod weighted_segment_policy_store;
+mod weighted_segment_policy_view;
+mod weighted_segment_policy_report;
+mod fallback_segment_draft;
+mod fallback_segment_draft_rules;
+mod fallback_segment_draft_store;
+mod fallback_segment_draft_report;
+mod fallback_segment_draft_workflow;
+mod legacy_segment_proposal;
+mod legacy_segment_proposal_rules;
+mod legacy_segment_proposal_store;
+mod legacy_segment_proposal_view;
+mod legacy_segment_proposal_workflow;
+mod rolling_segment_agreement;
+mod rolling_segment_agreement_rules;
+mod rolling_segment_agreement_store;
+mod rolling_segment_agreement_engine;
+mod rolling_segment_agreement_report;
+mod rolling_segment_agreement_workflow;
+mod weighted_segment_policy_policy;
+mod fallback_segment_draft_policy;
+mod legacy_segment_proposal_policy;
+mod rolling_segment_agreement_policy;
+mod fallback_segment_draft_from_forecast;
+
+pub use weighted_segment_policy::*;
+pub use weighted_segment_policy_rules::*;
+pub use weighted_segment_policy_store::*;
+pub use weighted_segment_policy_view::*;
+pub use weighted_segment_policy_report::*;
+pub use fallback_segment_draft::*;
+pub use fallback_segment_draft_rules::*;
+pub use fallback_segment_draft_store::*;
+pub use fallback_segment_draft_report::*;
+pub use fallback_segment_draft_workflow::*;
+pub use legacy_segment_proposal::*;
+pub use legacy_segment_proposal_rules::*;
+pub use legacy_segment_proposal_store::*;
+pub use legacy_segment_proposal_view::*;
+pub use legacy_segment_proposal_workflow::*;
+pub use rolling_segment_agreement::*;
+pub use rolling_segment_agreement_rules::*;
+pub use rolling_segment_agreement_store::*;
+pub use rolling_segment_agreement_engine::*;
+pub use rolling_segment_agreement_report::*;
+pub use rolling_segment_agreement_workflow::*;
+pub use weighted_segment_policy_policy::*;
+pub use fallback_segment_draft_policy::*;
+pub use legacy_segment_proposal_policy::*;
+pub use rolling_segment_agreement_policy::*;
+pub use fallback_segment_draft_from_forecast::*;

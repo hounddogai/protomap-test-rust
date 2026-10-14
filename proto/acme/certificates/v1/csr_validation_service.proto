@@ -1,0 +1,268 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.certificates.v1;
+
+import "acme/certificates/v1/certificates.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Certificates.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/certificates/v1;certificatesv1";
+option java_multiple_files = true;
+option java_outer_classname = "CsrValidationServiceProto";
+option java_package = "com.acme.certificates.v1";
+
+// Checks csrs against the rules before anything acts on them.
+service CsrValidationService {
+  // Validates a csr.
+  rpc ValidateCsr(ValidateCsrRequest) returns (ValidateCsrResponse);
+
+  // Previews a csr.
+  rpc PreviewCsr(PreviewCsrRequest) returns (PreviewCsrResponse);
+
+  // Normalizes a csr.
+  rpc NormalizeCsr(NormalizeCsrRequest) returns (NormalizeCsrResponse);
+
+  // Explains a csr.
+  rpc ExplainCsrDecision(ExplainCsrDecisionRequest) returns (ExplainCsrDecisionResponse);
+
+  // Scores a csr.
+  rpc ScoreCsr(ScoreCsrRequest) returns (ScoreCsrResponse);
+
+  // Lints a csr.
+  rpc LintCsrs(LintCsrsRequest) returns (LintCsrsResponse);
+
+  // Returns a csr.
+  rpc GetCsrRules(GetCsrRulesRequest) returns (GetCsrRulesResponse);
+}
+
+// The request of `ValidateCsr`.
+message ValidateCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  ValidateCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateCsr`.
+message ValidateCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  ValidateCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewCsr`.
+message PreviewCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  PreviewCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewCsr`.
+message PreviewCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  PreviewCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeCsr`.
+message NormalizeCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  NormalizeCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeCsr`.
+message NormalizeCsrResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  NormalizeCsrResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainCsrDecision`.
+message ExplainCsrDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  ExplainCsrDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainCsrDecision`.
+message ExplainCsrDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  ExplainCsrDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreCsr`.
+message ScoreCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  ScoreCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreCsr`.
+message ScoreCsrResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreCsrResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Csr csr = 1;
+  ScoreCsrResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintCsrs`.
+message LintCsrsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  LintCsrsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintCsrs`.
+message LintCsrsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  LintCsrsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCsrRules`.
+message GetCsrRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCsrRules`.
+message GetCsrRulesResponse {
+  Csr csr = 1;
+  acme.common.v1.OperationResult result = 2;
+}

@@ -1,0 +1,50 @@
+//! The regional federation proposal records of workload's federation work, and the rules, stores, and
+//! calculations around them.
+
+mod regional_federation_proposal;
+mod regional_federation_proposal_rules;
+mod regional_federation_proposal_store;
+mod regional_federation_proposal_engine;
+mod regional_federation_proposal_view;
+mod regional_federation_proposal_report;
+mod regional_federation_proposal_workflow;
+mod federation_quota;
+mod federation_quota_rules;
+mod federation_quota_engine;
+mod federation_quota_view;
+mod federation_quota_report;
+mod federation_profile;
+mod federation_profile_rules;
+mod federation_profile_store;
+mod federation_profile_view;
+mod federation_profile_report;
+mod federation_profile_workflow;
+mod regional_federation_proposal_policy;
+mod federation_quota_policy;
+mod federation_profile_policy;
+mod regional_federation_proposal_from_profile;
+mod federation_quota_from_forecast;
+
+pub use regional_federation_proposal::*;
+pub use regional_federation_proposal_rules::*;
+pub use regional_federation_proposal_store::*;
+pub use regional_federation_proposal_engine::*;
+pub use regional_federation_proposal_view::*;
+pub use regional_federation_proposal_report::*;
+pub use regional_federation_proposal_workflow::*;
+pub use federation_quota::*;
+pub use federation_quota_rules::*;
+pub use federation_quota_engine::*;
+pub use federation_quota_view::*;
+pub use federation_quota_report::*;
+pub use federation_profile::*;
+pub use federation_profile_rules::*;
+pub use federation_profile_store::*;
+pub use federation_profile_view::*;
+pub use federation_profile_report::*;
+pub use federation_profile_workflow::*;
+pub use regional_federation_proposal_policy::*;
+pub use federation_quota_policy::*;
+pub use federation_profile_policy::*;
+pub use regional_federation_proposal_from_profile::*;
+pub use federation_quota_from_forecast::*;

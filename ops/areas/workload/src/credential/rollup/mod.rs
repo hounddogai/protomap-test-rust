@@ -1,0 +1,50 @@
+//! The manual credential rollup records of workload's credential work, and the rules, stores, and
+//! calculations around them.
+
+mod manual_credential_rollup;
+mod manual_credential_rollup_rules;
+mod manual_credential_rollup_store;
+mod manual_credential_rollup_engine;
+mod manual_credential_rollup_view;
+mod manual_credential_rollup_workflow;
+mod weighted_credential_slot;
+mod weighted_credential_slot_rules;
+mod weighted_credential_slot_store;
+mod weighted_credential_slot_workflow;
+mod regional_credential_rollup;
+mod regional_credential_rollup_rules;
+mod regional_credential_rollup_store;
+mod weighted_credential_variance;
+mod weighted_credential_variance_rules;
+mod weighted_credential_variance_store;
+mod weighted_credential_variance_workflow;
+mod manual_credential_rollup_policy;
+mod weighted_credential_slot_policy;
+mod regional_credential_rollup_policy;
+mod weighted_credential_variance_policy;
+mod weighted_credential_slot_from_estimate;
+mod manual_credential_rollup_from_adjustment;
+
+pub use manual_credential_rollup::*;
+pub use manual_credential_rollup_rules::*;
+pub use manual_credential_rollup_store::*;
+pub use manual_credential_rollup_engine::*;
+pub use manual_credential_rollup_view::*;
+pub use manual_credential_rollup_workflow::*;
+pub use weighted_credential_slot::*;
+pub use weighted_credential_slot_rules::*;
+pub use weighted_credential_slot_store::*;
+pub use weighted_credential_slot_workflow::*;
+pub use regional_credential_rollup::*;
+pub use regional_credential_rollup_rules::*;
+pub use regional_credential_rollup_store::*;
+pub use weighted_credential_variance::*;
+pub use weighted_credential_variance_rules::*;
+pub use weighted_credential_variance_store::*;
+pub use weighted_credential_variance_workflow::*;
+pub use manual_credential_rollup_policy::*;
+pub use weighted_credential_slot_policy::*;
+pub use regional_credential_rollup_policy::*;
+pub use weighted_credential_variance_policy::*;
+pub use weighted_credential_slot_from_estimate::*;
+pub use manual_credential_rollup_from_adjustment::*;

@@ -1,0 +1,311 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FlagEvaluationAdminServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Operator actions on flag evaluations that support staff run by hand.
+service FlagEvaluationAdminService {
+  // Archives a flag evaluation.
+  rpc ArchiveFlagEvaluation(ArchiveFlagEvaluationRequest) returns (ArchiveFlagEvaluationResponse);
+
+  // Restores a flag evaluation.
+  rpc RestoreFlagEvaluation(RestoreFlagEvaluationRequest) returns (RestoreFlagEvaluationResponse);
+
+  // Deletes a flag evaluation.
+  rpc PurgeFlagEvaluation(PurgeFlagEvaluationRequest) returns (PurgeFlagEvaluationResponse);
+
+  // Reassigns a flag evaluation.
+  rpc ReassignFlagEvaluation(ReassignFlagEvaluationRequest) returns (ReassignFlagEvaluationResponse);
+
+  // Locks a flag evaluation.
+  rpc LockFlagEvaluation(LockFlagEvaluationRequest) returns (LockFlagEvaluationResponse);
+
+  // Unlocks a flag evaluation.
+  rpc UnlockFlagEvaluation(UnlockFlagEvaluationRequest) returns (UnlockFlagEvaluationResponse);
+
+  // Transfers a flag evaluation.
+  rpc TransferFlagEvaluation(TransferFlagEvaluationRequest) returns (TransferFlagEvaluationResponse);
+
+  // Repairs a flag evaluation.
+  rpc RepairFlagEvaluation(RepairFlagEvaluationRequest) returns (RepairFlagEvaluationResponse);
+
+  // Returns a flag evaluation.
+  rpc InspectFlagEvaluation(InspectFlagEvaluationRequest) returns (InspectFlagEvaluationResponse);
+}
+
+// The request of `ArchiveFlagEvaluation`.
+message ArchiveFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  ArchiveFlagEvaluationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ArchiveFlagEvaluation`.
+message ArchiveFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  ArchiveFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RestoreFlagEvaluation`.
+message RestoreFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  RestoreFlagEvaluationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RestoreFlagEvaluation`.
+message RestoreFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  RestoreFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PurgeFlagEvaluation`.
+message PurgeFlagEvaluationRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  string reason = 3;
+  string etag = 4;
+  bool force = 5;
+}
+
+// The response of `PurgeFlagEvaluation`.
+message PurgeFlagEvaluationResponse {
+  acme.common.v1.OperationResult result = 1;
+  google.protobuf.Timestamp effective_at = 2;
+}
+
+// The request of `ReassignFlagEvaluation`.
+message ReassignFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.identity.v1.UserRef assignee = 1;
+    string queue = 2;
+    int32 capacity = 3;
+    string assignee_email = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  ReassignFlagEvaluationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReassignFlagEvaluation`.
+message ReassignFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  ReassignFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LockFlagEvaluation`.
+message LockFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  LockFlagEvaluationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `LockFlagEvaluation`.
+message LockFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  LockFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnlockFlagEvaluation`.
+message UnlockFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  UnlockFlagEvaluationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnlockFlagEvaluation`.
+message UnlockFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  UnlockFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TransferFlagEvaluation`.
+message TransferFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  TransferFlagEvaluationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TransferFlagEvaluation`.
+message TransferFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  TransferFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RepairFlagEvaluation`.
+message RepairFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string cursor = 1;
+    bytes payload = 2;
+    string resolution = 3;
+    string peer_region = 4;
+    string checksum = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  RepairFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RepairFlagEvaluation`.
+message RepairFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  RepairFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectFlagEvaluation`.
+message InspectFlagEvaluationRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectFlagEvaluation`.
+message InspectFlagEvaluationResponse {
+  FlagEvaluation flag_evaluation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

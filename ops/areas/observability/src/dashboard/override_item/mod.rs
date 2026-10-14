@@ -1,0 +1,54 @@
+//! The strict dashboard override records of observability's dashboard work, and the rules, stores, and
+//! calculations around them.
+
+mod strict_dashboard_override;
+mod strict_dashboard_override_rules;
+mod strict_dashboard_override_store;
+mod strict_dashboard_override_view;
+mod strict_dashboard_override_workflow;
+mod lenient_dashboard_summary;
+mod lenient_dashboard_summary_rules;
+mod lenient_dashboard_summary_store;
+mod lenient_dashboard_summary_engine;
+mod lenient_dashboard_summary_report;
+mod capped_dashboard_template;
+mod capped_dashboard_template_rules;
+mod capped_dashboard_template_engine;
+mod capped_dashboard_template_view;
+mod capped_dashboard_template_report;
+mod strict_dashboard_milestone;
+mod strict_dashboard_milestone_rules;
+mod strict_dashboard_milestone_store;
+mod strict_dashboard_milestone_engine;
+mod strict_dashboard_milestone_view;
+mod strict_dashboard_override_policy;
+mod lenient_dashboard_summary_policy;
+mod capped_dashboard_template_policy;
+mod strict_dashboard_milestone_policy;
+mod strict_dashboard_milestone_from_profile;
+
+pub use strict_dashboard_override::*;
+pub use strict_dashboard_override_rules::*;
+pub use strict_dashboard_override_store::*;
+pub use strict_dashboard_override_view::*;
+pub use strict_dashboard_override_workflow::*;
+pub use lenient_dashboard_summary::*;
+pub use lenient_dashboard_summary_rules::*;
+pub use lenient_dashboard_summary_store::*;
+pub use lenient_dashboard_summary_engine::*;
+pub use lenient_dashboard_summary_report::*;
+pub use capped_dashboard_template::*;
+pub use capped_dashboard_template_rules::*;
+pub use capped_dashboard_template_engine::*;
+pub use capped_dashboard_template_view::*;
+pub use capped_dashboard_template_report::*;
+pub use strict_dashboard_milestone::*;
+pub use strict_dashboard_milestone_rules::*;
+pub use strict_dashboard_milestone_store::*;
+pub use strict_dashboard_milestone_engine::*;
+pub use strict_dashboard_milestone_view::*;
+pub use strict_dashboard_override_policy::*;
+pub use lenient_dashboard_summary_policy::*;
+pub use capped_dashboard_template_policy::*;
+pub use strict_dashboard_milestone_policy::*;
+pub use strict_dashboard_milestone_from_profile::*;

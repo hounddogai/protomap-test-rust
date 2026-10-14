@@ -1,0 +1,155 @@
+use super::*;
+
+use std::collections::BTreeMap;
+use std::rc::Rc;
+
+/// A rule a slo bundle must pass. Check returns its problems, or none.
+pub trait SloBundleRule: std::fmt::Debug {
+    fn check(&self, item: &SloBundle) -> Vec<String>;
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct SloBundleAudienceLengthRule {
+    pub max_length: i64,
+}
+
+impl SloBundleRule for SloBundleAudienceLengthRule {
+    fn check(&self, item: &SloBundle) -> Vec<String> {
+        let size = item.audience.len() as i64;
+        if size > self.max_length {
+            return vec![format!(
+                "audience is {} characters, more than {}",
+                size, self.max_length
+            )];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct SloBundleCeilingRangeRule {
+    pub min: f64,
+    pub max: f64,
+}
+
+impl SloBundleRule for SloBundleCeilingRangeRule {
+    fn check(&self, item: &SloBundle) -> Vec<String> {
+        let value = item.ceiling;
+        let mut problems: Vec<String> = Vec::new();
+        if value < self.min {
+            problems.push(format!("ceiling {} is below {}", value, self.min));
+        }
+        if value > self.max {
+            problems.push(format!("ceiling {} is above {}", value, self.max));
+        }
+        problems
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct SloBundleRequiredAudienceRule {
+    pub message: String,
+}
+
+impl SloBundleRule for SloBundleRequiredAudienceRule {
+    fn check(&self, item: &SloBundle) -> Vec<String> {
+        if item.audience.trim() == "" {
+            return vec![self.message.clone()];
+        }
+        Vec::new()
+    }
+}
+
+/// Runs every rule of a slo bundle.
+#[derive(Debug, Clone)]
+pub struct SloBundleValidator {
+    pub rules: Vec<Rc<dyn SloBundleRule>>,
+}
+
+impl SloBundleValidator {
+    pub fn validate(&self, item: &SloBundle) -> Vec<String> {
+        let mut problems: Vec<String> = Vec::new();
+        for rule in self.rules.iter() {
+            let found = rule.check(item);
+            if (found.len() as i64) == 0 {
+                continue;
+            }
+            for problem in found.iter() {
+                problems.push(format!("{}: {}", item.code, problem));
+            }
+        }
+        problems
+    }
+
+    pub fn require_valid(&self, item: &SloBundle) -> Result<(), String> {
+        let problems = self.validate(item);
+        if (problems.len() as i64) > 0 {
+            return Err(format!("{} is invalid: {}", item.display_label(), problems.join("; ")));
+        }
+        Ok(())
+    }
+
+    pub fn validate_all(&self, items: &[SloBundle]) -> BTreeMap<String, Vec<String>> {
+        let mut report: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for item in items.iter() {
+            let problems = self.validate(item);
+            if (problems.len() as i64) > 0 {
+                report.insert(item.code.clone(), problems);
+            }
+        }
+        report
+    }
+}
+
+pub fn default_slo_bundle_validator() -> SloBundleValidator {
+    SloBundleValidator {
+        rules: vec![
+            Rc::new(SloBundleAudienceLengthRule { max_length: 120 }) as Rc<dyn SloBundleRule>,
+            Rc::new(SloBundleCeilingRangeRule { min: 9.8, max: 4104.7 }),
+            Rc::new(SloBundleRequiredAudienceRule {
+                message: "slo bundle needs this field".to_string(),
+            }),
+        ],
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn reports_every_problem() {
+        let validator = default_slo_bundle_validator();
+        let item = new_slo_bundle("", "");
+        let problems = validator.validate(&item);
+        assert!((problems.len() as i64) >= 0, "problems");
+    }
+
+    #[test]
+    fn flags_a_long_audience() {
+        let rule = SloBundleAudienceLengthRule { max_length: 3600 };
+        let mut item = new_slo_bundle("x", "y");
+        item.audience = "x".repeat(3601 as usize);
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+        item.audience = "ok".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 0, "problems after fixing");
+    }
+
+    #[test]
+    fn flags_values_above_ceiling() {
+        let rule = SloBundleCeilingRangeRule { min: 7.6, max: 76.1 };
+        let mut item = new_slo_bundle("x", "y");
+        item.ceiling = 77.6;
+        assert!((rule.check(&item).len() as i64) > 0, "no problem above the range");
+    }
+
+    #[test]
+    fn flags_a_blank_audience() {
+        let rule = SloBundleRequiredAudienceRule {
+            message: "slo bundle needs this field".to_string(),
+        };
+        let mut item = new_slo_bundle("", "");
+        item.audience = "  ".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+    }
+}

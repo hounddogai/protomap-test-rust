@@ -1,0 +1,56 @@
+//! The batched approval snapshot records of deploys's approval work, and the rules, stores, and calculations
+//! around them.
+
+mod batched_approval_snapshot;
+mod batched_approval_snapshot_store;
+mod batched_approval_snapshot_report;
+mod approval_segment;
+mod approval_segment_rules;
+mod approval_segment_report;
+mod approval_allocation;
+mod approval_allocation_rules;
+mod approval_allocation_engine;
+mod approval_allocation_view;
+mod approval_allocation_report;
+mod fallback_approval_summary;
+mod fallback_approval_summary_store;
+mod fallback_approval_summary_engine;
+mod fallback_approval_summary_report;
+mod approval_estimate;
+mod approval_estimate_rules;
+mod approval_estimate_store;
+mod approval_estimate_engine;
+mod batched_approval_snapshot_policy;
+mod approval_segment_policy;
+mod approval_allocation_policy;
+mod fallback_approval_summary_policy;
+mod approval_estimate_policy;
+mod approval_estimate_from_allocation;
+mod batched_approval_snapshot_from_score;
+
+pub use batched_approval_snapshot::*;
+pub use batched_approval_snapshot_store::*;
+pub use batched_approval_snapshot_report::*;
+pub use approval_segment::*;
+pub use approval_segment_rules::*;
+pub use approval_segment_report::*;
+pub use approval_allocation::*;
+pub use approval_allocation_rules::*;
+pub use approval_allocation_engine::*;
+pub use approval_allocation_view::*;
+pub use approval_allocation_report::*;
+pub use fallback_approval_summary::*;
+pub use fallback_approval_summary_store::*;
+pub use fallback_approval_summary_engine::*;
+pub use fallback_approval_summary_report::*;
+pub use approval_estimate::*;
+pub use approval_estimate_rules::*;
+pub use approval_estimate_store::*;
+pub use approval_estimate_engine::*;
+pub use batched_approval_snapshot_policy::*;
+pub use approval_segment_policy::*;
+pub use approval_allocation_policy::*;
+pub use fallback_approval_summary_policy::*;
+pub use approval_estimate_policy::*;
+pub use approval_estimate_from_allocation::*;
+pub use batched_approval_snapshot_from_score::*;

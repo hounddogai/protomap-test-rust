@@ -1,0 +1,58 @@
+//! The federation group records of workload's federation work, and the rules, stores, and calculations around
+//! them.
+
+mod federation_group;
+mod federation_group_rules;
+mod federation_group_store;
+mod federation_group_engine;
+mod federation_group_view;
+mod federation_group_report;
+mod federation_group_workflow;
+mod federation_threshold;
+mod federation_threshold_rules;
+mod federation_threshold_store;
+mod federation_allocation;
+mod federation_allocation_rules;
+mod federation_allocation_store;
+mod federation_allocation_workflow;
+mod federation_forecast;
+mod federation_forecast_rules;
+mod federation_forecast_view;
+mod federation_template;
+mod federation_template_store;
+mod federation_template_engine;
+mod federation_group_policy;
+mod federation_threshold_policy;
+mod federation_allocation_policy;
+mod federation_forecast_policy;
+mod federation_template_policy;
+mod federation_threshold_from_slot;
+mod federation_allocation_from_variance;
+
+pub use federation_group::*;
+pub use federation_group_rules::*;
+pub use federation_group_store::*;
+pub use federation_group_engine::*;
+pub use federation_group_view::*;
+pub use federation_group_report::*;
+pub use federation_group_workflow::*;
+pub use federation_threshold::*;
+pub use federation_threshold_rules::*;
+pub use federation_threshold_store::*;
+pub use federation_allocation::*;
+pub use federation_allocation_rules::*;
+pub use federation_allocation_store::*;
+pub use federation_allocation_workflow::*;
+pub use federation_forecast::*;
+pub use federation_forecast_rules::*;
+pub use federation_forecast_view::*;
+pub use federation_template::*;
+pub use federation_template_store::*;
+pub use federation_template_engine::*;
+pub use federation_group_policy::*;
+pub use federation_threshold_policy::*;
+pub use federation_allocation_policy::*;
+pub use federation_forecast_policy::*;
+pub use federation_template_policy::*;
+pub use federation_threshold_from_slot::*;
+pub use federation_allocation_from_variance::*;

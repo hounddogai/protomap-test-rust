@@ -1,0 +1,43 @@
+//! The failover schedule records of dns's failover work, and the rules, stores, and calculations around them.
+
+mod failover_schedule;
+mod failover_schedule_rules;
+mod failover_schedule_store;
+mod failover_schedule_engine;
+mod failover_schedule_workflow;
+mod scheduled_failover_segment;
+mod scheduled_failover_segment_rules;
+mod scheduled_failover_segment_store;
+mod scheduled_failover_segment_engine;
+mod scheduled_failover_segment_view;
+mod default_failover_rule;
+mod default_failover_rule_rules;
+mod default_failover_rule_store;
+mod default_failover_rule_engine;
+mod default_failover_rule_report;
+mod failover_schedule_policy;
+mod scheduled_failover_segment_policy;
+mod default_failover_rule_policy;
+mod failover_schedule_from_bundle;
+mod default_failover_rule_from_summary;
+
+pub use failover_schedule::*;
+pub use failover_schedule_rules::*;
+pub use failover_schedule_store::*;
+pub use failover_schedule_engine::*;
+pub use failover_schedule_workflow::*;
+pub use scheduled_failover_segment::*;
+pub use scheduled_failover_segment_rules::*;
+pub use scheduled_failover_segment_store::*;
+pub use scheduled_failover_segment_engine::*;
+pub use scheduled_failover_segment_view::*;
+pub use default_failover_rule::*;
+pub use default_failover_rule_rules::*;
+pub use default_failover_rule_store::*;
+pub use default_failover_rule_engine::*;
+pub use default_failover_rule_report::*;
+pub use failover_schedule_policy::*;
+pub use scheduled_failover_segment_policy::*;
+pub use default_failover_rule_policy::*;
+pub use failover_schedule_from_bundle::*;
+pub use default_failover_rule_from_summary::*;

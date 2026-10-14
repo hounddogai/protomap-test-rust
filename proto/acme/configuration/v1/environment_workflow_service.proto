@@ -1,0 +1,317 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/configuration/v1/configuration.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "EnvironmentWorkflowServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Runs the long-lived workflow that takes an environment from start to finish.
+service EnvironmentWorkflowService {
+  // Starts an environment.
+  rpc StartEnvironmentWorkflow(StartEnvironmentWorkflowRequest) returns (StartEnvironmentWorkflowResponse);
+
+  // Advances an environment.
+  rpc AdvanceEnvironmentWorkflow(AdvanceEnvironmentWorkflowRequest) returns (AdvanceEnvironmentWorkflowResponse);
+
+  // Cancels an environment.
+  rpc CancelEnvironmentWorkflow(CancelEnvironmentWorkflowRequest) returns (CancelEnvironmentWorkflowResponse);
+
+  // Retrys an environment.
+  rpc RetryEnvironmentWorkflow(RetryEnvironmentWorkflowRequest) returns (RetryEnvironmentWorkflowResponse);
+
+  // Pauses an environment.
+  rpc PauseEnvironmentWorkflow(PauseEnvironmentWorkflowRequest) returns (PauseEnvironmentWorkflowResponse);
+
+  // Resumes an environment.
+  rpc ResumeEnvironmentWorkflow(ResumeEnvironmentWorkflowRequest) returns (ResumeEnvironmentWorkflowResponse);
+
+  // Lists environments a page at a time.
+  rpc ListEnvironmentWorkflows(ListEnvironmentWorkflowsRequest) returns (ListEnvironmentWorkflowsResponse);
+
+  // Signals an environment.
+  rpc SignalEnvironmentWorkflow(SignalEnvironmentWorkflowRequest) returns (SignalEnvironmentWorkflowResponse);
+}
+
+// The request of `StartEnvironmentWorkflow`.
+message StartEnvironmentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  StartEnvironmentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartEnvironmentWorkflow`.
+message StartEnvironmentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  StartEnvironmentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceEnvironmentWorkflow`.
+message AdvanceEnvironmentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  AdvanceEnvironmentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceEnvironmentWorkflow`.
+message AdvanceEnvironmentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  AdvanceEnvironmentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelEnvironmentWorkflow`.
+message CancelEnvironmentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  CancelEnvironmentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelEnvironmentWorkflow`.
+message CancelEnvironmentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  CancelEnvironmentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryEnvironmentWorkflow`.
+message RetryEnvironmentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  RetryEnvironmentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryEnvironmentWorkflow`.
+message RetryEnvironmentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  RetryEnvironmentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseEnvironmentWorkflow`.
+message PauseEnvironmentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  PauseEnvironmentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseEnvironmentWorkflow`.
+message PauseEnvironmentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  PauseEnvironmentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeEnvironmentWorkflow`.
+message ResumeEnvironmentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  ResumeEnvironmentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeEnvironmentWorkflow`.
+message ResumeEnvironmentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  ResumeEnvironmentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListEnvironmentWorkflows`.
+message ListEnvironmentWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated EnvironmentStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListEnvironmentWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListEnvironmentWorkflows`.
+message ListEnvironmentWorkflowsResponse {
+  repeated Environment environments = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalEnvironmentWorkflow`.
+message SignalEnvironmentWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string environment_id = 2;
+  Environment environment = 3;
+  SignalEnvironmentWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalEnvironmentWorkflow`.
+message SignalEnvironmentWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Environment environment = 1;
+  SignalEnvironmentWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

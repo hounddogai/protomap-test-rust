@@ -1,0 +1,294 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/identity/v1/refs.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "KeyRotationLifecycleServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Moves a key rotation between the states of its lifecycle.
+service KeyRotationLifecycleService {
+  // Activates a key rotation.
+  rpc ActivateKeyRotation(ActivateKeyRotationRequest) returns (ActivateKeyRotationResponse);
+
+  // Suspends a key rotation.
+  rpc SuspendKeyRotation(SuspendKeyRotationRequest) returns (SuspendKeyRotationResponse);
+
+  // Reinstates a key rotation.
+  rpc ReinstateKeyRotation(ReinstateKeyRotationRequest) returns (ReinstateKeyRotationResponse);
+
+  // Terminates a key rotation.
+  rpc TerminateKeyRotation(TerminateKeyRotationRequest) returns (TerminateKeyRotationResponse);
+
+  // Renews a key rotation.
+  rpc RenewKeyRotation(RenewKeyRotationRequest) returns (RenewKeyRotationResponse);
+
+  // Expires a key rotation.
+  rpc ExpireKeyRotation(ExpireKeyRotationRequest) returns (ExpireKeyRotationResponse);
+
+  // Returns a key rotation.
+  rpc GetKeyRotationLifecycle(GetKeyRotationLifecycleRequest) returns (GetKeyRotationLifecycleResponse);
+
+  // Schedules a key rotation.
+  rpc ScheduleKeyRotationExpiry(ScheduleKeyRotationExpiryRequest) returns (ScheduleKeyRotationExpiryResponse);
+}
+
+// The request of `ActivateKeyRotation`.
+message ActivateKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  ActivateKeyRotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ActivateKeyRotation`.
+message ActivateKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  ActivateKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SuspendKeyRotation`.
+message SuspendKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  SuspendKeyRotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SuspendKeyRotation`.
+message SuspendKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  SuspendKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ReinstateKeyRotation`.
+message ReinstateKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  ReinstateKeyRotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReinstateKeyRotation`.
+message ReinstateKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  ReinstateKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TerminateKeyRotation`.
+message TerminateKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  TerminateKeyRotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TerminateKeyRotation`.
+message TerminateKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  TerminateKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RenewKeyRotation`.
+message RenewKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  RenewKeyRotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `RenewKeyRotation`.
+message RenewKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  RenewKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExpireKeyRotation`.
+message ExpireKeyRotationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  ExpireKeyRotationRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ExpireKeyRotation`.
+message ExpireKeyRotationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  ExpireKeyRotationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetKeyRotationLifecycle`.
+message GetKeyRotationLifecycleRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetKeyRotationLifecycle`.
+message GetKeyRotationLifecycleResponse {
+  KeyRotation key_rotation = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ScheduleKeyRotationExpiry`.
+message ScheduleKeyRotationExpiryRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_rotation_id = 2;
+  KeyRotation key_rotation = 3;
+  ScheduleKeyRotationExpiryRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScheduleKeyRotationExpiry`.
+message ScheduleKeyRotationExpiryResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRotation key_rotation = 1;
+  ScheduleKeyRotationExpiryResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

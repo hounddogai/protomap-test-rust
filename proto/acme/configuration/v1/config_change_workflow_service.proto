@@ -1,0 +1,267 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.configuration.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/configuration/v1/configuration.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Configuration.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/configuration/v1;configurationv1";
+option java_multiple_files = true;
+option java_outer_classname = "ConfigChangeWorkflowServiceProto";
+option java_package = "com.acme.configuration.v1";
+
+// Runs the long-lived workflow that takes a config change from start to finish.
+service ConfigChangeWorkflowService {
+  // Starts a config change.
+  rpc StartConfigChangeWorkflow(StartConfigChangeWorkflowRequest) returns (StartConfigChangeWorkflowResponse);
+
+  // Advances a config change.
+  rpc AdvanceConfigChangeWorkflow(AdvanceConfigChangeWorkflowRequest) returns (AdvanceConfigChangeWorkflowResponse);
+
+  // Cancels a config change.
+  rpc CancelConfigChangeWorkflow(CancelConfigChangeWorkflowRequest) returns (CancelConfigChangeWorkflowResponse);
+
+  // Retrys a config change.
+  rpc RetryConfigChangeWorkflow(RetryConfigChangeWorkflowRequest) returns (RetryConfigChangeWorkflowResponse);
+
+  // Resumes a config change.
+  rpc ResumeConfigChangeWorkflow(ResumeConfigChangeWorkflowRequest) returns (ResumeConfigChangeWorkflowResponse);
+
+  // Returns a config change.
+  rpc InspectConfigChangeWorkflow(InspectConfigChangeWorkflowRequest) returns (InspectConfigChangeWorkflowResponse);
+
+  // Signals a config change.
+  rpc SignalConfigChangeWorkflow(SignalConfigChangeWorkflowRequest) returns (SignalConfigChangeWorkflowResponse);
+}
+
+// The request of `StartConfigChangeWorkflow`.
+message StartConfigChangeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  StartConfigChangeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartConfigChangeWorkflow`.
+message StartConfigChangeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  StartConfigChangeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceConfigChangeWorkflow`.
+message AdvanceConfigChangeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  AdvanceConfigChangeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceConfigChangeWorkflow`.
+message AdvanceConfigChangeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  AdvanceConfigChangeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelConfigChangeWorkflow`.
+message CancelConfigChangeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  CancelConfigChangeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelConfigChangeWorkflow`.
+message CancelConfigChangeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  CancelConfigChangeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryConfigChangeWorkflow`.
+message RetryConfigChangeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  RetryConfigChangeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryConfigChangeWorkflow`.
+message RetryConfigChangeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  RetryConfigChangeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeConfigChangeWorkflow`.
+message ResumeConfigChangeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  ResumeConfigChangeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeConfigChangeWorkflow`.
+message ResumeConfigChangeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  ResumeConfigChangeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectConfigChangeWorkflow`.
+message InspectConfigChangeWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectConfigChangeWorkflow`.
+message InspectConfigChangeWorkflowResponse {
+  ConfigChange config_change = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `SignalConfigChangeWorkflow`.
+message SignalConfigChangeWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string config_change_id = 2;
+  ConfigChange config_change = 3;
+  SignalConfigChangeWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalConfigChangeWorkflow`.
+message SignalConfigChangeWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ConfigChange config_change = 1;
+  SignalConfigChangeWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

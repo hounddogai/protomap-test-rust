@@ -1,0 +1,77 @@
+use super::*;
+
+use std::rc::Rc;
+
+use acme_kit::clock;
+
+/// Moves pending slo budgets through their life cycle and keeps a journal of what it did.
+#[derive(Debug, Clone)]
+pub struct PendingSloBudgetManager {
+    pub store: Rc<dyn PendingSloBudgetStore>,
+    pub validator: PendingSloBudgetValidator,
+    pub clock: Rc<dyn clock::Clock>,
+    pub journal: Vec<String>,
+}
+
+impl PendingSloBudgetManager {
+    fn note(&mut self, message: &str) {
+        self.journal.push(format!("{} {}", self.clock.now(), message));
+    }
+
+    pub fn open(&mut self, code: &str) -> Result<(), String> {
+        let Some(mut item) = self.store.find(code) else {
+            return Err(format!("pending slo budget {} not found", code));
+        };
+        self.validator
+            .require_valid(&item)
+            .map_err(|err| format!("validate: {err}"))?;
+        item.move_to(PendingSloBudgetStatus::Pending)
+            .map_err(|err| format!("move: {err}"))?;
+        self.store.save(&item);
+        self.note(&format!("{} is pending", code));
+        Ok(())
+    }
+
+    pub fn finish(&mut self, code: &str, reason: &str) -> Result<(), String> {
+        let Some(mut item) = self.store.find(code) else {
+            return Err(format!("pending slo budget {} not found", code));
+        };
+        if item.is_terminal() {
+            self.note(&format!("{} already closed", code));
+            return Ok(());
+        }
+        item.move_to(PendingSloBudgetStatus::Closed)
+            .map_err(|err| format!("close: {err}"))?;
+        self.store.save(&item);
+        self.note(&format!("{} is closed: {}", code, reason));
+        Ok(())
+    }
+
+    pub fn audit(&mut self, cutoff: i64) -> i64 {
+        let mut changed = 0;
+        for item in self.store.list() {
+            if item.is_terminal() {
+                continue;
+            }
+            let problems = self.validator.validate(&item);
+            if (problems.len() as i64) == 0 {
+                continue;
+            }
+            self.note(&format!("{} needs attention: {}", item.code, problems.join(", ")));
+            changed += 1;
+        }
+        changed
+    }
+}
+
+pub fn new_pending_slo_budget_manager(
+    store: Rc<dyn PendingSloBudgetStore>,
+    clock: Rc<dyn clock::Clock>,
+) -> PendingSloBudgetManager {
+    PendingSloBudgetManager {
+        store: store.clone(),
+        validator: default_pending_slo_budget_validator(),
+        clock: clock.clone(),
+        journal: Vec::new(),
+    }
+}

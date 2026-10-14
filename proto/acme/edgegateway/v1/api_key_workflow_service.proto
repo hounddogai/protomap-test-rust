@@ -1,0 +1,258 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.edgegateway.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/edgegateway/v1/edgegateway.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Edgegateway.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/edgegateway/v1;edgegatewayv1";
+option java_multiple_files = true;
+option java_outer_classname = "ApiKeyWorkflowServiceProto";
+option java_package = "com.acme.edgegateway.v1";
+
+// Runs the long-lived workflow that takes an api key from start to finish.
+service ApiKeyWorkflowService {
+  // Starts an api key.
+  rpc StartApiKeyWorkflow(StartApiKeyWorkflowRequest) returns (StartApiKeyWorkflowResponse);
+
+  // Advances an api key.
+  rpc AdvanceApiKeyWorkflow(AdvanceApiKeyWorkflowRequest) returns (AdvanceApiKeyWorkflowResponse);
+
+  // Retrys an api key.
+  rpc RetryApiKeyWorkflow(RetryApiKeyWorkflowRequest) returns (RetryApiKeyWorkflowResponse);
+
+  // Pauses an api key.
+  rpc PauseApiKeyWorkflow(PauseApiKeyWorkflowRequest) returns (PauseApiKeyWorkflowResponse);
+
+  // Returns an api key.
+  rpc InspectApiKeyWorkflow(InspectApiKeyWorkflowRequest) returns (InspectApiKeyWorkflowResponse);
+
+  // Lists api keys a page at a time.
+  rpc ListApiKeyWorkflows(ListApiKeyWorkflowsRequest) returns (ListApiKeyWorkflowsResponse);
+
+  // Signals an api key.
+  rpc SignalApiKeyWorkflow(SignalApiKeyWorkflowRequest) returns (SignalApiKeyWorkflowResponse);
+}
+
+// The request of `StartApiKeyWorkflow`.
+message StartApiKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  ApiKey api_key = 3;
+  StartApiKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartApiKeyWorkflow`.
+message StartApiKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApiKey api_key = 1;
+  StartApiKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceApiKeyWorkflow`.
+message AdvanceApiKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  ApiKey api_key = 3;
+  AdvanceApiKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceApiKeyWorkflow`.
+message AdvanceApiKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApiKey api_key = 1;
+  AdvanceApiKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryApiKeyWorkflow`.
+message RetryApiKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  ApiKey api_key = 3;
+  RetryApiKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryApiKeyWorkflow`.
+message RetryApiKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApiKey api_key = 1;
+  RetryApiKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseApiKeyWorkflow`.
+message PauseApiKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  ApiKey api_key = 3;
+  PauseApiKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseApiKeyWorkflow`.
+message PauseApiKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApiKey api_key = 1;
+  PauseApiKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectApiKeyWorkflow`.
+message InspectApiKeyWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectApiKeyWorkflow`.
+message InspectApiKeyWorkflowResponse {
+  ApiKey api_key = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListApiKeyWorkflows`.
+message ListApiKeyWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated ApiKeyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListApiKeyWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListApiKeyWorkflows`.
+message ListApiKeyWorkflowsResponse {
+  repeated ApiKey api_keys = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalApiKeyWorkflow`.
+message SignalApiKeyWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string api_key_id = 2;
+  ApiKey api_key = 3;
+  SignalApiKeyWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalApiKeyWorkflow`.
+message SignalApiKeyWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  ApiKey api_key = 1;
+  SignalApiKeyWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

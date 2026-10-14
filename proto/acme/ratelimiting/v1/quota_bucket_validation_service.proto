@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "QuotaBucketValidationServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Checks quota buckets against the rules before anything acts on them.
+service QuotaBucketValidationService {
+  // Validates a quota bucket.
+  rpc ValidateQuotaBucket(ValidateQuotaBucketRequest) returns (ValidateQuotaBucketResponse);
+
+  // Previews a quota bucket.
+  rpc PreviewQuotaBucket(PreviewQuotaBucketRequest) returns (PreviewQuotaBucketResponse);
+
+  // Checks a quota bucket.
+  rpc CheckQuotaBucketEligibility(CheckQuotaBucketEligibilityRequest) returns (CheckQuotaBucketEligibilityResponse);
+
+  // Normalizes a quota bucket.
+  rpc NormalizeQuotaBucket(NormalizeQuotaBucketRequest) returns (NormalizeQuotaBucketResponse);
+
+  // Explains a quota bucket.
+  rpc ExplainQuotaBucketDecision(ExplainQuotaBucketDecisionRequest) returns (ExplainQuotaBucketDecisionResponse);
+
+  // Scores a quota bucket.
+  rpc ScoreQuotaBucket(ScoreQuotaBucketRequest) returns (ScoreQuotaBucketResponse);
+
+  // Lints a quota bucket.
+  rpc LintQuotaBuckets(LintQuotaBucketsRequest) returns (LintQuotaBucketsResponse);
+
+  // Returns a quota bucket.
+  rpc GetQuotaBucketRules(GetQuotaBucketRulesRequest) returns (GetQuotaBucketRulesResponse);
+}
+
+// The request of `ValidateQuotaBucket`.
+message ValidateQuotaBucketRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  ValidateQuotaBucketRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateQuotaBucket`.
+message ValidateQuotaBucketResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  ValidateQuotaBucketResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewQuotaBucket`.
+message PreviewQuotaBucketRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  PreviewQuotaBucketRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewQuotaBucket`.
+message PreviewQuotaBucketResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  PreviewQuotaBucketResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckQuotaBucketEligibility`.
+message CheckQuotaBucketEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  CheckQuotaBucketEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckQuotaBucketEligibility`.
+message CheckQuotaBucketEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  CheckQuotaBucketEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeQuotaBucket`.
+message NormalizeQuotaBucketRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  NormalizeQuotaBucketRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeQuotaBucket`.
+message NormalizeQuotaBucketResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  NormalizeQuotaBucketResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainQuotaBucketDecision`.
+message ExplainQuotaBucketDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  ExplainQuotaBucketDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainQuotaBucketDecision`.
+message ExplainQuotaBucketDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  ExplainQuotaBucketDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreQuotaBucket`.
+message ScoreQuotaBucketRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  ScoreQuotaBucketRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreQuotaBucket`.
+message ScoreQuotaBucketResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreQuotaBucketResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  ScoreQuotaBucketResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintQuotaBuckets`.
+message LintQuotaBucketsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  QuotaBucket quota_bucket = 3;
+  LintQuotaBucketsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintQuotaBuckets`.
+message LintQuotaBucketsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  QuotaBucket quota_bucket = 1;
+  LintQuotaBucketsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetQuotaBucketRules`.
+message GetQuotaBucketRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string quota_bucket_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetQuotaBucketRules`.
+message GetQuotaBucketRulesResponse {
+  QuotaBucket quota_bucket = 1;
+  acme.common.v1.OperationResult result = 2;
+}

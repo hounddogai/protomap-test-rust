@@ -1,0 +1,29 @@
+//! Attestation's verifier work.
+
+pub mod budget;
+pub mod targets;
+pub mod mapping;
+pub mod segment;
+pub mod baseline;
+pub mod template;
+pub mod batch;
+pub mod review;
+pub mod quota;
+pub mod milestone;
+pub mod verifier_review;
+pub mod cycle;
+pub mod verifier_baseline;
+pub mod draft;
+pub mod primary_verifier_review;
+pub mod estimate;
+pub mod request;
+pub mod allocation;
+pub mod verifier_request;
+pub mod checkpoint;
+pub mod strict_verifier_review;
+pub mod assignment;
+pub mod summary;
+pub mod verifier_allocation;
+pub mod verifier_budget;
+pub mod score;
+pub mod verifier_template;

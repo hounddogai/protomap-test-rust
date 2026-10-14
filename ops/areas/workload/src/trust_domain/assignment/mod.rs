@@ -1,0 +1,58 @@
+//! The legacy trust domain assignment records of workload's trust domain work, and the rules, stores, and
+//! calculations around them.
+
+mod legacy_trust_domain_assignment;
+mod legacy_trust_domain_assignment_rules;
+mod legacy_trust_domain_assignment_store;
+mod legacy_trust_domain_assignment_engine;
+mod legacy_trust_domain_assignment_view;
+mod legacy_trust_domain_assignment_workflow;
+mod capped_trust_domain_exception;
+mod capped_trust_domain_exception_rules;
+mod capped_trust_domain_exception_store;
+mod capped_trust_domain_exception_view;
+mod capped_trust_domain_exception_workflow;
+mod regional_trust_domain_notice;
+mod regional_trust_domain_notice_rules;
+mod regional_trust_domain_notice_store;
+mod regional_trust_domain_notice_report;
+mod trust_domain_metric;
+mod trust_domain_metric_rules;
+mod trust_domain_metric_store;
+mod trust_domain_metric_engine;
+mod trust_domain_metric_view;
+mod trust_domain_metric_report;
+mod trust_domain_metric_workflow;
+mod legacy_trust_domain_assignment_policy;
+mod capped_trust_domain_exception_policy;
+mod regional_trust_domain_notice_policy;
+mod trust_domain_metric_policy;
+mod regional_trust_domain_notice_from_template;
+
+pub use legacy_trust_domain_assignment::*;
+pub use legacy_trust_domain_assignment_rules::*;
+pub use legacy_trust_domain_assignment_store::*;
+pub use legacy_trust_domain_assignment_engine::*;
+pub use legacy_trust_domain_assignment_view::*;
+pub use legacy_trust_domain_assignment_workflow::*;
+pub use capped_trust_domain_exception::*;
+pub use capped_trust_domain_exception_rules::*;
+pub use capped_trust_domain_exception_store::*;
+pub use capped_trust_domain_exception_view::*;
+pub use capped_trust_domain_exception_workflow::*;
+pub use regional_trust_domain_notice::*;
+pub use regional_trust_domain_notice_rules::*;
+pub use regional_trust_domain_notice_store::*;
+pub use regional_trust_domain_notice_report::*;
+pub use trust_domain_metric::*;
+pub use trust_domain_metric_rules::*;
+pub use trust_domain_metric_store::*;
+pub use trust_domain_metric_engine::*;
+pub use trust_domain_metric_view::*;
+pub use trust_domain_metric_report::*;
+pub use trust_domain_metric_workflow::*;
+pub use legacy_trust_domain_assignment_policy::*;
+pub use capped_trust_domain_exception_policy::*;
+pub use regional_trust_domain_notice_policy::*;
+pub use trust_domain_metric_policy::*;
+pub use regional_trust_domain_notice_from_template::*;

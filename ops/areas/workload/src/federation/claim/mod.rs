@@ -1,0 +1,50 @@
+//! The federation claim records of workload's federation work, and the rules, stores, and calculations around
+//! them.
+
+mod federation_claim;
+mod federation_claim_rules;
+mod federation_claim_engine;
+mod legacy_federation_reservation;
+mod legacy_federation_reservation_rules;
+mod legacy_federation_reservation_engine;
+mod legacy_federation_reservation_report;
+mod capped_federation_target;
+mod capped_federation_target_rules;
+mod capped_federation_target_store;
+mod capped_federation_target_engine;
+mod capped_federation_target_view;
+mod capped_federation_target_report;
+mod legacy_federation_override;
+mod legacy_federation_override_store;
+mod legacy_federation_override_view;
+mod legacy_federation_override_report;
+mod federation_claim_policy;
+mod legacy_federation_reservation_policy;
+mod capped_federation_target_policy;
+mod legacy_federation_override_policy;
+mod legacy_federation_override_from_schedule;
+mod capped_federation_target_from_segment;
+
+pub use federation_claim::*;
+pub use federation_claim_rules::*;
+pub use federation_claim_engine::*;
+pub use legacy_federation_reservation::*;
+pub use legacy_federation_reservation_rules::*;
+pub use legacy_federation_reservation_engine::*;
+pub use legacy_federation_reservation_report::*;
+pub use capped_federation_target::*;
+pub use capped_federation_target_rules::*;
+pub use capped_federation_target_store::*;
+pub use capped_federation_target_engine::*;
+pub use capped_federation_target_view::*;
+pub use capped_federation_target_report::*;
+pub use legacy_federation_override::*;
+pub use legacy_federation_override_store::*;
+pub use legacy_federation_override_view::*;
+pub use legacy_federation_override_report::*;
+pub use federation_claim_policy::*;
+pub use legacy_federation_reservation_policy::*;
+pub use capped_federation_target_policy::*;
+pub use legacy_federation_override_policy::*;
+pub use legacy_federation_override_from_schedule::*;
+pub use capped_federation_target_from_segment::*;

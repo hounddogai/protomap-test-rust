@@ -1,0 +1,300 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.edgegateway.v1;
+
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/edgegateway/v1/edgegateway.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Edgegateway.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/edgegateway/v1;edgegatewayv1";
+option java_multiple_files = true;
+option java_outer_classname = "GatewayPolicyIntegrationServiceProto";
+option java_package = "com.acme.edgegateway.v1";
+
+// Connects external systems that send gateway policy events.
+service GatewayPolicyIntegrationService {
+  // Connects a gateway policy.
+  rpc ConnectGatewayPolicySource(ConnectGatewayPolicySourceRequest) returns (ConnectGatewayPolicySourceResponse);
+
+  // Disconnects a gateway policy.
+  rpc DisconnectGatewayPolicySource(DisconnectGatewayPolicySourceRequest) returns (DisconnectGatewayPolicySourceResponse);
+
+  // Takes a stream of gateway policies and answers once at the end.
+  rpc IngestGatewayPolicyEvents(stream IngestGatewayPolicyEventsRequest) returns (IngestGatewayPolicyEventsResponse);
+
+  // Replays a gateway policy.
+  rpc ReplayGatewayPolicyEvents(ReplayGatewayPolicyEventsRequest) returns (ReplayGatewayPolicyEventsResponse);
+
+  // Acknowledges a gateway policy.
+  rpc AcknowledgeGatewayPolicyEvent(AcknowledgeGatewayPolicyEventRequest) returns (AcknowledgeGatewayPolicyEventResponse);
+
+  // Exchanges changes of gateway policies with a peer.
+  rpc RelayGatewayPolicyMessages(stream RelayGatewayPolicyMessagesRequest) returns (stream RelayGatewayPolicyMessagesResponse);
+
+  // Lists gateway policies a page at a time.
+  rpc ListGatewayPolicySources(ListGatewayPolicySourcesRequest) returns (ListGatewayPolicySourcesResponse);
+
+  // Tests a gateway policy.
+  rpc TestGatewayPolicyConnection(TestGatewayPolicyConnectionRequest) returns (TestGatewayPolicyConnectionResponse);
+}
+
+// The request of `ConnectGatewayPolicySource`.
+message ConnectGatewayPolicySourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string gateway_policy_id = 2;
+  ConnectGatewayPolicySourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ConnectGatewayPolicySource`.
+message ConnectGatewayPolicySourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GatewayPolicy gateway_policy = 1;
+  ConnectGatewayPolicySourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `DisconnectGatewayPolicySource`.
+message DisconnectGatewayPolicySourceRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string gateway_policy_id = 2;
+  DisconnectGatewayPolicySourceRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `DisconnectGatewayPolicySource`.
+message DisconnectGatewayPolicySourceResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GatewayPolicy gateway_policy = 1;
+  DisconnectGatewayPolicySourceResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `IngestGatewayPolicyEvents`.
+message IngestGatewayPolicyEventsRequest {
+  // What a stream of records starts with.
+  message StreamHeader {
+    string source = 1;
+    string format = 2;
+    int64 total_records = 3;
+    acme.common.v1.ContactInfo submitted_by = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof chunk {
+    IngestGatewayPolicyEventsRequest.StreamHeader header = 2;
+    GatewayPolicy record = 3;
+  }
+  int64 sequence = 4;
+}
+
+// The response of `IngestGatewayPolicyEvents`.
+message IngestGatewayPolicyEventsResponse {
+  // A record the import turned down.
+  message Rejection {
+    int64 sequence = 1;
+    string reason = 2;
+    string gateway_policy_id = 3;
+  }
+
+  int64 accepted = 1;
+  int64 rejected = 2;
+  repeated IngestGatewayPolicyEventsResponse.Rejection rejections = 3;
+  acme.common.v1.OperationResult result = 4;
+}
+
+// The request of `ReplayGatewayPolicyEvents`.
+message ReplayGatewayPolicyEventsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string gateway_policy_id = 2;
+  ReplayGatewayPolicyEventsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ReplayGatewayPolicyEvents`.
+message ReplayGatewayPolicyEventsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GatewayPolicy gateway_policy = 1;
+  ReplayGatewayPolicyEventsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AcknowledgeGatewayPolicyEvent`.
+message AcknowledgeGatewayPolicyEventRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string gateway_policy_id = 2;
+  AcknowledgeGatewayPolicyEventRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `AcknowledgeGatewayPolicyEvent`.
+message AcknowledgeGatewayPolicyEventResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GatewayPolicy gateway_policy = 1;
+  AcknowledgeGatewayPolicyEventResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RelayGatewayPolicyMessages`.
+message RelayGatewayPolicyMessagesRequest {
+  // An acknowledgment of a change the peer sent.
+  message ChangeAck {
+    int64 sequence = 1;
+    string status = 2;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  oneof frame {
+    GatewayPolicy change = 2;
+    RelayGatewayPolicyMessagesRequest.ChangeAck ack = 3;
+  }
+  string cursor = 4;
+}
+
+// The response of `RelayGatewayPolicyMessages`.
+message RelayGatewayPolicyMessagesResponse {
+  GatewayPolicy gateway_policy = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `ListGatewayPolicySources`.
+message ListGatewayPolicySourcesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated GatewayPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListGatewayPolicySourcesRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListGatewayPolicySources`.
+message ListGatewayPolicySourcesResponse {
+  repeated GatewayPolicy gateway_policies = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `TestGatewayPolicyConnection`.
+message TestGatewayPolicyConnectionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string endpoint = 1;
+    google.protobuf.Any envelope = 2;
+    string message_id = 3;
+    string source_system = 4;
+    google.protobuf.Timestamp received_at = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string gateway_policy_id = 2;
+  TestGatewayPolicyConnectionRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `TestGatewayPolicyConnection`.
+message TestGatewayPolicyConnectionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  GatewayPolicy gateway_policy = 1;
+  TestGatewayPolicyConnectionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

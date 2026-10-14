@@ -1,0 +1,43 @@
+//! The quote draft records of attestation's quote work, and the rules, stores, and calculations around them.
+
+mod quote_draft;
+mod quote_draft_rules;
+mod quote_draft_store;
+mod quote_draft_engine;
+mod quote_draft_view;
+mod quote_draft_workflow;
+mod quote_segment;
+mod quote_segment_rules;
+mod quote_segment_engine;
+mod quote_segment_report;
+mod legacy_quote_agreement;
+mod legacy_quote_agreement_rules;
+mod legacy_quote_agreement_store;
+mod legacy_quote_agreement_view;
+mod legacy_quote_agreement_report;
+mod legacy_quote_agreement_workflow;
+mod quote_draft_policy;
+mod quote_segment_policy;
+mod legacy_quote_agreement_policy;
+mod quote_draft_from_rollup;
+
+pub use quote_draft::*;
+pub use quote_draft_rules::*;
+pub use quote_draft_store::*;
+pub use quote_draft_engine::*;
+pub use quote_draft_view::*;
+pub use quote_draft_workflow::*;
+pub use quote_segment::*;
+pub use quote_segment_rules::*;
+pub use quote_segment_engine::*;
+pub use quote_segment_report::*;
+pub use legacy_quote_agreement::*;
+pub use legacy_quote_agreement_rules::*;
+pub use legacy_quote_agreement_store::*;
+pub use legacy_quote_agreement_view::*;
+pub use legacy_quote_agreement_report::*;
+pub use legacy_quote_agreement_workflow::*;
+pub use quote_draft_policy::*;
+pub use quote_segment_policy::*;
+pub use legacy_quote_agreement_policy::*;
+pub use quote_draft_from_rollup::*;

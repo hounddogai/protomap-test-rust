@@ -1,0 +1,54 @@
+//! The rollback template records of deploys's rollback work, and the rules, stores, and calculations around
+//! them.
+
+mod rollback_template;
+mod rollback_template_rules;
+mod rollback_template_store;
+mod rollback_template_report;
+mod rollback_template_workflow;
+mod rollback_summary;
+mod rollback_summary_rules;
+mod rollback_summary_store;
+mod rollback_summary_view;
+mod rollback_summary_workflow;
+mod rollback_adjustment;
+mod rollback_adjustment_rules;
+mod rollback_adjustment_store;
+mod rollback_adjustment_view;
+mod strict_rollback_policy;
+mod strict_rollback_policy_store;
+mod strict_rollback_policy_engine;
+mod strict_rollback_policy_view;
+mod strict_rollback_policy_report;
+mod rollback_template_policy;
+mod rollback_summary_policy;
+mod rollback_adjustment_policy;
+mod strict_rollback_policy_policy;
+mod rollback_summary_from_preference;
+mod strict_rollback_policy_from_tier;
+
+pub use rollback_template::*;
+pub use rollback_template_rules::*;
+pub use rollback_template_store::*;
+pub use rollback_template_report::*;
+pub use rollback_template_workflow::*;
+pub use rollback_summary::*;
+pub use rollback_summary_rules::*;
+pub use rollback_summary_store::*;
+pub use rollback_summary_view::*;
+pub use rollback_summary_workflow::*;
+pub use rollback_adjustment::*;
+pub use rollback_adjustment_rules::*;
+pub use rollback_adjustment_store::*;
+pub use rollback_adjustment_view::*;
+pub use strict_rollback_policy::*;
+pub use strict_rollback_policy_store::*;
+pub use strict_rollback_policy_engine::*;
+pub use strict_rollback_policy_view::*;
+pub use strict_rollback_policy_report::*;
+pub use rollback_template_policy::*;
+pub use rollback_summary_policy::*;
+pub use rollback_adjustment_policy::*;
+pub use strict_rollback_policy_policy::*;
+pub use rollback_summary_from_preference::*;
+pub use strict_rollback_policy_from_tier::*;

@@ -1,0 +1,29 @@
+# The platform team's operations workspace: the shared kit, one crate per business area the team runs, and
+# the jobs that keep those areas in sync with the services that own their records. It builds apart from the
+# service workspace at the repository root, whose protobuf and operations crates it uses by path.
+[workspace]
+resolver = "3"
+members = ["kit", "areas/*", "jobs"]
+
+[workspace.package]
+edition = "2024"
+rust-version = "1.94"
+
+[workspace.dependencies]
+acme-kit = { path = "kit" }
+acme-attestation = { path = "areas/attestation" }
+acme-audittrail = { path = "areas/audittrail" }
+acme-netpolicy = { path = "areas/netpolicy" }
+acme-workload = { path = "areas/workload" }
+acme-incident = { path = "areas/incident" }
+acme-quotas = { path = "areas/quotas" }
+acme-deploys = { path = "areas/deploys" }
+acme-dns = { path = "areas/dns" }
+acme-observability = { path = "areas/observability" }
+acme-tenancy = { path = "areas/tenancy" }
+acme-operations = { path = "../apps/operations" }
+acme-platform = { path = "../crates/platform" }
+acme-proto = { path = "../crates/proto" }
+anyhow = "=1.0.104"
+tokio = { version = "=1.53.3", features = ["macros", "rt-multi-thread", "sync", "time", "signal", "net"] }
+tonic = "=0.14.6"

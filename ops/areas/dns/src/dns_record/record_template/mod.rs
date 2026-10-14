@@ -1,0 +1,58 @@
+//! The weighted dns record template records of dns's dns record work, and the rules, stores, and calculations
+//! around them.
+
+mod weighted_dns_record_template;
+mod weighted_dns_record_template_rules;
+mod weighted_dns_record_template_store;
+mod weighted_dns_record_template_engine;
+mod weighted_dns_record_template_view;
+mod manual_dns_record_reservation;
+mod manual_dns_record_reservation_rules;
+mod manual_dns_record_reservation_store;
+mod manual_dns_record_reservation_engine;
+mod manual_dns_record_reservation_report;
+mod manual_dns_record_reservation_workflow;
+mod fallback_dns_record_allocation;
+mod fallback_dns_record_allocation_rules;
+mod fallback_dns_record_allocation_store;
+mod fallback_dns_record_allocation_view;
+mod fallback_dns_record_allocation_report;
+mod fallback_dns_record_allocation_workflow;
+mod legacy_dns_record_item;
+mod legacy_dns_record_item_rules;
+mod legacy_dns_record_item_store;
+mod legacy_dns_record_item_report;
+mod legacy_dns_record_item_workflow;
+mod weighted_dns_record_template_policy;
+mod manual_dns_record_reservation_policy;
+mod fallback_dns_record_allocation_policy;
+mod legacy_dns_record_item_policy;
+mod weighted_dns_record_template_from_preference;
+
+pub use weighted_dns_record_template::*;
+pub use weighted_dns_record_template_rules::*;
+pub use weighted_dns_record_template_store::*;
+pub use weighted_dns_record_template_engine::*;
+pub use weighted_dns_record_template_view::*;
+pub use manual_dns_record_reservation::*;
+pub use manual_dns_record_reservation_rules::*;
+pub use manual_dns_record_reservation_store::*;
+pub use manual_dns_record_reservation_engine::*;
+pub use manual_dns_record_reservation_report::*;
+pub use manual_dns_record_reservation_workflow::*;
+pub use fallback_dns_record_allocation::*;
+pub use fallback_dns_record_allocation_rules::*;
+pub use fallback_dns_record_allocation_store::*;
+pub use fallback_dns_record_allocation_view::*;
+pub use fallback_dns_record_allocation_report::*;
+pub use fallback_dns_record_allocation_workflow::*;
+pub use legacy_dns_record_item::*;
+pub use legacy_dns_record_item_rules::*;
+pub use legacy_dns_record_item_store::*;
+pub use legacy_dns_record_item_report::*;
+pub use legacy_dns_record_item_workflow::*;
+pub use weighted_dns_record_template_policy::*;
+pub use manual_dns_record_reservation_policy::*;
+pub use fallback_dns_record_allocation_policy::*;
+pub use legacy_dns_record_item_policy::*;
+pub use weighted_dns_record_template_from_preference::*;

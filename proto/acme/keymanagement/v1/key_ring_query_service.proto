@@ -1,0 +1,245 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/audit.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "KeyRingQueryServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Answers read-only questions about key rings, for screens and reports.
+service KeyRingQueryService {
+  // Returns a key ring.
+  rpc LookupKeyRing(LookupKeyRingRequest) returns (LookupKeyRingResponse);
+
+  // Lists key rings a page at a time.
+  rpc BrowseKeyRings(BrowseKeyRingsRequest) returns (BrowseKeyRingsResponse);
+
+  // Lists key rings a page at a time.
+  rpc FindKeyRings(FindKeyRingsRequest) returns (FindKeyRingsResponse);
+
+  // Counts key rings by status.
+  rpc CountKeyRings(CountKeyRingsRequest) returns (CountKeyRingsResponse);
+
+  // Returns several key rings at once.
+  rpc ResolveKeyRings(ResolveKeyRingsRequest) returns (ResolveKeyRingsResponse);
+
+  // Streams every matching key ring.
+  rpc ExportKeyRings(ExportKeyRingsRequest) returns (stream ExportKeyRingsResponse);
+
+  // Summarizes a key ring.
+  rpc SummarizeKeyRings(SummarizeKeyRingsRequest) returns (SummarizeKeyRingsResponse);
+
+  // Lists key rings a page at a time.
+  rpc SuggestKeyRings(SuggestKeyRingsRequest) returns (SuggestKeyRingsResponse);
+
+  // Returns a key ring.
+  rpc PeekKeyRing(PeekKeyRingRequest) returns (PeekKeyRingResponse);
+}
+
+// The request of `LookupKeyRing`.
+message LookupKeyRingRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `LookupKeyRing`.
+message LookupKeyRingResponse {
+  KeyRing key_ring = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `BrowseKeyRings`.
+message BrowseKeyRingsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated KeyRingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  BrowseKeyRingsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `BrowseKeyRings`.
+message BrowseKeyRingsResponse {
+  repeated KeyRing key_rings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `FindKeyRings`.
+message FindKeyRingsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated KeyRingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  FindKeyRingsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `FindKeyRings`.
+message FindKeyRingsResponse {
+  repeated KeyRing key_rings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CountKeyRings`.
+message CountKeyRingsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated KeyRingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  CountKeyRingsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `CountKeyRings`.
+message CountKeyRingsResponse {
+  int64 count = 1;
+  map<string, int64> by_status = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResolveKeyRings`.
+message ResolveKeyRingsRequest {
+  acme.common.v1.RequestContext context = 1;
+  repeated string key_ring_ids = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `ResolveKeyRings`.
+message ResolveKeyRingsResponse {
+  repeated KeyRing key_rings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExportKeyRings`.
+message ExportKeyRingsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated KeyRingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  ExportKeyRingsRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `ExportKeyRings`.
+message ExportKeyRingsResponse {
+  KeyRing key_ring = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SummarizeKeyRings`.
+message SummarizeKeyRingsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string format = 1;
+    acme.common.v1.TimeWindow period = 2;
+    repeated string recipient_emails = 3;
+    string cron = 4;
+    map<string, string> filters = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  SummarizeKeyRingsRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SummarizeKeyRings`.
+message SummarizeKeyRingsResponse {
+  string report_id = 1;
+  string download_uri = 2;
+  map<string, string> summary = 3;
+  acme.common.v1.TimeWindow period = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `SuggestKeyRings`.
+message SuggestKeyRingsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated KeyRingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  SuggestKeyRingsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `SuggestKeyRings`.
+message SuggestKeyRingsResponse {
+  repeated KeyRing key_rings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PeekKeyRing`.
+message PeekKeyRingRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `PeekKeyRing`.
+message PeekKeyRingResponse {
+  KeyRing key_ring = 1;
+  acme.common.v1.OperationResult result = 2;
+}

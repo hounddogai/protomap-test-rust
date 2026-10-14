@@ -1,0 +1,52 @@
+//! The regional verifier segment records of attestation's verifier work, and the rules, stores, and
+//! calculations around them.
+
+mod regional_verifier_segment;
+mod regional_verifier_segment_rules;
+mod regional_verifier_segment_store;
+mod regional_verifier_segment_report;
+mod regional_verifier_segment_workflow;
+mod verifier_preference;
+mod verifier_preference_rules;
+mod verifier_preference_engine;
+mod verifier_rollup;
+mod verifier_rollup_rules;
+mod verifier_rollup_store;
+mod verifier_rollup_engine;
+mod verifier_rollup_workflow;
+mod verifier_baseline;
+mod verifier_baseline_rules;
+mod verifier_baseline_store;
+mod verifier_baseline_engine;
+mod verifier_baseline_workflow;
+mod regional_verifier_segment_policy;
+mod verifier_preference_policy;
+mod verifier_rollup_policy;
+mod verifier_baseline_policy;
+mod verifier_baseline_from_mapping;
+mod regional_verifier_segment_from_baseline;
+
+pub use regional_verifier_segment::*;
+pub use regional_verifier_segment_rules::*;
+pub use regional_verifier_segment_store::*;
+pub use regional_verifier_segment_report::*;
+pub use regional_verifier_segment_workflow::*;
+pub use verifier_preference::*;
+pub use verifier_preference_rules::*;
+pub use verifier_preference_engine::*;
+pub use verifier_rollup::*;
+pub use verifier_rollup_rules::*;
+pub use verifier_rollup_store::*;
+pub use verifier_rollup_engine::*;
+pub use verifier_rollup_workflow::*;
+pub use verifier_baseline::*;
+pub use verifier_baseline_rules::*;
+pub use verifier_baseline_store::*;
+pub use verifier_baseline_engine::*;
+pub use verifier_baseline_workflow::*;
+pub use regional_verifier_segment_policy::*;
+pub use verifier_preference_policy::*;
+pub use verifier_rollup_policy::*;
+pub use verifier_baseline_policy::*;
+pub use verifier_baseline_from_mapping::*;
+pub use regional_verifier_segment_from_baseline::*;

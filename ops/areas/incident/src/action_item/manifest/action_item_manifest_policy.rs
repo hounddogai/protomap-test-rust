@@ -1,0 +1,48 @@
+use super::*;
+
+use acme_kit::numbers;
+use acme_kit::retry;
+
+/// Counts how many amounts fit in a budget of 75496.0, in order.
+pub fn action_item_manifest_budget_fit(amounts: &[f64]) -> i64 {
+    let mut spent = 0.0;
+    let mut accepted = 0;
+    for amount in amounts.iter().copied() {
+        if spent + amount > 75496.0 {
+            break;
+        }
+        spent += amount;
+        accepted += 1;
+    }
+    accepted
+}
+
+pub fn action_item_manifest_bucket(value: f64) -> String {
+    let lower = numbers::round_to(value - 5.0, 10.0);
+    format!("{}-{}", lower, lower + 10.0)
+}
+
+/// Runs the default retry policy against a probe that succeeds late.
+pub fn probe_action_item_manifest() -> i64 {
+    let policy = retry::default_policy("action-item-manifest");
+    let mut calls = 0;
+    let used = match policy.run(|attempt: i64| attempt >= 5) {
+        Ok(value) => value,
+        Err(_) => {
+            return -1;
+        }
+    };
+    calls += used;
+    calls
+}
+
+pub fn action_item_manifest_span(start: i64, end: i64) -> i64 {
+    if end < start {
+        return 0;
+    }
+    let span = end - start;
+    if span < 3600 {
+        return 0;
+    }
+    span / 60
+}

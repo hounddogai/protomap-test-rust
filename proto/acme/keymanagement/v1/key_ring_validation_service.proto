@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.keymanagement.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/keymanagement/v1/keymanagement.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Keymanagement.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/keymanagement/v1;keymanagementv1";
+option java_multiple_files = true;
+option java_outer_classname = "KeyRingValidationServiceProto";
+option java_package = "com.acme.keymanagement.v1";
+
+// Checks key rings against the rules before anything acts on them.
+service KeyRingValidationService {
+  // Validates a key ring.
+  rpc ValidateKeyRing(ValidateKeyRingRequest) returns (ValidateKeyRingResponse);
+
+  // Previews a key ring.
+  rpc PreviewKeyRing(PreviewKeyRingRequest) returns (PreviewKeyRingResponse);
+
+  // Checks a key ring.
+  rpc CheckKeyRingEligibility(CheckKeyRingEligibilityRequest) returns (CheckKeyRingEligibilityResponse);
+
+  // Normalizes a key ring.
+  rpc NormalizeKeyRing(NormalizeKeyRingRequest) returns (NormalizeKeyRingResponse);
+
+  // Explains a key ring.
+  rpc ExplainKeyRingDecision(ExplainKeyRingDecisionRequest) returns (ExplainKeyRingDecisionResponse);
+
+  // Scores a key ring.
+  rpc ScoreKeyRing(ScoreKeyRingRequest) returns (ScoreKeyRingResponse);
+
+  // Lints a key ring.
+  rpc LintKeyRings(LintKeyRingsRequest) returns (LintKeyRingsResponse);
+
+  // Returns a key ring.
+  rpc GetKeyRingRules(GetKeyRingRulesRequest) returns (GetKeyRingRulesResponse);
+}
+
+// The request of `ValidateKeyRing`.
+message ValidateKeyRingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  ValidateKeyRingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateKeyRing`.
+message ValidateKeyRingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  ValidateKeyRingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewKeyRing`.
+message PreviewKeyRingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  PreviewKeyRingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewKeyRing`.
+message PreviewKeyRingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  PreviewKeyRingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckKeyRingEligibility`.
+message CheckKeyRingEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  CheckKeyRingEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckKeyRingEligibility`.
+message CheckKeyRingEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  CheckKeyRingEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeKeyRing`.
+message NormalizeKeyRingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  NormalizeKeyRingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeKeyRing`.
+message NormalizeKeyRingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  NormalizeKeyRingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainKeyRingDecision`.
+message ExplainKeyRingDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  ExplainKeyRingDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainKeyRingDecision`.
+message ExplainKeyRingDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  ExplainKeyRingDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreKeyRing`.
+message ScoreKeyRingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  ScoreKeyRingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreKeyRing`.
+message ScoreKeyRingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreKeyRingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  KeyRing key_ring = 1;
+  ScoreKeyRingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintKeyRings`.
+message LintKeyRingsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  KeyRing key_ring = 3;
+  LintKeyRingsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintKeyRings`.
+message LintKeyRingsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  KeyRing key_ring = 1;
+  LintKeyRingsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetKeyRingRules`.
+message GetKeyRingRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string key_ring_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetKeyRingRules`.
+message GetKeyRingRulesResponse {
+  KeyRing key_ring = 1;
+  acme.common.v1.OperationResult result = 2;
+}

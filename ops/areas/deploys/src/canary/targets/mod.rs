@@ -1,0 +1,52 @@
+//! The weighted canary target records of deploys's canary work, and the rules, stores, and calculations
+//! around them.
+
+mod weighted_canary_target;
+mod weighted_canary_target_rules;
+mod weighted_canary_target_report;
+mod manual_canary_segment;
+mod manual_canary_segment_rules;
+mod manual_canary_segment_store;
+mod manual_canary_segment_view;
+mod manual_canary_segment_report;
+mod manual_canary_segment_workflow;
+mod lenient_canary_forecast;
+mod lenient_canary_forecast_store;
+mod lenient_canary_forecast_view;
+mod lenient_canary_forecast_report;
+mod canary_schedule;
+mod canary_schedule_rules;
+mod canary_schedule_store;
+mod canary_schedule_view;
+mod canary_schedule_workflow;
+mod weighted_canary_target_policy;
+mod manual_canary_segment_policy;
+mod lenient_canary_forecast_policy;
+mod canary_schedule_policy;
+mod lenient_canary_forecast_from_variance;
+mod manual_canary_segment_from_batch;
+
+pub use weighted_canary_target::*;
+pub use weighted_canary_target_rules::*;
+pub use weighted_canary_target_report::*;
+pub use manual_canary_segment::*;
+pub use manual_canary_segment_rules::*;
+pub use manual_canary_segment_store::*;
+pub use manual_canary_segment_view::*;
+pub use manual_canary_segment_report::*;
+pub use manual_canary_segment_workflow::*;
+pub use lenient_canary_forecast::*;
+pub use lenient_canary_forecast_store::*;
+pub use lenient_canary_forecast_view::*;
+pub use lenient_canary_forecast_report::*;
+pub use canary_schedule::*;
+pub use canary_schedule_rules::*;
+pub use canary_schedule_store::*;
+pub use canary_schedule_view::*;
+pub use canary_schedule_workflow::*;
+pub use weighted_canary_target_policy::*;
+pub use manual_canary_segment_policy::*;
+pub use lenient_canary_forecast_policy::*;
+pub use canary_schedule_policy::*;
+pub use lenient_canary_forecast_from_variance::*;
+pub use manual_canary_segment_from_batch::*;

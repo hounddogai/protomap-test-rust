@@ -1,0 +1,29 @@
+//! Workload's identity work.
+
+pub mod manifest;
+pub mod tier;
+pub mod forecast;
+pub mod review;
+pub mod preference;
+pub mod template;
+pub mod override_item;
+pub mod policy;
+pub mod slot;
+pub mod summary;
+pub mod cycle;
+pub mod agreement;
+pub mod group;
+pub mod schedule;
+pub mod plan;
+pub mod targets;
+pub mod profile;
+pub mod bundle;
+pub mod window;
+pub mod rollup;
+pub mod identity_forecast;
+pub mod digest;
+pub mod baseline;
+pub mod milestone;
+pub mod identity_target;
+pub mod identity_schedule;
+pub mod identity_review;

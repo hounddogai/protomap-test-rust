@@ -1,0 +1,58 @@
+//! The global federation forecast records of workload's federation work, and the rules, stores, and
+//! calculations around them.
+
+mod global_federation_forecast;
+mod global_federation_forecast_view;
+mod scheduled_federation_group;
+mod scheduled_federation_group_rules;
+mod scheduled_federation_group_store;
+mod scheduled_federation_group_view;
+mod scheduled_federation_group_workflow;
+mod federation_reservation;
+mod federation_reservation_rules;
+mod federation_reservation_view;
+mod federation_reservation_report;
+mod primary_federation_bundle;
+mod primary_federation_bundle_rules;
+mod primary_federation_bundle_store;
+mod primary_federation_bundle_engine;
+mod federation_schedule;
+mod federation_schedule_rules;
+mod federation_schedule_store;
+mod federation_schedule_engine;
+mod federation_schedule_view;
+mod federation_schedule_workflow;
+mod global_federation_forecast_policy;
+mod scheduled_federation_group_policy;
+mod federation_reservation_policy;
+mod primary_federation_bundle_policy;
+mod federation_schedule_policy;
+mod global_federation_forecast_from_group;
+
+pub use global_federation_forecast::*;
+pub use global_federation_forecast_view::*;
+pub use scheduled_federation_group::*;
+pub use scheduled_federation_group_rules::*;
+pub use scheduled_federation_group_store::*;
+pub use scheduled_federation_group_view::*;
+pub use scheduled_federation_group_workflow::*;
+pub use federation_reservation::*;
+pub use federation_reservation_rules::*;
+pub use federation_reservation_view::*;
+pub use federation_reservation_report::*;
+pub use primary_federation_bundle::*;
+pub use primary_federation_bundle_rules::*;
+pub use primary_federation_bundle_store::*;
+pub use primary_federation_bundle_engine::*;
+pub use federation_schedule::*;
+pub use federation_schedule_rules::*;
+pub use federation_schedule_store::*;
+pub use federation_schedule_engine::*;
+pub use federation_schedule_view::*;
+pub use federation_schedule_workflow::*;
+pub use global_federation_forecast_policy::*;
+pub use scheduled_federation_group_policy::*;
+pub use federation_reservation_policy::*;
+pub use primary_federation_bundle_policy::*;
+pub use federation_schedule_policy::*;
+pub use global_federation_forecast_from_group::*;

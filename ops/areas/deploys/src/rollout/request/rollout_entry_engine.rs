@@ -1,0 +1,156 @@
+use super::*;
+
+use std::collections::BTreeMap;
+use std::rc::Rc;
+
+use acme_kit::flags;
+use acme_kit::numbers;
+
+/// One step of the rollout entry calculation.
+pub trait RolloutEntryAdjuster: std::fmt::Debug {
+    fn describe(&self) -> String;
+    fn adjust(&self, item: &RolloutEntry, value: f64) -> f64;
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct PercentRolloutEntryAdjuster {
+    pub percent: f64,
+}
+
+impl RolloutEntryAdjuster for PercentRolloutEntryAdjuster {
+    fn describe(&self) -> String {
+        format!("{}% change", self.percent)
+    }
+
+    fn adjust(&self, item: &RolloutEntry, value: f64) -> f64 {
+        value * (1.0 + self.percent / 100.0)
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct FlaggedRolloutEntryAdjuster {
+    pub flags: flags::Registry,
+    pub flag: String,
+    pub percent: f64,
+}
+
+impl RolloutEntryAdjuster for FlaggedRolloutEntryAdjuster {
+    fn describe(&self) -> String {
+        format!("{} when {} is on", self.percent, self.flag)
+    }
+
+    fn adjust(&self, item: &RolloutEntry, value: f64) -> f64 {
+        if !(self.flags.enabled(&self.flag, &item.code)) {
+            return value;
+        }
+        value * (1.0 + self.percent / 100.0)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct CapRolloutEntryAdjuster {
+    pub cap: f64,
+}
+
+impl RolloutEntryAdjuster for CapRolloutEntryAdjuster {
+    fn describe(&self) -> String {
+        format!("cap at {}", self.cap)
+    }
+
+    fn adjust(&self, item: &RolloutEntry, value: f64) -> f64 {
+        value.min(self.cap)
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct UnitRolloutEntryAdjuster {
+    pub factors: BTreeMap<String, f64>,
+}
+
+impl RolloutEntryAdjuster for UnitRolloutEntryAdjuster {
+    fn describe(&self) -> String {
+        "by unit".to_string()
+    }
+
+    fn adjust(&self, item: &RolloutEntry, value: f64) -> f64 {
+        let Some(factor) = self.factors.get(&item.group_key()).copied() else {
+            return value;
+        };
+        value * factor
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct RoundingRolloutEntryAdjuster {
+    pub step: f64,
+}
+
+impl RolloutEntryAdjuster for RoundingRolloutEntryAdjuster {
+    fn describe(&self) -> String {
+        format!("round to {}", self.step)
+    }
+
+    fn adjust(&self, item: &RolloutEntry, value: f64) -> f64 {
+        numbers::round_to(value, self.step)
+    }
+}
+
+/// Runs the rollout entry steps in order and keeps a trace of each.
+#[derive(Debug, Clone)]
+pub struct RolloutEntryEngine {
+    pub steps: Vec<Rc<dyn RolloutEntryAdjuster>>,
+    pub trace: Vec<String>,
+    pub floor: f64,
+    pub ceiling: f64,
+}
+
+impl RolloutEntryEngine {
+    pub fn evaluate(&mut self, item: &RolloutEntry) -> f64 {
+        let mut current = item.adjusted_value();
+        self.trace = Vec::new();
+        for step in self.steps.iter() {
+            let next = step.adjust(item, current);
+            self.trace.push(format!(
+                "{}: {} -> {}",
+                step.describe(),
+                (current * 100.0).round() / 100.0,
+                (next * 100.0).round() / 100.0
+            ));
+            current = next;
+        }
+        numbers::clamp_float(current, self.floor, self.ceiling)
+    }
+
+    pub fn explain(&self) -> String {
+        self.trace.join("\n")
+    }
+
+    pub fn evaluate_all(&mut self, items: &[RolloutEntry]) -> BTreeMap<String, f64> {
+        let mut results: BTreeMap<String, f64> = BTreeMap::new();
+        for item in items.iter() {
+            results.insert(item.code.clone(), self.evaluate(item));
+        }
+        results
+    }
+}
+
+pub fn default_rollout_entry_engine(flags: &flags::Registry) -> RolloutEntryEngine {
+    RolloutEntryEngine {
+        steps: vec![
+            Rc::new(PercentRolloutEntryAdjuster { percent: 20.3 }) as Rc<dyn RolloutEntryAdjuster>,
+            Rc::new(FlaggedRolloutEntryAdjuster {
+                flags: flags.clone(),
+                flag: "rollout-entry-seasonal".to_string(),
+                percent: -9.7,
+            }),
+            Rc::new(CapRolloutEntryAdjuster { cap: 37838.0 }),
+            Rc::new(UnitRolloutEntryAdjuster {
+                factors: BTreeMap::from([("west".to_string(), 1.11), ("east".to_string(), 0.86)]),
+            }),
+            Rc::new(RoundingRolloutEntryAdjuster { step: 5.0 }),
+        ],
+        trace: Vec::new(),
+        floor: 2.6,
+        ceiling: 98783.6,
+    }
+}

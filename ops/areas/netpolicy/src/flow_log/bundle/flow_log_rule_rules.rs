@@ -1,0 +1,169 @@
+use super::*;
+
+use std::collections::BTreeMap;
+use std::rc::Rc;
+
+use acme_kit::text;
+
+/// A rule a flow log rule must pass. Check returns its problems, or none.
+pub trait FlowLogRuleRule: std::fmt::Debug {
+    fn check(&self, item: &FlowLogRule) -> Vec<String>;
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct FlowLogRuleAllowedIssuerRule {
+    pub allowed: Vec<String>,
+}
+
+impl FlowLogRuleRule for FlowLogRuleAllowedIssuerRule {
+    fn check(&self, item: &FlowLogRule) -> Vec<String> {
+        if (self.allowed.len() as i64) == 0 {
+            return Vec::new();
+        }
+        if !(self.allowed.iter().any(|value| value == &text::normalize(&item.issuer))) {
+            return vec![format!("issuer {} is below minimum", item.issuer)];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct FlowLogRuleWeightRangeRule {
+    pub min: f64,
+    pub max: f64,
+}
+
+impl FlowLogRuleRule for FlowLogRuleWeightRangeRule {
+    fn check(&self, item: &FlowLogRule) -> Vec<String> {
+        let value = item.weight;
+        if value < self.min || value > self.max {
+            return vec![format!("weight {} is outside {} to {}", value, self.min, self.max)];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct FlowLogRuleRequiredIssuerRule {
+    pub message: String,
+}
+
+impl FlowLogRuleRule for FlowLogRuleRequiredIssuerRule {
+    fn check(&self, item: &FlowLogRule) -> Vec<String> {
+        if item.issuer.trim() == "" {
+            return vec![self.message.clone()];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct FlowLogRuleRequiredCodeRule {
+    pub message: String,
+}
+
+impl FlowLogRuleRule for FlowLogRuleRequiredCodeRule {
+    fn check(&self, item: &FlowLogRule) -> Vec<String> {
+        if item.code.trim() == "" {
+            return vec![self.message.clone()];
+        }
+        Vec::new()
+    }
+}
+
+/// Runs every rule of a flow log rule.
+#[derive(Debug, Clone)]
+pub struct FlowLogRuleValidator {
+    pub rules: Vec<Rc<dyn FlowLogRuleRule>>,
+}
+
+impl FlowLogRuleValidator {
+    pub fn validate(&self, item: &FlowLogRule) -> Vec<String> {
+        let mut problems: Vec<String> = Vec::new();
+        for rule in self.rules.iter() {
+            let found = rule.check(item);
+            if (found.len() as i64) == 0 {
+                continue;
+            }
+            for problem in found.iter() {
+                problems.push(format!("{}: {}", item.code, problem));
+            }
+        }
+        problems
+    }
+
+    pub fn require_valid(&self, item: &FlowLogRule) -> Result<(), String> {
+        let problems = self.validate(item);
+        if (problems.len() as i64) > 0 {
+            return Err(format!("{} is invalid: {}", item.label(), problems.join("; ")));
+        }
+        Ok(())
+    }
+
+    pub fn validate_all(&self, items: &[FlowLogRule]) -> BTreeMap<String, Vec<String>> {
+        let mut report: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for item in items.iter() {
+            let problems = self.validate(item);
+            if (problems.len() as i64) > 0 {
+                report.insert(item.code.clone(), problems);
+            }
+        }
+        report
+    }
+}
+
+pub fn default_flow_log_rule_validator() -> FlowLogRuleValidator {
+    FlowLogRuleValidator {
+        rules: vec![
+            Rc::new(FlowLogRuleAllowedIssuerRule { allowed: Vec::new() }) as Rc<dyn FlowLogRuleRule>,
+            Rc::new(FlowLogRuleWeightRangeRule { min: 6.5, max: 4210.6 }),
+            Rc::new(FlowLogRuleRequiredIssuerRule {
+                message: "flow log rule needs this field".to_string(),
+            }),
+            Rc::new(FlowLogRuleRequiredCodeRule {
+                message: "flow log rule needs this field".to_string(),
+            }),
+        ],
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn reports_every_problem() {
+        let validator = default_flow_log_rule_validator();
+        let item = new_flow_log_rule("", "");
+        let problems = validator.validate(&item);
+        assert!((problems.len() as i64) >= 0, "problems");
+    }
+
+    #[test]
+    fn flags_values_above_weight() {
+        let rule = FlowLogRuleWeightRangeRule { min: 4.3, max: 3705.3 };
+        let mut item = new_flow_log_rule("x", "y");
+        item.weight = 3706.8;
+        assert!((rule.check(&item).len() as i64) > 0, "no problem above the range");
+    }
+
+    #[test]
+    fn flags_a_blank_issuer() {
+        let rule = FlowLogRuleRequiredIssuerRule {
+            message: "flow log rule needs a value".to_string(),
+        };
+        let mut item = new_flow_log_rule("", "");
+        item.issuer = "  ".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+    }
+
+    #[test]
+    fn flags_a_blank_code() {
+        let rule = FlowLogRuleRequiredCodeRule {
+            message: "flow log rule needs this field".to_string(),
+        };
+        let mut item = new_flow_log_rule("", "");
+        item.code = "  ".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+    }
+}

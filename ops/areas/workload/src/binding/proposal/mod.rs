@@ -1,0 +1,58 @@
+//! The legacy binding proposal records of workload's binding work, and the rules, stores, and calculations
+//! around them.
+
+mod legacy_binding_proposal;
+mod legacy_binding_proposal_rules;
+mod legacy_binding_proposal_engine;
+mod legacy_binding_proposal_view;
+mod legacy_binding_proposal_report;
+mod pending_binding_group;
+mod pending_binding_group_rules;
+mod pending_binding_group_store;
+mod pending_binding_group_engine;
+mod pending_binding_group_view;
+mod pending_binding_group_workflow;
+mod binding_snapshot;
+mod binding_snapshot_rules;
+mod binding_snapshot_store;
+mod binding_snapshot_engine;
+mod binding_snapshot_workflow;
+mod global_binding_segment;
+mod global_binding_segment_rules;
+mod global_binding_segment_store;
+mod global_binding_segment_engine;
+mod global_binding_segment_view;
+mod global_binding_segment_workflow;
+mod legacy_binding_proposal_policy;
+mod pending_binding_group_policy;
+mod binding_snapshot_policy;
+mod global_binding_segment_policy;
+mod legacy_binding_proposal_from_threshold;
+
+pub use legacy_binding_proposal::*;
+pub use legacy_binding_proposal_rules::*;
+pub use legacy_binding_proposal_engine::*;
+pub use legacy_binding_proposal_view::*;
+pub use legacy_binding_proposal_report::*;
+pub use pending_binding_group::*;
+pub use pending_binding_group_rules::*;
+pub use pending_binding_group_store::*;
+pub use pending_binding_group_engine::*;
+pub use pending_binding_group_view::*;
+pub use pending_binding_group_workflow::*;
+pub use binding_snapshot::*;
+pub use binding_snapshot_rules::*;
+pub use binding_snapshot_store::*;
+pub use binding_snapshot_engine::*;
+pub use binding_snapshot_workflow::*;
+pub use global_binding_segment::*;
+pub use global_binding_segment_rules::*;
+pub use global_binding_segment_store::*;
+pub use global_binding_segment_engine::*;
+pub use global_binding_segment_view::*;
+pub use global_binding_segment_workflow::*;
+pub use legacy_binding_proposal_policy::*;
+pub use pending_binding_group_policy::*;
+pub use binding_snapshot_policy::*;
+pub use global_binding_segment_policy::*;
+pub use legacy_binding_proposal_from_threshold::*;

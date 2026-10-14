@@ -1,0 +1,29 @@
+//! Observability's slo work.
+
+pub mod targets;
+pub mod audit;
+pub mod slot;
+pub mod proposal;
+pub mod tier;
+pub mod slo_target;
+pub mod reservation;
+pub mod segment;
+pub mod budget;
+pub mod metric;
+pub mod window;
+pub mod slo_reservation;
+pub mod group;
+pub mod slo_slot;
+pub mod record_item;
+pub mod adjustment;
+pub mod override_item;
+pub mod forecast;
+pub mod profile;
+pub mod slo_budget;
+pub mod entry;
+pub mod slo_record;
+pub mod assignment;
+pub mod slo_metric;
+pub mod plan;
+pub mod slo_audit;
+pub mod slo_assignment;

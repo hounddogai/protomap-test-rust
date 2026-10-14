@@ -1,0 +1,58 @@
+//! The dns record preference records of dns's dns record work, and the rules, stores, and calculations around
+//! them.
+
+mod dns_record_preference;
+mod dns_record_preference_rules;
+mod dns_record_preference_store;
+mod dns_record_preference_engine;
+mod dns_record_preference_view;
+mod dns_record_preference_report;
+mod dns_record_profile;
+mod dns_record_profile_rules;
+mod dns_record_profile_store;
+mod dns_record_profile_engine;
+mod dns_record_profile_report;
+mod dns_record_profile_workflow;
+mod dns_record_entry;
+mod dns_record_entry_rules;
+mod dns_record_entry_store;
+mod dns_record_entry_engine;
+mod dns_record_entry_workflow;
+mod dns_record_batch;
+mod dns_record_batch_rules;
+mod dns_record_batch_store;
+mod dns_record_batch_report;
+mod dns_record_batch_workflow;
+mod dns_record_preference_policy;
+mod dns_record_profile_policy;
+mod dns_record_entry_policy;
+mod dns_record_batch_policy;
+mod dns_record_entry_from_quota;
+
+pub use dns_record_preference::*;
+pub use dns_record_preference_rules::*;
+pub use dns_record_preference_store::*;
+pub use dns_record_preference_engine::*;
+pub use dns_record_preference_view::*;
+pub use dns_record_preference_report::*;
+pub use dns_record_profile::*;
+pub use dns_record_profile_rules::*;
+pub use dns_record_profile_store::*;
+pub use dns_record_profile_engine::*;
+pub use dns_record_profile_report::*;
+pub use dns_record_profile_workflow::*;
+pub use dns_record_entry::*;
+pub use dns_record_entry_rules::*;
+pub use dns_record_entry_store::*;
+pub use dns_record_entry_engine::*;
+pub use dns_record_entry_workflow::*;
+pub use dns_record_batch::*;
+pub use dns_record_batch_rules::*;
+pub use dns_record_batch_store::*;
+pub use dns_record_batch_report::*;
+pub use dns_record_batch_workflow::*;
+pub use dns_record_preference_policy::*;
+pub use dns_record_profile_policy::*;
+pub use dns_record_entry_policy::*;
+pub use dns_record_batch_policy::*;
+pub use dns_record_entry_from_quota::*;

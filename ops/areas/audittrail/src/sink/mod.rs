@@ -1,0 +1,29 @@
+//! Audittrail's sink work.
+
+pub mod quota;
+pub mod milestone;
+pub mod review;
+pub mod targets;
+pub mod draft;
+pub mod bundle;
+pub mod proposal;
+pub mod forecast;
+pub mod schedule;
+pub mod sink_forecast;
+pub mod snapshot;
+pub mod agreement;
+pub mod template;
+pub mod ledger;
+pub mod plan;
+pub mod slot;
+pub mod allocation;
+pub mod tier;
+pub mod segment;
+pub mod sink_agreement;
+pub mod audit;
+pub mod sink_bundle;
+pub mod rollup;
+pub mod assignment;
+pub mod sink_plan;
+pub mod baseline;
+pub mod sink_template;

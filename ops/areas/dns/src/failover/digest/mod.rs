@@ -1,0 +1,45 @@
+//! The failover digest records of dns's failover work, and the rules, stores, and calculations around them.
+
+mod failover_digest;
+mod failover_digest_engine;
+mod failover_digest_view;
+mod failover_estimate;
+mod failover_estimate_rules;
+mod failover_estimate_store;
+mod failover_estimate_view;
+mod failover_estimate_workflow;
+mod fallback_failover_metric;
+mod fallback_failover_metric_store;
+mod fallback_failover_metric_view;
+mod tiered_failover_adjustment;
+mod tiered_failover_adjustment_rules;
+mod tiered_failover_adjustment_store;
+mod tiered_failover_adjustment_view;
+mod tiered_failover_adjustment_workflow;
+mod failover_digest_policy;
+mod failover_estimate_policy;
+mod fallback_failover_metric_policy;
+mod tiered_failover_adjustment_policy;
+mod failover_estimate_from_estimate;
+
+pub use failover_digest::*;
+pub use failover_digest_engine::*;
+pub use failover_digest_view::*;
+pub use failover_estimate::*;
+pub use failover_estimate_rules::*;
+pub use failover_estimate_store::*;
+pub use failover_estimate_view::*;
+pub use failover_estimate_workflow::*;
+pub use fallback_failover_metric::*;
+pub use fallback_failover_metric_store::*;
+pub use fallback_failover_metric_view::*;
+pub use tiered_failover_adjustment::*;
+pub use tiered_failover_adjustment_rules::*;
+pub use tiered_failover_adjustment_store::*;
+pub use tiered_failover_adjustment_view::*;
+pub use tiered_failover_adjustment_workflow::*;
+pub use failover_digest_policy::*;
+pub use failover_estimate_policy::*;
+pub use fallback_failover_metric_policy::*;
+pub use tiered_failover_adjustment_policy::*;
+pub use failover_estimate_from_estimate::*;

@@ -1,0 +1,58 @@
+//! The adaptive rollout rule records of deploys's rollout work, and the rules, stores, and calculations
+//! around them.
+
+mod adaptive_rollout_rule;
+mod adaptive_rollout_rule_store;
+mod adaptive_rollout_rule_engine;
+mod adaptive_rollout_rule_view;
+mod capped_rollout_audit;
+mod capped_rollout_audit_rules;
+mod capped_rollout_audit_store;
+mod capped_rollout_audit_engine;
+mod capped_rollout_audit_view;
+mod capped_rollout_audit_report;
+mod capped_rollout_audit_workflow;
+mod global_rollout_digest;
+mod global_rollout_digest_rules;
+mod global_rollout_digest_store;
+mod global_rollout_digest_engine;
+mod global_rollout_digest_view;
+mod global_rollout_digest_workflow;
+mod primary_rollout_mapping;
+mod primary_rollout_mapping_store;
+mod primary_rollout_mapping_engine;
+mod primary_rollout_mapping_view;
+mod adaptive_rollout_rule_policy;
+mod capped_rollout_audit_policy;
+mod global_rollout_digest_policy;
+mod primary_rollout_mapping_policy;
+mod global_rollout_digest_from_assignment;
+mod global_rollout_digest_from_proposal;
+
+pub use adaptive_rollout_rule::*;
+pub use adaptive_rollout_rule_store::*;
+pub use adaptive_rollout_rule_engine::*;
+pub use adaptive_rollout_rule_view::*;
+pub use capped_rollout_audit::*;
+pub use capped_rollout_audit_rules::*;
+pub use capped_rollout_audit_store::*;
+pub use capped_rollout_audit_engine::*;
+pub use capped_rollout_audit_view::*;
+pub use capped_rollout_audit_report::*;
+pub use capped_rollout_audit_workflow::*;
+pub use global_rollout_digest::*;
+pub use global_rollout_digest_rules::*;
+pub use global_rollout_digest_store::*;
+pub use global_rollout_digest_engine::*;
+pub use global_rollout_digest_view::*;
+pub use global_rollout_digest_workflow::*;
+pub use primary_rollout_mapping::*;
+pub use primary_rollout_mapping_store::*;
+pub use primary_rollout_mapping_engine::*;
+pub use primary_rollout_mapping_view::*;
+pub use adaptive_rollout_rule_policy::*;
+pub use capped_rollout_audit_policy::*;
+pub use global_rollout_digest_policy::*;
+pub use primary_rollout_mapping_policy::*;
+pub use global_rollout_digest_from_assignment::*;
+pub use global_rollout_digest_from_proposal::*;

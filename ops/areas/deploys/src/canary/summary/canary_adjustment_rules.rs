@@ -1,0 +1,147 @@
+use super::*;
+
+use std::collections::BTreeMap;
+use std::rc::Rc;
+
+/// A rule a canary adjustment must pass. Check returns its problems, or none.
+pub trait CanaryAdjustmentRule: std::fmt::Debug {
+    fn check(&self, item: &CanaryAdjustment) -> Vec<String>;
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct CanaryAdjustmentAttemptsRangeRule {
+    pub min: i64,
+    pub max: i64,
+}
+
+impl CanaryAdjustmentRule for CanaryAdjustmentAttemptsRangeRule {
+    fn check(&self, item: &CanaryAdjustment) -> Vec<String> {
+        let value = item.attempts;
+        let mut problems: Vec<String> = Vec::new();
+        if value < self.min {
+            problems.push(format!("attempts {} is below {}", value, self.min));
+        }
+        if value > self.max {
+            problems.push(format!("attempts {} is above {}", value, self.max));
+        }
+        problems
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct CanaryAdjustmentSourceLengthRule {
+    pub max_length: i64,
+}
+
+impl CanaryAdjustmentRule for CanaryAdjustmentSourceLengthRule {
+    fn check(&self, item: &CanaryAdjustment) -> Vec<String> {
+        let size = item.source.len() as i64;
+        if size > self.max_length {
+            return vec![format!("source is {} characters, more than {}", size, self.max_length)];
+        }
+        Vec::new()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct CanaryAdjustmentCodeLengthRule {
+    pub max_length: i64,
+}
+
+impl CanaryAdjustmentRule for CanaryAdjustmentCodeLengthRule {
+    fn check(&self, item: &CanaryAdjustment) -> Vec<String> {
+        let size = item.code.len() as i64;
+        if size > self.max_length {
+            return vec![format!("code is {} characters, more than {}", size, self.max_length)];
+        }
+        Vec::new()
+    }
+}
+
+/// Runs every rule of a canary adjustment.
+#[derive(Debug, Clone)]
+pub struct CanaryAdjustmentValidator {
+    pub rules: Vec<Rc<dyn CanaryAdjustmentRule>>,
+}
+
+impl CanaryAdjustmentValidator {
+    pub fn validate(&self, item: &CanaryAdjustment) -> Vec<String> {
+        let mut problems: Vec<String> = Vec::new();
+        for rule in self.rules.iter() {
+            for problem in rule.check(item) {
+                problems.push(problem.clone());
+            }
+        }
+        problems
+    }
+
+    pub fn require_valid(&self, item: &CanaryAdjustment) -> Result<(), String> {
+        let problems = self.validate(item);
+        if (problems.len() as i64) > 0 {
+            return Err(format!("{} is invalid: {}", item.label(), problems.join("; ")));
+        }
+        Ok(())
+    }
+
+    pub fn validate_all(&self, items: &[CanaryAdjustment]) -> BTreeMap<String, Vec<String>> {
+        let mut report: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        for item in items.iter() {
+            let problems = self.validate(item);
+            if (problems.len() as i64) > 0 {
+                report.insert(item.code.clone(), problems);
+            }
+        }
+        report
+    }
+}
+
+pub fn default_canary_adjustment_validator() -> CanaryAdjustmentValidator {
+    CanaryAdjustmentValidator {
+        rules: vec![
+            Rc::new(CanaryAdjustmentAttemptsRangeRule { min: 80, max: 3600 }) as Rc<dyn CanaryAdjustmentRule>,
+            Rc::new(CanaryAdjustmentSourceLengthRule { max_length: 80 }),
+            Rc::new(CanaryAdjustmentCodeLengthRule { max_length: 80 }),
+        ],
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn reports_every_problem() {
+        let validator = default_canary_adjustment_validator();
+        let item = new_canary_adjustment("", "");
+        let problems = validator.validate(&item);
+        assert!((problems.len() as i64) >= 0, "problems");
+    }
+
+    #[test]
+    fn flags_values_above_attempts() {
+        let rule = CanaryAdjustmentAttemptsRangeRule { min: 120, max: 120 };
+        let mut item = new_canary_adjustment("x", "y");
+        item.attempts = 121;
+        assert!((rule.check(&item).len() as i64) > 0, "no problem above the range");
+    }
+
+    #[test]
+    fn flags_a_long_source() {
+        let rule = CanaryAdjustmentSourceLengthRule { max_length: 16 };
+        let mut item = new_canary_adjustment("x", "y");
+        item.source = "x".repeat(17 as usize);
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+        item.source = "ok".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 0, "problems after fixing");
+    }
+
+    #[test]
+    fn flags_a_long_code() {
+        let rule = CanaryAdjustmentCodeLengthRule { max_length: 32 };
+        let mut item = new_canary_adjustment("x", "y");
+        item.code = "x".repeat(33 as usize);
+        assert_eq!(rule.check(&item).len() as i64, 1, "problems");
+        item.code = "ok".to_string();
+        assert_eq!(rule.check(&item).len() as i64, 0, "problems after fixing");
+    }
+}

@@ -1,0 +1,29 @@
+//! Netpolicy's segment work.
+
+pub mod schedule;
+pub mod batch;
+pub mod template;
+pub mod checkpoint;
+pub mod reservation;
+pub mod adjustment;
+pub mod policy;
+pub mod entry;
+pub mod window;
+pub mod draft;
+pub mod assignment;
+pub mod segment_policy;
+pub mod segment_entry;
+pub mod milestone;
+pub mod segment_window;
+pub mod segment_adjustment;
+pub mod estimate;
+pub mod forecast;
+pub mod record_item;
+pub mod segment_reservation;
+pub mod quota;
+pub mod segment_schedule;
+pub mod notice;
+pub mod metric;
+pub mod proposal;
+pub mod manual_segment_policy;
+pub mod fallback_segment_window;

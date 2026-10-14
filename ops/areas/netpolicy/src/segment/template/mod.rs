@@ -1,0 +1,56 @@
+//! The segment template records of netpolicy's segment work, and the rules, stores, and calculations around
+//! them.
+
+mod segment_template;
+mod segment_template_rules;
+mod segment_template_store;
+mod segment_template_engine;
+mod segment_template_workflow;
+mod segment_review;
+mod segment_review_rules;
+mod segment_review_store;
+mod segment_review_engine;
+mod segment_review_view;
+mod segment_review_report;
+mod segment_snapshot;
+mod segment_snapshot_rules;
+mod segment_snapshot_store;
+mod segment_snapshot_engine;
+mod segment_snapshot_view;
+mod segment_snapshot_report;
+mod segment_snapshot_workflow;
+mod segment_rollup;
+mod segment_rollup_store;
+mod segment_rollup_engine;
+mod segment_template_policy;
+mod segment_review_policy;
+mod segment_snapshot_policy;
+mod segment_rollup_policy;
+mod segment_review_from_digest;
+
+pub use segment_template::*;
+pub use segment_template_rules::*;
+pub use segment_template_store::*;
+pub use segment_template_engine::*;
+pub use segment_template_workflow::*;
+pub use segment_review::*;
+pub use segment_review_rules::*;
+pub use segment_review_store::*;
+pub use segment_review_engine::*;
+pub use segment_review_view::*;
+pub use segment_review_report::*;
+pub use segment_snapshot::*;
+pub use segment_snapshot_rules::*;
+pub use segment_snapshot_store::*;
+pub use segment_snapshot_engine::*;
+pub use segment_snapshot_view::*;
+pub use segment_snapshot_report::*;
+pub use segment_snapshot_workflow::*;
+pub use segment_rollup::*;
+pub use segment_rollup_store::*;
+pub use segment_rollup_engine::*;
+pub use segment_template_policy::*;
+pub use segment_review_policy::*;
+pub use segment_snapshot_policy::*;
+pub use segment_rollup_policy::*;
+pub use segment_review_from_digest::*;

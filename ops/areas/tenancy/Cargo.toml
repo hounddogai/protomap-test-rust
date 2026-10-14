@@ -1,0 +1,9 @@
+[package]
+name = "acme-tenancy"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[dependencies]
+acme-kit.workspace = true

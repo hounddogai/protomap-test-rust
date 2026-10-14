@@ -1,0 +1,16 @@
+[package]
+name = "acme-operations"
+version = "0.1.0"
+edition.workspace = true
+rust-version.workspace = true
+publish = false
+
+[dependencies]
+acme-platform.workspace = true
+acme-proto.workspace = true
+anyhow.workspace = true
+http.workspace = true
+prost.workspace = true
+tokio.workspace = true
+tokio-stream.workspace = true
+tonic.workspace = true

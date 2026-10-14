@@ -1,0 +1,58 @@
+//! The rollback allocation records of deploys's rollback work, and the rules, stores, and calculations around
+//! them.
+
+mod rollback_allocation;
+mod rollback_allocation_rules;
+mod rollback_allocation_store;
+mod rollback_allocation_engine;
+mod batched_rollback_target;
+mod batched_rollback_target_rules;
+mod batched_rollback_target_view;
+mod batched_rollback_target_report;
+mod manual_rollback_profile;
+mod manual_rollback_profile_rules;
+mod manual_rollback_profile_store;
+mod manual_rollback_profile_engine;
+mod manual_rollback_profile_report;
+mod scheduled_rollback_score;
+mod scheduled_rollback_score_view;
+mod global_rollback_agreement;
+mod global_rollback_agreement_rules;
+mod global_rollback_agreement_store;
+mod global_rollback_agreement_view;
+mod global_rollback_agreement_workflow;
+mod rollback_allocation_policy;
+mod batched_rollback_target_policy;
+mod manual_rollback_profile_policy;
+mod scheduled_rollback_score_policy;
+mod global_rollback_agreement_policy;
+mod scheduled_rollback_score_from_snapshot;
+mod batched_rollback_target_from_draft;
+
+pub use rollback_allocation::*;
+pub use rollback_allocation_rules::*;
+pub use rollback_allocation_store::*;
+pub use rollback_allocation_engine::*;
+pub use batched_rollback_target::*;
+pub use batched_rollback_target_rules::*;
+pub use batched_rollback_target_view::*;
+pub use batched_rollback_target_report::*;
+pub use manual_rollback_profile::*;
+pub use manual_rollback_profile_rules::*;
+pub use manual_rollback_profile_store::*;
+pub use manual_rollback_profile_engine::*;
+pub use manual_rollback_profile_report::*;
+pub use scheduled_rollback_score::*;
+pub use scheduled_rollback_score_view::*;
+pub use global_rollback_agreement::*;
+pub use global_rollback_agreement_rules::*;
+pub use global_rollback_agreement_store::*;
+pub use global_rollback_agreement_view::*;
+pub use global_rollback_agreement_workflow::*;
+pub use rollback_allocation_policy::*;
+pub use batched_rollback_target_policy::*;
+pub use manual_rollback_profile_policy::*;
+pub use scheduled_rollback_score_policy::*;
+pub use global_rollback_agreement_policy::*;
+pub use scheduled_rollback_score_from_snapshot::*;
+pub use batched_rollback_target_from_draft::*;

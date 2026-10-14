@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.authorization.v1;
+
+import "acme/authorization/v1/authorization.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Authorization.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/authorization/v1;authorizationv1";
+option java_multiple_files = true;
+option java_outer_classname = "RoleBindingValidationServiceProto";
+option java_package = "com.acme.authorization.v1";
+
+// Checks role bindings against the rules before anything acts on them.
+service RoleBindingValidationService {
+  // Validates a role binding.
+  rpc ValidateRoleBinding(ValidateRoleBindingRequest) returns (ValidateRoleBindingResponse);
+
+  // Previews a role binding.
+  rpc PreviewRoleBinding(PreviewRoleBindingRequest) returns (PreviewRoleBindingResponse);
+
+  // Checks a role binding.
+  rpc CheckRoleBindingEligibility(CheckRoleBindingEligibilityRequest) returns (CheckRoleBindingEligibilityResponse);
+
+  // Normalizes a role binding.
+  rpc NormalizeRoleBinding(NormalizeRoleBindingRequest) returns (NormalizeRoleBindingResponse);
+
+  // Explains a role binding.
+  rpc ExplainRoleBindingDecision(ExplainRoleBindingDecisionRequest) returns (ExplainRoleBindingDecisionResponse);
+
+  // Scores a role binding.
+  rpc ScoreRoleBinding(ScoreRoleBindingRequest) returns (ScoreRoleBindingResponse);
+
+  // Lints a role binding.
+  rpc LintRoleBindings(LintRoleBindingsRequest) returns (LintRoleBindingsResponse);
+
+  // Returns a role binding.
+  rpc GetRoleBindingRules(GetRoleBindingRulesRequest) returns (GetRoleBindingRulesResponse);
+}
+
+// The request of `ValidateRoleBinding`.
+message ValidateRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RoleBinding role_binding = 3;
+  ValidateRoleBindingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateRoleBinding`.
+message ValidateRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  ValidateRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewRoleBinding`.
+message PreviewRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RoleBinding role_binding = 3;
+  PreviewRoleBindingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewRoleBinding`.
+message PreviewRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  PreviewRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckRoleBindingEligibility`.
+message CheckRoleBindingEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RoleBinding role_binding = 3;
+  CheckRoleBindingEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckRoleBindingEligibility`.
+message CheckRoleBindingEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  CheckRoleBindingEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeRoleBinding`.
+message NormalizeRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RoleBinding role_binding = 3;
+  NormalizeRoleBindingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeRoleBinding`.
+message NormalizeRoleBindingResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  NormalizeRoleBindingResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainRoleBindingDecision`.
+message ExplainRoleBindingDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RoleBinding role_binding = 3;
+  ExplainRoleBindingDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainRoleBindingDecision`.
+message ExplainRoleBindingDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  ExplainRoleBindingDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreRoleBinding`.
+message ScoreRoleBindingRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RoleBinding role_binding = 3;
+  ScoreRoleBindingRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreRoleBinding`.
+message ScoreRoleBindingResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreRoleBindingResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  RoleBinding role_binding = 1;
+  ScoreRoleBindingResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintRoleBindings`.
+message LintRoleBindingsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RoleBinding role_binding = 3;
+  LintRoleBindingsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintRoleBindings`.
+message LintRoleBindingsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  LintRoleBindingsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetRoleBindingRules`.
+message GetRoleBindingRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRoleBindingRules`.
+message GetRoleBindingRulesResponse {
+  RoleBinding role_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}

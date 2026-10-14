@@ -1,0 +1,212 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.authorization.v1;
+
+import "acme/authorization/v1/authorization.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "acme/identity/v1/refs.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Authorization.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/authorization/v1;authorizationv1";
+option java_multiple_files = true;
+option java_outer_classname = "RoleBindingExportServiceProto";
+option java_package = "com.acme.authorization.v1";
+
+// Exports role bindings to files and other systems.
+service RoleBindingExportService {
+  // Streams every matching role binding.
+  rpc StreamRoleBindingExport(StreamRoleBindingExportRequest) returns (stream StreamRoleBindingExportResponse);
+
+  // Returns a role binding.
+  rpc GetRoleBindingExport(GetRoleBindingExportRequest) returns (GetRoleBindingExportResponse);
+
+  // Cancels a role binding.
+  rpc CancelRoleBindingExport(CancelRoleBindingExportRequest) returns (CancelRoleBindingExportResponse);
+
+  // Lists role bindings a page at a time.
+  rpc ListRoleBindingExports(ListRoleBindingExportsRequest) returns (ListRoleBindingExportsResponse);
+
+  // Retrys a role binding.
+  rpc RetryRoleBindingExport(RetryRoleBindingExportRequest) returns (RetryRoleBindingExportResponse);
+
+  // Shares a role binding.
+  rpc ShareRoleBindingExport(ShareRoleBindingExportRequest) returns (ShareRoleBindingExportResponse);
+}
+
+// The request of `StreamRoleBindingExport`.
+message StreamRoleBindingExportRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RoleBindingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamRoleBindingExportRequest.Filter filter = 2;
+  string format = 3;
+  google.protobuf.FieldMask fields = 4;
+  string destination_uri = 5;
+}
+
+// The response of `StreamRoleBindingExport`.
+message StreamRoleBindingExportResponse {
+  RoleBinding role_binding = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}
+
+// The request of `GetRoleBindingExport`.
+message GetRoleBindingExportRequest {
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetRoleBindingExport`.
+message GetRoleBindingExportResponse {
+  RoleBinding role_binding = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `CancelRoleBindingExport`.
+message CancelRoleBindingExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string reason_code = 1;
+    google.protobuf.Timestamp effective_at = 2;
+    acme.identity.v1.UserRef new_owner = 3;
+    acme.common.v1.ContactInfo notify_contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  CancelRoleBindingExportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `CancelRoleBindingExport`.
+message CancelRoleBindingExportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  CancelRoleBindingExportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListRoleBindingExports`.
+message ListRoleBindingExportsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated RoleBindingStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListRoleBindingExportsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListRoleBindingExports`.
+message ListRoleBindingExportsResponse {
+  repeated RoleBinding role_bindings = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryRoleBindingExport`.
+message RetryRoleBindingExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  RoleBinding role_binding = 3;
+  RetryRoleBindingExportRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryRoleBindingExport`.
+message RetryRoleBindingExportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  RetryRoleBindingExportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ShareRoleBindingExport`.
+message ShareRoleBindingExportRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string role_binding_id = 2;
+  ShareRoleBindingExportRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `ShareRoleBindingExport`.
+message ShareRoleBindingExportResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  RoleBinding role_binding = 1;
+  ShareRoleBindingExportResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

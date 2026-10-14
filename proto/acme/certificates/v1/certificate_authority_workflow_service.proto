@@ -1,0 +1,334 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.certificates.v1;
+
+import "acme/certificates/v1/certificates.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Certificates.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/certificates/v1;certificatesv1";
+option java_multiple_files = true;
+option java_outer_classname = "CertificateAuthorityWorkflowServiceProto";
+option java_package = "com.acme.certificates.v1";
+
+// Runs the long-lived workflow that takes a certificate authority from start to finish.
+service CertificateAuthorityWorkflowService {
+  // Starts a certificate authority.
+  rpc StartCertificateAuthorityWorkflow(StartCertificateAuthorityWorkflowRequest) returns (StartCertificateAuthorityWorkflowResponse);
+
+  // Advances a certificate authority.
+  rpc AdvanceCertificateAuthorityWorkflow(AdvanceCertificateAuthorityWorkflowRequest) returns (AdvanceCertificateAuthorityWorkflowResponse);
+
+  // Cancels a certificate authority.
+  rpc CancelCertificateAuthorityWorkflow(CancelCertificateAuthorityWorkflowRequest) returns (CancelCertificateAuthorityWorkflowResponse);
+
+  // Retrys a certificate authority.
+  rpc RetryCertificateAuthorityWorkflow(RetryCertificateAuthorityWorkflowRequest) returns (RetryCertificateAuthorityWorkflowResponse);
+
+  // Pauses a certificate authority.
+  rpc PauseCertificateAuthorityWorkflow(PauseCertificateAuthorityWorkflowRequest) returns (PauseCertificateAuthorityWorkflowResponse);
+
+  // Resumes a certificate authority.
+  rpc ResumeCertificateAuthorityWorkflow(ResumeCertificateAuthorityWorkflowRequest) returns (ResumeCertificateAuthorityWorkflowResponse);
+
+  // Returns a certificate authority.
+  rpc InspectCertificateAuthorityWorkflow(InspectCertificateAuthorityWorkflowRequest) returns (InspectCertificateAuthorityWorkflowResponse);
+
+  // Lists certificate authorities a page at a time.
+  rpc ListCertificateAuthorityWorkflows(ListCertificateAuthorityWorkflowsRequest) returns (ListCertificateAuthorityWorkflowsResponse);
+
+  // Signals a certificate authority.
+  rpc SignalCertificateAuthorityWorkflow(SignalCertificateAuthorityWorkflowRequest) returns (SignalCertificateAuthorityWorkflowResponse);
+}
+
+// The request of `StartCertificateAuthorityWorkflow`.
+message StartCertificateAuthorityWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  StartCertificateAuthorityWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `StartCertificateAuthorityWorkflow`.
+message StartCertificateAuthorityWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  StartCertificateAuthorityWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `AdvanceCertificateAuthorityWorkflow`.
+message AdvanceCertificateAuthorityWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  AdvanceCertificateAuthorityWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `AdvanceCertificateAuthorityWorkflow`.
+message AdvanceCertificateAuthorityWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  AdvanceCertificateAuthorityWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CancelCertificateAuthorityWorkflow`.
+message CancelCertificateAuthorityWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  CancelCertificateAuthorityWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CancelCertificateAuthorityWorkflow`.
+message CancelCertificateAuthorityWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  CancelCertificateAuthorityWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RetryCertificateAuthorityWorkflow`.
+message RetryCertificateAuthorityWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  RetryCertificateAuthorityWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RetryCertificateAuthorityWorkflow`.
+message RetryCertificateAuthorityWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  RetryCertificateAuthorityWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PauseCertificateAuthorityWorkflow`.
+message PauseCertificateAuthorityWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  PauseCertificateAuthorityWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PauseCertificateAuthorityWorkflow`.
+message PauseCertificateAuthorityWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  PauseCertificateAuthorityWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ResumeCertificateAuthorityWorkflow`.
+message ResumeCertificateAuthorityWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  ResumeCertificateAuthorityWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ResumeCertificateAuthorityWorkflow`.
+message ResumeCertificateAuthorityWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  ResumeCertificateAuthorityWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `InspectCertificateAuthorityWorkflow`.
+message InspectCertificateAuthorityWorkflowRequest {
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `InspectCertificateAuthorityWorkflow`.
+message InspectCertificateAuthorityWorkflowResponse {
+  CertificateAuthority certificate_authority = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `ListCertificateAuthorityWorkflows`.
+message ListCertificateAuthorityWorkflowsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated CertificateAuthorityStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListCertificateAuthorityWorkflowsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListCertificateAuthorityWorkflows`.
+message ListCertificateAuthorityWorkflowsResponse {
+  repeated CertificateAuthority certificate_authorities = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SignalCertificateAuthorityWorkflow`.
+message SignalCertificateAuthorityWorkflowRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string step = 1;
+    map<string, string> parameters = 2;
+    google.protobuf.Duration timeout = 3;
+    string initiated_by = 4;
+    acme.common.v1.ContactInfo notify = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string certificate_authority_id = 2;
+  CertificateAuthority certificate_authority = 3;
+  SignalCertificateAuthorityWorkflowRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SignalCertificateAuthorityWorkflow`.
+message SignalCertificateAuthorityWorkflowResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  CertificateAuthority certificate_authority = 1;
+  SignalCertificateAuthorityWorkflowResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}

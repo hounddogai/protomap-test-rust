@@ -1,0 +1,56 @@
+//! The fallback page adjustment records of incident's page work, and the rules, stores, and calculations
+//! around them.
+
+mod fallback_page_adjustment;
+mod fallback_page_adjustment_rules;
+mod fallback_page_adjustment_store;
+mod fallback_page_adjustment_engine;
+mod fallback_page_adjustment_view;
+mod fallback_page_adjustment_workflow;
+mod capped_page_budget;
+mod capped_page_budget_rules;
+mod capped_page_budget_engine;
+mod capped_page_budget_view;
+mod adaptive_page_variance;
+mod adaptive_page_variance_rules;
+mod adaptive_page_variance_store;
+mod adaptive_page_variance_engine;
+mod adaptive_page_variance_view;
+mod adaptive_page_variance_report;
+mod primary_page_baseline;
+mod primary_page_baseline_rules;
+mod primary_page_baseline_store;
+mod primary_page_baseline_report;
+mod primary_page_baseline_workflow;
+mod fallback_page_adjustment_policy;
+mod capped_page_budget_policy;
+mod adaptive_page_variance_policy;
+mod primary_page_baseline_policy;
+mod primary_page_baseline_from_draft;
+
+pub use fallback_page_adjustment::*;
+pub use fallback_page_adjustment_rules::*;
+pub use fallback_page_adjustment_store::*;
+pub use fallback_page_adjustment_engine::*;
+pub use fallback_page_adjustment_view::*;
+pub use fallback_page_adjustment_workflow::*;
+pub use capped_page_budget::*;
+pub use capped_page_budget_rules::*;
+pub use capped_page_budget_engine::*;
+pub use capped_page_budget_view::*;
+pub use adaptive_page_variance::*;
+pub use adaptive_page_variance_rules::*;
+pub use adaptive_page_variance_store::*;
+pub use adaptive_page_variance_engine::*;
+pub use adaptive_page_variance_view::*;
+pub use adaptive_page_variance_report::*;
+pub use primary_page_baseline::*;
+pub use primary_page_baseline_rules::*;
+pub use primary_page_baseline_store::*;
+pub use primary_page_baseline_report::*;
+pub use primary_page_baseline_workflow::*;
+pub use fallback_page_adjustment_policy::*;
+pub use capped_page_budget_policy::*;
+pub use adaptive_page_variance_policy::*;
+pub use primary_page_baseline_policy::*;
+pub use primary_page_baseline_from_draft::*;

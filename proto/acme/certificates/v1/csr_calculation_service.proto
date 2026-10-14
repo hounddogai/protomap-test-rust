@@ -1,0 +1,335 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.certificates.v1;
+
+import "acme/certificates/v1/certificates.proto";
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Certificates.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/certificates/v1;certificatesv1";
+option java_multiple_files = true;
+option java_outer_classname = "CsrCalculationServiceProto";
+option java_package = "com.acme.certificates.v1";
+
+// Computes the figures of a csr, such as totals, taxes, and estimates.
+service CsrCalculationService {
+  // Calculates a csr.
+  rpc CalculateCsr(CalculateCsrRequest) returns (CalculateCsrResponse);
+
+  // Estimates a csr.
+  rpc EstimateCsr(EstimateCsrRequest) returns (EstimateCsrResponse);
+
+  // Quotes a csr.
+  rpc QuoteCsr(QuoteCsrRequest) returns (QuoteCsrResponse);
+
+  // Compares a csr.
+  rpc CompareCsrOptions(CompareCsrOptionsRequest) returns (CompareCsrOptionsResponse);
+
+  // Recalculates a csr.
+  rpc RecalculateCsrs(RecalculateCsrsRequest) returns (RecalculateCsrsResponse);
+
+  // Simulates a csr.
+  rpc SimulateCsr(SimulateCsrRequest) returns (SimulateCsrResponse);
+
+  // Explains a csr.
+  rpc ExplainCsrCalculation(ExplainCsrCalculationRequest) returns (ExplainCsrCalculationResponse);
+
+  // Returns a csr.
+  rpc GetCsrRates(GetCsrRatesRequest) returns (GetCsrRatesResponse);
+}
+
+// The request of `CalculateCsr`.
+message CalculateCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  CalculateCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateCsr`.
+message CalculateCsrResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateCsrResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Csr csr = 1;
+  CalculateCsrResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateCsr`.
+message EstimateCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  EstimateCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateCsr`.
+message EstimateCsrResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateCsrResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Csr csr = 1;
+  EstimateCsrResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteCsr`.
+message QuoteCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  QuoteCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteCsr`.
+message QuoteCsrResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteCsrResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Csr csr = 1;
+  QuoteCsrResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareCsrOptions`.
+message CompareCsrOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  CompareCsrOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareCsrOptions`.
+message CompareCsrOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareCsrOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Csr csr = 1;
+  CompareCsrOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateCsrs`.
+message RecalculateCsrsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  RecalculateCsrsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateCsrs`.
+message RecalculateCsrsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateCsrsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Csr csr = 1;
+  RecalculateCsrsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateCsr`.
+message SimulateCsrRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  SimulateCsrRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateCsr`.
+message SimulateCsrResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateCsrResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Csr csr = 1;
+  SimulateCsrResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainCsrCalculation`.
+message ExplainCsrCalculationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  Csr csr = 3;
+  ExplainCsrCalculationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainCsrCalculation`.
+message ExplainCsrCalculationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  Csr csr = 1;
+  ExplainCsrCalculationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetCsrRates`.
+message GetCsrRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string csr_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetCsrRates`.
+message GetCsrRatesResponse {
+  Csr csr = 1;
+  acme.common.v1.OperationResult result = 2;
+}

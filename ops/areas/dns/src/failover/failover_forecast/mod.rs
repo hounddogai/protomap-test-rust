@@ -1,0 +1,56 @@
+//! The rolling failover forecast records of dns's failover work, and the rules, stores, and calculations
+//! around them.
+
+mod rolling_failover_forecast;
+mod rolling_failover_forecast_rules;
+mod rolling_failover_forecast_store;
+mod rolling_failover_forecast_engine;
+mod rolling_failover_forecast_view;
+mod failover_target;
+mod failover_target_rules;
+mod failover_target_store;
+mod failover_target_engine;
+mod failover_target_view;
+mod failover_override;
+mod failover_override_store;
+mod failover_override_engine;
+mod failover_override_report;
+mod strict_failover_review;
+mod strict_failover_review_rules;
+mod strict_failover_review_store;
+mod strict_failover_review_engine;
+mod strict_failover_review_view;
+mod strict_failover_review_report;
+mod rolling_failover_forecast_policy;
+mod failover_target_policy;
+mod failover_override_policy;
+mod strict_failover_review_policy;
+mod rolling_failover_forecast_from_score;
+mod failover_override_from_metric;
+
+pub use rolling_failover_forecast::*;
+pub use rolling_failover_forecast_rules::*;
+pub use rolling_failover_forecast_store::*;
+pub use rolling_failover_forecast_engine::*;
+pub use rolling_failover_forecast_view::*;
+pub use failover_target::*;
+pub use failover_target_rules::*;
+pub use failover_target_store::*;
+pub use failover_target_engine::*;
+pub use failover_target_view::*;
+pub use failover_override::*;
+pub use failover_override_store::*;
+pub use failover_override_engine::*;
+pub use failover_override_report::*;
+pub use strict_failover_review::*;
+pub use strict_failover_review_rules::*;
+pub use strict_failover_review_store::*;
+pub use strict_failover_review_engine::*;
+pub use strict_failover_review_view::*;
+pub use strict_failover_review_report::*;
+pub use rolling_failover_forecast_policy::*;
+pub use failover_target_policy::*;
+pub use failover_override_policy::*;
+pub use strict_failover_review_policy::*;
+pub use rolling_failover_forecast_from_score::*;
+pub use failover_override_from_metric::*;

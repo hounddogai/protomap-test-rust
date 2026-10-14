@@ -1,0 +1,296 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.ratelimiting.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/ratelimiting/v1/ratelimiting.proto";
+import "google/protobuf/field_mask.proto";
+
+option csharp_namespace = "Acme.Ratelimiting.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/ratelimiting/v1;ratelimitingv1";
+option java_multiple_files = true;
+option java_outer_classname = "ThrottleCalculationServiceProto";
+option java_package = "com.acme.ratelimiting.v1";
+
+// Computes the figures of a throttle, such as totals, taxes, and estimates.
+service ThrottleCalculationService {
+  // Calculates a throttle.
+  rpc CalculateThrottle(CalculateThrottleRequest) returns (CalculateThrottleResponse);
+
+  // Estimates a throttle.
+  rpc EstimateThrottle(EstimateThrottleRequest) returns (EstimateThrottleResponse);
+
+  // Quotes a throttle.
+  rpc QuoteThrottle(QuoteThrottleRequest) returns (QuoteThrottleResponse);
+
+  // Compares a throttle.
+  rpc CompareThrottleOptions(CompareThrottleOptionsRequest) returns (CompareThrottleOptionsResponse);
+
+  // Recalculates a throttle.
+  rpc RecalculateThrottles(RecalculateThrottlesRequest) returns (RecalculateThrottlesResponse);
+
+  // Simulates a throttle.
+  rpc SimulateThrottle(SimulateThrottleRequest) returns (SimulateThrottleResponse);
+
+  // Returns a throttle.
+  rpc GetThrottleRates(GetThrottleRatesRequest) returns (GetThrottleRatesResponse);
+}
+
+// The request of `CalculateThrottle`.
+message CalculateThrottleRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  CalculateThrottleRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CalculateThrottle`.
+message CalculateThrottleResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CalculateThrottleResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Throttle throttle = 1;
+  CalculateThrottleResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `EstimateThrottle`.
+message EstimateThrottleRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  EstimateThrottleRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `EstimateThrottle`.
+message EstimateThrottleResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated EstimateThrottleResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Throttle throttle = 1;
+  EstimateThrottleResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `QuoteThrottle`.
+message QuoteThrottleRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  QuoteThrottleRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `QuoteThrottle`.
+message QuoteThrottleResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated QuoteThrottleResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Throttle throttle = 1;
+  QuoteThrottleResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CompareThrottleOptions`.
+message CompareThrottleOptionsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  CompareThrottleOptionsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CompareThrottleOptions`.
+message CompareThrottleOptionsResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated CompareThrottleOptionsResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Throttle throttle = 1;
+  CompareThrottleOptionsResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `RecalculateThrottles`.
+message RecalculateThrottlesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  RecalculateThrottlesRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `RecalculateThrottles`.
+message RecalculateThrottlesResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated RecalculateThrottlesResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Throttle throttle = 1;
+  RecalculateThrottlesResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SimulateThrottle`.
+message SimulateThrottleRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  Throttle throttle = 3;
+  SimulateThrottleRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `SimulateThrottle`.
+message SimulateThrottleResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated SimulateThrottleResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  Throttle throttle = 1;
+  SimulateThrottleResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetThrottleRates`.
+message GetThrottleRatesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string throttle_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetThrottleRates`.
+message GetThrottleRatesResponse {
+  Throttle throttle = 1;
+  acme.common.v1.OperationResult result = 2;
+}

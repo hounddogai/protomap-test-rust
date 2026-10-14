@@ -1,0 +1,305 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.featureflags.v1;
+
+import "acme/common/v1/address.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/money.proto";
+import "acme/common/v1/operation.proto";
+import "acme/featureflags/v1/featureflags.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Featureflags.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/featureflags/v1;featureflagsv1";
+option java_multiple_files = true;
+option java_outer_classname = "FlagEvaluationValidationServiceProto";
+option java_package = "com.acme.featureflags.v1";
+
+// Checks flag evaluations against the rules before anything acts on them.
+service FlagEvaluationValidationService {
+  // Validates a flag evaluation.
+  rpc ValidateFlagEvaluation(ValidateFlagEvaluationRequest) returns (ValidateFlagEvaluationResponse);
+
+  // Previews a flag evaluation.
+  rpc PreviewFlagEvaluation(PreviewFlagEvaluationRequest) returns (PreviewFlagEvaluationResponse);
+
+  // Checks a flag evaluation.
+  rpc CheckFlagEvaluationEligibility(CheckFlagEvaluationEligibilityRequest) returns (CheckFlagEvaluationEligibilityResponse);
+
+  // Normalizes a flag evaluation.
+  rpc NormalizeFlagEvaluation(NormalizeFlagEvaluationRequest) returns (NormalizeFlagEvaluationResponse);
+
+  // Explains a flag evaluation.
+  rpc ExplainFlagEvaluationDecision(ExplainFlagEvaluationDecisionRequest) returns (ExplainFlagEvaluationDecisionResponse);
+
+  // Scores a flag evaluation.
+  rpc ScoreFlagEvaluation(ScoreFlagEvaluationRequest) returns (ScoreFlagEvaluationResponse);
+
+  // Lints a flag evaluation.
+  rpc LintFlagEvaluations(LintFlagEvaluationsRequest) returns (LintFlagEvaluationsResponse);
+
+  // Returns a flag evaluation.
+  rpc GetFlagEvaluationRules(GetFlagEvaluationRulesRequest) returns (GetFlagEvaluationRulesResponse);
+}
+
+// The request of `ValidateFlagEvaluation`.
+message ValidateFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  ValidateFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ValidateFlagEvaluation`.
+message ValidateFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  ValidateFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `PreviewFlagEvaluation`.
+message PreviewFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  PreviewFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `PreviewFlagEvaluation`.
+message PreviewFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  PreviewFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `CheckFlagEvaluationEligibility`.
+message CheckFlagEvaluationEligibilityRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  CheckFlagEvaluationEligibilityRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `CheckFlagEvaluationEligibility`.
+message CheckFlagEvaluationEligibilityResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  CheckFlagEvaluationEligibilityResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `NormalizeFlagEvaluation`.
+message NormalizeFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  NormalizeFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `NormalizeFlagEvaluation`.
+message NormalizeFlagEvaluationResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  NormalizeFlagEvaluationResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ExplainFlagEvaluationDecision`.
+message ExplainFlagEvaluationDecisionRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  ExplainFlagEvaluationDecisionRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ExplainFlagEvaluationDecision`.
+message ExplainFlagEvaluationDecisionResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  ExplainFlagEvaluationDecisionResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ScoreFlagEvaluation`.
+message ScoreFlagEvaluationRequest {
+  // What the operation needs besides the record.
+  message Details {
+    string currency_code = 1;
+    acme.common.v1.PostalAddress destination = 2;
+    repeated string scenario_ids = 3;
+    bool include_breakdown = 4;
+    acme.common.v1.Money budget = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  ScoreFlagEvaluationRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `ScoreFlagEvaluation`.
+message ScoreFlagEvaluationResponse {
+  // How a figure was reached.
+  message Breakdown {
+    // One line of a breakdown.
+    message Line {
+      string label = 1;
+      acme.common.v1.Money amount = 2;
+      double rate = 3;
+    }
+
+    acme.common.v1.Money total = 1;
+    repeated ScoreFlagEvaluationResponse.Breakdown.Line lines = 2;
+    string currency_code = 3;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  ScoreFlagEvaluationResponse.Breakdown breakdown = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `LintFlagEvaluations`.
+message LintFlagEvaluationsRequest {
+  // What the operation needs besides the record.
+  message Details {
+    repeated string rules = 1;
+    bool strict = 2;
+    string locale = 3;
+    acme.common.v1.ContactInfo contact = 4;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  FlagEvaluation flag_evaluation = 3;
+  LintFlagEvaluationsRequest.Details details = 4;
+  string reason = 5;
+  map<string, string> annotations = 6;
+}
+
+// The response of `LintFlagEvaluations`.
+message LintFlagEvaluationsResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  FlagEvaluation flag_evaluation = 1;
+  LintFlagEvaluationsResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetFlagEvaluationRules`.
+message GetFlagEvaluationRulesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string flag_evaluation_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetFlagEvaluationRules`.
+message GetFlagEvaluationRulesResponse {
+  FlagEvaluation flag_evaluation = 1;
+  acme.common.v1.OperationResult result = 2;
+}

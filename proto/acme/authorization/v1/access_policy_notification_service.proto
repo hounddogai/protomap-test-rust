@@ -1,0 +1,210 @@
+// Copyright 2026 Acme Corp. All rights reserved.
+// Use of this file is governed by the Acme API license in LICENSE.
+
+syntax = "proto3";
+
+package acme.authorization.v1;
+
+import "acme/authorization/v1/authorization.proto";
+import "acme/common/v1/contact.proto";
+import "acme/common/v1/context.proto";
+import "acme/common/v1/operation.proto";
+import "acme/common/v1/paging.proto";
+import "google/protobuf/any.proto";
+import "google/protobuf/field_mask.proto";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "Acme.Authorization.V1";
+option go_package = "github.com/hounddogai/protomap-test-golang/gen/acme/authorization/v1;authorizationv1";
+option java_multiple_files = true;
+option java_outer_classname = "AccessPolicyNotificationServiceProto";
+option java_package = "com.acme.authorization.v1";
+
+// Tells the people who follow an access policy what changed.
+service AccessPolicyNotificationService {
+  // Subscribes an access policy.
+  rpc SubscribeAccessPolicyUpdates(SubscribeAccessPolicyUpdatesRequest) returns (SubscribeAccessPolicyUpdatesResponse);
+
+  // Unsubscribes an access policy.
+  rpc UnsubscribeAccessPolicyUpdates(UnsubscribeAccessPolicyUpdatesRequest) returns (UnsubscribeAccessPolicyUpdatesResponse);
+
+  // Lists access policies a page at a time.
+  rpc ListAccessPolicySubscriptions(ListAccessPolicySubscriptionsRequest) returns (ListAccessPolicySubscriptionsResponse);
+
+  // Sends an access policy.
+  rpc SendAccessPolicyTestNotice(SendAccessPolicyTestNoticeRequest) returns (SendAccessPolicyTestNoticeResponse);
+
+  // Returns an access policy.
+  rpc GetAccessPolicyPreferences(GetAccessPolicyPreferencesRequest) returns (GetAccessPolicyPreferencesResponse);
+
+  // Streams the changes of access policies as they happen.
+  rpc StreamAccessPolicyNotices(StreamAccessPolicyNoticesRequest) returns (stream StreamAccessPolicyNoticesResponse);
+}
+
+// The request of `SubscribeAccessPolicyUpdates`.
+message SubscribeAccessPolicyUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string access_policy_id = 2;
+  SubscribeAccessPolicyUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SubscribeAccessPolicyUpdates`.
+message SubscribeAccessPolicyUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AccessPolicy access_policy = 1;
+  SubscribeAccessPolicyUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `UnsubscribeAccessPolicyUpdates`.
+message UnsubscribeAccessPolicyUpdatesRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string access_policy_id = 2;
+  UnsubscribeAccessPolicyUpdatesRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `UnsubscribeAccessPolicyUpdates`.
+message UnsubscribeAccessPolicyUpdatesResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AccessPolicy access_policy = 1;
+  UnsubscribeAccessPolicyUpdatesResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `ListAccessPolicySubscriptions`.
+message ListAccessPolicySubscriptionsRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AccessPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  acme.common.v1.PageRequest page = 2;
+  ListAccessPolicySubscriptionsRequest.Filter filter = 3;
+  string order_by = 4;
+}
+
+// The response of `ListAccessPolicySubscriptions`.
+message ListAccessPolicySubscriptionsResponse {
+  repeated AccessPolicy access_policies = 1;
+  acme.common.v1.PageInfo page_info = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `SendAccessPolicyTestNotice`.
+message SendAccessPolicyTestNoticeRequest {
+  // What the operation needs besides the record.
+  message Details {
+    acme.common.v1.ContactInfo recipient = 1;
+    string template_id = 2;
+    map<string, string> variables = 3;
+    google.protobuf.Any payload = 4;
+    string channel = 5;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  string access_policy_id = 2;
+  SendAccessPolicyTestNoticeRequest.Details details = 3;
+  string reason = 4;
+  map<string, string> annotations = 5;
+}
+
+// The response of `SendAccessPolicyTestNotice`.
+message SendAccessPolicyTestNoticeResponse {
+  // What the operation decided.
+  message Outcome {
+    string status = 1;
+    string message = 2;
+    string reference_id = 3;
+    repeated string next_steps = 4;
+    google.protobuf.Timestamp effective_at = 5;
+  }
+
+  AccessPolicy access_policy = 1;
+  SendAccessPolicyTestNoticeResponse.Outcome outcome = 2;
+  acme.common.v1.OperationResult result = 3;
+}
+
+// The request of `GetAccessPolicyPreferences`.
+message GetAccessPolicyPreferencesRequest {
+  acme.common.v1.RequestContext context = 1;
+  string access_policy_id = 2;
+  google.protobuf.FieldMask read_mask = 3;
+}
+
+// The response of `GetAccessPolicyPreferences`.
+message GetAccessPolicyPreferencesResponse {
+  AccessPolicy access_policy = 1;
+  acme.common.v1.OperationResult result = 2;
+}
+
+// The request of `StreamAccessPolicyNotices`.
+message StreamAccessPolicyNoticesRequest {
+  // Which records to include.
+  message Filter {
+    string query = 1;
+    repeated AccessPolicyStatus statuses = 2;
+    google.protobuf.Timestamp created_after = 3;
+    map<string, string> labels = 4;
+    string owner_id = 5;
+    string region = 6;
+  }
+
+  acme.common.v1.RequestContext context = 1;
+  StreamAccessPolicyNoticesRequest.Filter filter = 2;
+  google.protobuf.Timestamp since = 3;
+  int32 max_events = 4;
+  acme.common.v1.ContactInfo subscriber = 5;
+}
+
+// The response of `StreamAccessPolicyNotices`.
+message StreamAccessPolicyNoticesResponse {
+  AccessPolicy access_policy = 1;
+  string change_type = 2;
+  google.protobuf.Timestamp changed_at = 3;
+  int64 sequence = 4;
+  acme.common.v1.OperationResult result = 5;
+}

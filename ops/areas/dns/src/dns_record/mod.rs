@@ -1,0 +1,29 @@
+//! Dns's dns record work.
+
+pub mod preference;
+pub mod schedule;
+pub mod audit;
+pub mod notice;
+pub mod item;
+pub mod milestone;
+pub mod record_notice;
+pub mod segment;
+pub mod override_item;
+pub mod rule;
+pub mod tier;
+pub mod policy;
+pub mod checkpoint;
+pub mod entry;
+pub mod snapshot;
+pub mod record_checkpoint;
+pub mod forecast;
+pub mod template;
+pub mod request;
+pub mod ledger;
+pub mod record_template;
+pub mod rollup;
+pub mod window;
+pub mod variance;
+pub mod agreement;
+pub mod draft;
+pub mod quota;

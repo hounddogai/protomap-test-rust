@@ -1,0 +1,41 @@
+//! The failover variance records of dns's failover work, and the rules, stores, and calculations around them.
+
+mod failover_variance;
+mod failover_variance_rules;
+mod failover_variance_store;
+mod failover_variance_view;
+mod failover_variance_workflow;
+mod failover_slot;
+mod failover_slot_rules;
+mod failover_slot_store;
+mod failover_slot_view;
+mod failover_slot_workflow;
+mod failover_notice;
+mod failover_notice_engine;
+mod failover_notice_view;
+mod failover_notice_report;
+mod failover_variance_policy;
+mod failover_slot_policy;
+mod failover_notice_policy;
+mod failover_slot_from_mapping;
+mod failover_notice_from_budget;
+
+pub use failover_variance::*;
+pub use failover_variance_rules::*;
+pub use failover_variance_store::*;
+pub use failover_variance_view::*;
+pub use failover_variance_workflow::*;
+pub use failover_slot::*;
+pub use failover_slot_rules::*;
+pub use failover_slot_store::*;
+pub use failover_slot_view::*;
+pub use failover_slot_workflow::*;
+pub use failover_notice::*;
+pub use failover_notice_engine::*;
+pub use failover_notice_view::*;
+pub use failover_notice_report::*;
+pub use failover_variance_policy::*;
+pub use failover_slot_policy::*;
+pub use failover_notice_policy::*;
+pub use failover_slot_from_mapping::*;
+pub use failover_notice_from_budget::*;
